@@ -15,3 +15,13 @@ SQLALCHEMY_DATABASE_URL = "sqlite:///./data.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
+class Base(DeclarativeBase):
+    pass
+
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(50))
+    password_hash: Mapped[str] = mapped_column(String)
