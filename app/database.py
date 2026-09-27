@@ -1,5 +1,5 @@
 import sqlalchemy
-from sqlalchemy import String, Integer
+from sqlalchemy import String, Integer, select
 from sqlalchemy.orm import relationship, mapped_column, Mapped, DeclarativeBase, sessionmaker
 from sqlalchemy.engine import create_engine, Engine
 
@@ -32,3 +32,7 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
     password_hash: Mapped[str] = mapped_column(String)
+
+
+def get_user_by_id(db, user_id) -> User | None:
+    return db.scalars(select(User).where(User.id == user_id)).first()
