@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Cookie, HTTPException
+from fastapi import APIRouter, Depends, Cookie, HTTPException, Response
 from sqlalchemy.orm import Session
 from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher
@@ -13,7 +13,7 @@ router = APIRouter(
 hasher = PasswordHash((Argon2Hasher(),))
 
 @router.post("/")
-def create_user(data: UserCreateSchema,
+def create_user(data: UserCreateSchema, response: Response,
                 db: Session = Depends(get_db),
                 session_id: str | None = Cookie(default=True)):
     if get_user_by_id(session_id) is not None:
@@ -24,5 +24,15 @@ def create_user(data: UserCreateSchema,
     user = User(name=data.name, password_hash=password_hash)
     db.add(user)
     db.commit()
+
+    response.set_cookie(
+        key="session_id",
+        value=str(user.id),
+        path="/",
+        secure=False,
+        httponly=True,
+        max_age=86400*366,
+        samesite="lax"
+    )
 
     return {"message": "success"}
