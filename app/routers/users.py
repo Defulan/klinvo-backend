@@ -1,3 +1,4 @@
+from typing import Annotated
 from fastapi import APIRouter, Depends, Cookie, HTTPException, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -27,7 +28,7 @@ def get_users(db: Session = Depends(get_db)):
 @router.post("/")
 def create_user(data: UserCreateSchema, response: Response,
                 db: Session = Depends(get_db),
-                session_id: str | None = Cookie(default=True)):
+                session_id: Annotated[str | None, Cookie()] = None):
     if get_user_by_id(session_id) is not None:
         raise HTTPException(status_code=400, detail="User already registered!")
     
