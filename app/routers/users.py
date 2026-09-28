@@ -1,10 +1,7 @@
-import os
 from fastapi import APIRouter, Depends, Cookie, HTTPException, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from pwdlib import PasswordHash
-from pwdlib.hashers.argon2 import Argon2Hasher
-from itsdangerous import BadSignature, URLSafeSerializer
+from security import hasher, get_serializer
 from database import get_db, get_user_by_id, User
 from schemas import UserCreateSchema
 
@@ -12,11 +9,6 @@ router = APIRouter(
     prefix="/users",
     tags=["Users"]
 )
-
-hasher = PasswordHash((Argon2Hasher(),))
-
-def get_serializer():
-    return URLSafeSerializer(os.environ.get("COOKIE_KEY"))
 
 
 @router.get("/{user_id}")
