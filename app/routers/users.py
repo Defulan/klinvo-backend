@@ -1,5 +1,6 @@
 import os
 from fastapi import APIRouter, Depends, Cookie, HTTPException, Response
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher
@@ -25,6 +26,10 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="User with this ID doesn't exists")    
     return user
 
+
+@router.get("/")
+def get_users(db: Session = Depends(get_db)):
+    return db.scalars(select(User)).all()
 
 
 @router.post("/")
