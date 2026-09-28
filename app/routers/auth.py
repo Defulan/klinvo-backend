@@ -9,5 +9,5 @@ router = APIRouter(
 @router.get("/me")
 def get_auth_cookie(session_id: Annotated[str | None, Cookie()] = None):
     is_auth = session_id is not None
-    return {"session_id": session_id, "is_auth": is_auth}
+    return {"sessionId": session_id, "isAuth": is_auth}
 
