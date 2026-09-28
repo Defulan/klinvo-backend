@@ -21,4 +21,4 @@ app.add_middleware(
     secret_key=os.environ.get("SECRET_KEY")
 )
 
-app.include_router(users)
+app.include_router(users.router)
