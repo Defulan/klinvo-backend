@@ -18,6 +18,15 @@ def get_serializer():
     return URLSafeSerializer(os.environ.get("COOKIE_KEY"))
 
 
+@router.get("/{user_id}")
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = get_user_by_id(db, user_id)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User with this ID doesn't exists")    
+    return user
+
+
+
 @router.post("/")
 def create_user(data: UserCreateSchema, response: Response,
                 db: Session = Depends(get_db),
