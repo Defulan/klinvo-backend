@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from security import hasher, get_serializer
 from database import get_db, get_user_by_id, User
-from schemas import UserCreateSchema
+from schemas import UserCreateSchema, UserOut
 
 router = APIRouter(
     prefix="/users",
@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.get("/{user_id}")
+@router.get("/{user_id}", response_model=UserOut)
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = get_user_by_id(db, user_id)
     if user is None:
@@ -20,7 +20,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     return user
 
 
-@router.get("/")
+@router.get("/", response_model=list[UserOut])
 def get_users(db: Session = Depends(get_db)):
     return db.scalars(select(User)).all()
 
