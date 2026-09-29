@@ -1,5 +1,6 @@
 import os
 from functools import lru_cache
+from fastapi import Response
 from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher
 from itsdangerous import BadSignature, URLSafeSerializer
@@ -15,3 +16,15 @@ def hash_password(password: str) -> str:
 
 def verify_password(entered_password: str, hashed_password: str) -> bool:
     return hasher.verify(entered_password, hashed_password)
+
+def create_cookie(response: Response, key: str, value):
+    response.set_cookie(
+        key=key,
+        value=get_serializer().dumps(value),
+        path="/",
+        secure=False,
+        httponly=True,
+        max_age=86400*366,
+        samesite="lax"
+    )
+
