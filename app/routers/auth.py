@@ -1,5 +1,9 @@
 from typing import Annotated
-from fastapi import APIRouter, Cookie
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
+from sqlalchemy.orm import Session
+from database import get_db, get_user_by_id
+from schemas import UserLoginSchema
+from security import create_cookie, verify_password
 
 router = APIRouter(
     prefix="/auth",
@@ -11,3 +15,18 @@ def get_auth_cookie(session_id: Annotated[str | None, Cookie()] = None):
     is_auth = session_id is not None
     return {"userId": session_id, "isAuth": is_auth}
 
+
+@router.post("/login")
+def login(data: UserLoginSchema, response: Response,
+          db: Session = Depends(get_db),
+          session_id: Annotated[str | None, Cookie()] = None):
+    if session_id or get_user_by_id(session_id) is not None:
+        raise HTTPException(status_code=409, detail="Client already in account")
+    
+    user = get_user_by_id(data.id)
+    if user is None or not verify_password(data.password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Wrong password or ID")
+    
+    create_cookie(response, "session_id", user.id)
+
+    return {"message": "success"}
