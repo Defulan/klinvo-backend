@@ -1,6 +1,6 @@
 import os
 from functools import lru_cache
-from fastapi import Response
+from fastapi import Response, HTTPException
 from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher
 from itsdangerous import BadSignature, URLSafeSerializer
@@ -28,3 +28,8 @@ def create_cookie(response: Response, key: str, value):
         samesite="lax"
     )
 
+def get_value_from_cookie(value: str) -> str:
+    try:
+        return get_serializer().loads(value)
+    except BadSignature:
+        raise HTTPException(status_code=401, detail="Invalid cookie")
