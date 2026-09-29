@@ -10,3 +10,6 @@ def get_serializer():
 
 def hash_password(password: str) -> str:
     return hasher.hash(password)
+
+def verify_password(entered_password: str, hash_password: str) -> bool:
+    return hasher.verify(entered_password, hash_password)
