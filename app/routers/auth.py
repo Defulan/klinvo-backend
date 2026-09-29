@@ -18,7 +18,6 @@ def get_auth_cookie(session_id: Annotated[str | None, Cookie()] = None):
 
 @router.post("/login")
 def login(data: UserLoginSchema, response: Response,
-          db: Session = Depends(get_db),
           session_id: Annotated[str | None, Cookie()] = None):
     if session_id or get_user_by_id(session_id) is not None:
         raise HTTPException(status_code=409, detail="Client already in account")
