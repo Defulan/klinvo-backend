@@ -7,3 +7,7 @@ class UserCreateSchema(BaseModel):
 class UserLoginSchema(BaseModel):
     id: int
     password: str
+
+class UserOut(BaseModel):
+    id: int
+    name: str
