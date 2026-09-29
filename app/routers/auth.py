@@ -19,7 +19,7 @@ def get_auth_cookie(session_id: Annotated[str | None, Cookie()] = None):
 @router.post("/login")
 def login(data: UserLoginSchema, response: Response,
           session_id: Annotated[str | None, Cookie()] = None):
-    if session_id or get_user_by_id(session_id) is not None:
+    if session_id:
         raise HTTPException(status_code=409, detail="Client already in account")
     
     user = get_user_by_id(data.id)
