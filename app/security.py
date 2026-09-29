@@ -7,3 +7,6 @@ hasher = PasswordHash((Argon2Hasher(),))
 
 def get_serializer():
     return URLSafeSerializer(os.environ.get("COOKIE_KEY"))
+
+def hash_password(password: str) -> str:
+    return hasher.hash(password)
