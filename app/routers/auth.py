@@ -3,7 +3,7 @@ from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from database import get_db, get_user_by_id
 from schemas import UserLoginSchema
-from security import create_cookie, verify_password
+from security import create_cookie, verify_password, get_value_from_cookie
 
 router = APIRouter(
     prefix="/auth",
@@ -27,5 +27,20 @@ def login(data: UserLoginSchema, response: Response,
         raise HTTPException(status_code=401, detail="Wrong password or ID")
     
     create_cookie(response, "session_id", user.id)
+
+    return {"message": "success"}
+
+
+@router.post("/logout")
+def logout(response: Response, session_id: Annotated[str | None, Cookie()] = None):
+    if not session_id:
+        raise HTTPException(status_code=401, detail="Client not in account")
+    
+    user_id = get_value_from_cookie(session_id)
+    user = get_user_by_id(user_id)
+    if user is None:
+        raise HTTPException(status_code=401, detail="User doesn't exists")
+    
+    response.delete_cookie(key="session_id", path="/")
 
     return {"message": "success"}
