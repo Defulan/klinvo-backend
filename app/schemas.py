@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class UserCreateSchema(BaseModel):
     name: str
@@ -11,4 +12,8 @@ class UserLoginSchema(BaseModel):
 
 class UserOut(BaseModel):
     id: int
+    name: str
+
+class LanguageCreate(BaseModel):
+    author_id: int
     name: str

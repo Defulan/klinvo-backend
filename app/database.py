@@ -1,7 +1,8 @@
 from datetime import datetime
 import sqlalchemy
-from sqlalchemy import String, Integer, select, Text
+from sqlalchemy import String, Integer, select, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, mapped_column, Mapped, DeclarativeBase, sessionmaker
+from sqlalchemy.sql import func
 from sqlalchemy.engine import create_engine, Engine
 
 @sqlalchemy.event.listens_for(Engine, "connect")
@@ -39,18 +40,18 @@ class Language(Base):
     __tablename__ = "languages"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    author_id: Mapped[int] = mapped_column()
-    name: Mapped[str] = mapped_column(String(255))
-    created_at: Mapped[datetime] = mapped_column()
+    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 class Note(Base):
     __tablename__ = "notes"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    language_id: Mapped[int] = mapped_column()
-    content: Mapped[Text] = mapped_column()
-    created_at: Mapped[datetime] = mapped_column()
+    language_id: Mapped[int] = mapped_column(ForeignKey("languages.id"), nullable=False)
+    content: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 def get_user_by_id(db, user_id) -> User | None:
