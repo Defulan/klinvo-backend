@@ -20,3 +20,8 @@ def get_language(language_id: int, db: Session = Depends(get_db)):
 @router.get("/", response_model=list[LanguageOut])
 def get_languages(db: Session = Depends(get_db)):
     return db.scalars(select(Language)).all()
+
+
+@router.get("/{user_id}", response_model=list[LanguageOut])
+def get_user_languages(user_id: int, db: Session = Depends(get_db)):
+    return db.scalars(select(Language).where(Language.author_id == user_id)).all()
