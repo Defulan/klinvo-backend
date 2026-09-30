@@ -17,3 +17,9 @@ class UserOut(BaseModel):
 class LanguageCreate(BaseModel):
     author_id: int
     name: str
+
+class LanguageOut(BaseModel):
+    id: int
+    author_id: int
+    name: str
+    created_at: datetime
