@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Cookie, HTTPException, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from security import hasher, get_serializer, create_cookie
+from security import hasher, create_cookie
 from database import get_db, get_user_by_id, User
 from schemas import UserCreateSchema, UserOut
 from enums import CookieKey, ErrorCode
