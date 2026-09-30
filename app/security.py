@@ -4,6 +4,7 @@ from fastapi import Response, HTTPException
 from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher
 from itsdangerous import BadSignature, URLSafeSerializer
+from enums import CookieKey
 
 hasher = PasswordHash((Argon2Hasher(),))
 
@@ -17,7 +18,7 @@ def hash_password(password: str) -> str:
 def verify_password(entered_password: str, hashed_password: str) -> bool:
     return hasher.verify(entered_password, hashed_password)
 
-def create_cookie(response: Response, key: str, value):
+def create_cookie(response: Response, key: CookieKey, value):
     response.set_cookie(
         key=key,
         value=get_serializer().dumps(value),

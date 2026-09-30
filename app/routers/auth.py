@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from database import get_db, get_user_by_id
 from schemas import UserLoginSchema
 from security import create_cookie, verify_password, get_value_from_cookie
+from enums import CookieKey
 
 router = APIRouter(
     prefix="/auth",
@@ -26,7 +27,7 @@ def login(data: UserLoginSchema, response: Response,
     if user is None or not verify_password(data.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Wrong password or ID")
     
-    create_cookie(response, "session_id", user.id)
+    create_cookie(response, CookieKey.SESSION_ID, user.id)
 
     return {"message": "success"}
 
@@ -41,6 +42,6 @@ def logout(response: Response, session_id: Annotated[str | None, Cookie()] = Non
     if user is None:
         raise HTTPException(status_code=401, detail="User doesn't exists")
     
-    response.delete_cookie(key="session_id", path="/")
+    response.delete_cookie(key=CookieKey.SESSION_ID, path="/")
 
     return {"message": "success"}
