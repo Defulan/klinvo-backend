@@ -3,7 +3,7 @@ from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from database import get_db, get_user_by_id
 from schemas import UserLoginSchema
-from security import create_cookie, verify_password, get_value_from_cookie
+from security import create_cookie, verify_password, get_value_from_cookie, delete_cookie
 from enums import CookieKey
 
 router = APIRouter(
@@ -42,6 +42,6 @@ def logout(response: Response, session_id: Annotated[str | None, Cookie()] = Non
     if user is None:
         raise HTTPException(status_code=401, detail="User doesn't exists")
     
-    response.delete_cookie(key=CookieKey.SESSION_ID, path="/")
+    delete_cookie(response, key=CookieKey.SESSION_ID)
 
     return {"message": "success"}
