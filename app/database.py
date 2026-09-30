@@ -35,6 +35,8 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(50))
     password_hash: Mapped[str] = mapped_column(String)
 
+    languages: Mapped[list["Language"]] = relationship(back_populates="author")
+
 
 class Language(Base):
     __tablename__ = "languages"
@@ -44,6 +46,9 @@ class Language(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
+    author: Mapped["User"] = relationship(back_populates="languages")
+    notes: Mapped[list["Note"]] = relationship(back_populates="language")
+
 
 class Note(Base):
     __tablename__ = "notes"
@@ -52,6 +57,8 @@ class Note(Base):
     language_id: Mapped[int] = mapped_column(ForeignKey("languages.id"), nullable=False)
     content: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    language: Mapped["Language"] = relationship(back_populates="notes")
 
 
 def get_user_by_id(db, user_id) -> User | None:
