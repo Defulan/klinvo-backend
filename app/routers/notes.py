@@ -10,3 +10,7 @@ router = APIRouter(
     prefix="/notes",
     tags=["Notes"]
 )
+
+@router.get("/{note_id}", response_model=NoteOut)
+def get_note(note_id: int, db: Session = Depends(get_db)):
+    return db.scalars(select(Note).where(Note.id == note_id)).first()
