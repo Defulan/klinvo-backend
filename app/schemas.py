@@ -36,5 +36,6 @@ class NoteOut(BaseModel):
     created_at: datetime
 
 class NotePatch(BaseModel):
+    id: int
     title: str | None
     content: str | None
