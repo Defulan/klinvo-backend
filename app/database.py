@@ -45,6 +45,7 @@ class Language(Base):
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    is_private: Mapped[bool] = mapped_column(server_default=False)
 
     author: Mapped["User"] = relationship(back_populates="languages")
     notes: Mapped[list["Note"]] = relationship(back_populates="language")

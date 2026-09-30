@@ -23,6 +23,7 @@ class LanguageOut(BaseModel):
     author_id: int
     name: str
     created_at: datetime
+    is_private: bool
 
 class NoteCreate(BaseModel):
     language_id: int
