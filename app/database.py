@@ -33,6 +33,13 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(50))
     password_hash: Mapped[str] = mapped_column(String)
 
+class Language(Base):
+    __tablename__ = "languages"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    author_id: Mapped[int] = mapped_column()
+    name: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column()
 
 def get_user_by_id(db, user_id) -> User | None:
     return db.scalars(select(User).where(User.id == user_id)).first()
