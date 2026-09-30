@@ -4,7 +4,7 @@ from fastapi import Response, HTTPException
 from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher
 from itsdangerous import BadSignature, URLSafeSerializer
-from enums import CookieKey
+from enums import CookieKey, ErrorCode
 
 hasher = PasswordHash((Argon2Hasher(),))
 
@@ -38,4 +38,4 @@ def get_value_from_cookie(value: str) -> str:
     try:
         return get_serializer().loads(value)
     except BadSignature:
-        raise HTTPException(status_code=401, detail="Invalid cookie")
+        raise HTTPException(status_code=401, detail=ErrorCode.INVALID_COOKIE_VALUE)

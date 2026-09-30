@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from database import get_db, get_user_by_id
 from schemas import UserLoginSchema
 from security import create_cookie, verify_password, get_value_from_cookie, delete_cookie
-from enums import CookieKey
+from enums import CookieKey, ErrorCode
 
 router = APIRouter(
     prefix="/auth",
@@ -25,11 +25,11 @@ def get_auth_cookie(session_id: Annotated[str | None, Cookie()] = None):
 def login(data: UserLoginSchema, response: Response, db: Session = Depends(get_db),
           session_id: Annotated[str | None, Cookie()] = None):
     if session_id:
-        raise HTTPException(status_code=409, detail="Client already in account")
+        raise HTTPException(status_code=409, detail=ErrorCode.AUTHORIZED)
     
     user = get_user_by_id(db, data.id)
     if user is None or not verify_password(data.password, user.password_hash):
-        raise HTTPException(status_code=401, detail="Wrong password or ID")
+        raise HTTPException(status_code=401, detail=ErrorCode.WRONG_LOGIN_DATA)
     
     create_cookie(response, CookieKey.SESSION_ID, user.id)
 
@@ -40,12 +40,12 @@ def login(data: UserLoginSchema, response: Response, db: Session = Depends(get_d
 def logout(response: Response, db: Session = Depends(get_db),
            session_id: Annotated[str | None, Cookie()] = None):
     if not session_id:
-        raise HTTPException(status_code=401, detail="Client not in account")
+        raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
     
     user_id = get_value_from_cookie(session_id)
     user = get_user_by_id(db, user_id)
     if user is None:
-        raise HTTPException(status_code=401, detail="User doesn't exists")
+        raise HTTPException(status_code=401, detail=ErrorCode.USER_DOESNT_EXIST)
     
     delete_cookie(response, key=CookieKey.SESSION_ID)
 

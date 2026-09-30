@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from security import hasher, get_serializer, create_cookie
 from database import get_db, get_user_by_id, User
 from schemas import UserCreateSchema, UserOut
-from enums import CookieKey
+from enums import CookieKey, ErrorCode
 
 router = APIRouter(
     prefix="/users",
@@ -17,7 +17,7 @@ router = APIRouter(
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = get_user_by_id(db, user_id)
     if user is None:
-        raise HTTPException(status_code=400, detail="User with this ID doesn't exists")    
+        raise HTTPException(status_code=400, detail=ErrorCode.USER_DOESNT_EXIST)    
     return user
 
 
@@ -31,10 +31,10 @@ def create_user(data: UserCreateSchema, response: Response,
                 db: Session = Depends(get_db),
                 session_id: Annotated[str | None, Cookie()] = None):
     if session_id:
-        raise HTTPException(status_code=400, detail="User already registered")
+        raise HTTPException(status_code=400, detail=ErrorCode.AUTHORIZED)
     
     if data.password != data.repassword:
-        raise HTTPException(status_code=400, detail="Password & repassword not equal")
+        raise HTTPException(status_code=400, detail=ErrorCode.WRONG_REGISTER_DATA)
     
     password_hash = hasher.hash(data.password)
 
