@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from database import Base, engine
-from routers import users, auth, notes
+from routers import users, auth, notes, languages
 import os
 from dotenv import load_dotenv
 
@@ -33,3 +33,4 @@ app.add_middleware(
 app.include_router(users.router)
 app.include_router(auth.router)
 app.include_router(notes.router)
+app.include_router(languages.router)
