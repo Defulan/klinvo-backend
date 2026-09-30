@@ -15,3 +15,8 @@ router = APIRouter(
 @router.get("/{language_id}", response_model=LanguageOut)
 def get_language(language_id: int, db: Session = Depends(get_db)):
     return db.scalars(select(Language).where(Language.id == language_id)).first()
+
+
+@router.get("/", response_model=list[LanguageOut])
+def get_languages(db: Session = Depends(get_db)):
+    return db.scalars(select(Language)).all()
