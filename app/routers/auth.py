@@ -34,12 +34,13 @@ def login(data: UserLoginSchema, response: Response,
 
 
 @router.post("/logout")
-def logout(response: Response, session_id: Annotated[str | None, Cookie()] = None):
+def logout(response: Response, db: Session = Depends(get_db),
+           session_id: Annotated[str | None, Cookie()] = None):
     if not session_id:
         raise HTTPException(status_code=401, detail="Client not in account")
     
     user_id = get_value_from_cookie(session_id)
-    user = get_user_by_id(user_id)
+    user = get_user_by_id(db, user_id)
     if user is None:
         raise HTTPException(status_code=401, detail="User doesn't exists")
     
