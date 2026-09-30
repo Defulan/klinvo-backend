@@ -1,5 +1,6 @@
+from datetime import datetime
 import sqlalchemy
-from sqlalchemy import String, Integer, select
+from sqlalchemy import String, Integer, select, Text
 from sqlalchemy.orm import relationship, mapped_column, Mapped, DeclarativeBase, sessionmaker
 from sqlalchemy.engine import create_engine, Engine
 
@@ -33,6 +34,7 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(50))
     password_hash: Mapped[str] = mapped_column(String)
 
+
 class Language(Base):
     __tablename__ = "languages"
 
@@ -50,5 +52,11 @@ class Note(Base):
     content: Mapped[Text] = mapped_column()
     created_at: Mapped[datetime] = mapped_column()
 
+
 def get_user_by_id(db, user_id) -> User | None:
     return db.scalars(select(User).where(User.id == user_id)).first()
+
+
+def get_language_by_id(db, language_id) -> User | None:
+    return db.scalars(select(Language).where(Language.id == language_id)).first()
+
