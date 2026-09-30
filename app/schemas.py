@@ -23,3 +23,14 @@ class LanguageOut(BaseModel):
     author_id: int
     name: str
     created_at: datetime
+
+class NoteCreate(BaseModel):
+    language_id: int
+    title: str
+
+class NoteOut(BaseModel):
+    id: int
+    language_id: int
+    title: str
+    content: str
+    created_at: datetime
