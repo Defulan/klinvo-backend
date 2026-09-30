@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 import sqlalchemy
 from sqlalchemy import String, Integer, select, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, mapped_column, Mapped, DeclarativeBase, sessionmaker
@@ -33,6 +34,7 @@ class User(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
+    bio: Mapped[Optional[str]] = mapped_column(Text)
     password_hash: Mapped[str] = mapped_column(String)
 
     languages: Mapped[list["Language"]] = relationship(back_populates="author")
