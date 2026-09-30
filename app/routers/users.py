@@ -29,8 +29,11 @@ def get_users(db: Session = Depends(get_db)):
 def create_user(data: UserCreateSchema, response: Response,
                 db: Session = Depends(get_db),
                 session_id: Annotated[str | None, Cookie()] = None):
-    if get_user_by_id(session_id) is not None:
-        raise HTTPException(status_code=400, detail="User already registered!")
+    if session_id:
+        raise HTTPException(status_code=400, detail="User already registered")
+    
+    if data.password != data.repassword:
+        raise HTTPException(status_code=400, detail="Password & repassword not equal")
     
     password_hash = hasher.hash(data.password)
 

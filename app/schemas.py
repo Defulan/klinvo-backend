@@ -3,6 +3,7 @@ from pydantic import BaseModel
 class UserCreateSchema(BaseModel):
     name: str
     password: str
+    repassword: str
 
 class UserLoginSchema(BaseModel):
     id: int
