@@ -70,3 +70,7 @@ def get_user_by_id(db, user_id) -> User | None:
 def get_language_by_id(db, language_id) -> User | None:
     return db.scalars(select(Language).where(Language.id == language_id)).first()
 
+
+def get_note_by_id(db, note_id) -> User | None:
+    return db.scalars(select(Note).where(Note.id == note_id)).first()
+
