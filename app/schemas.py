@@ -13,7 +13,7 @@ class UserLoginSchema(BaseModel):
 class UserOut(BaseModel):
     id: int
     name: str
-    bio: str
+    bio: str | None
 
 class UserPatch(BaseModel):
     name: str | None
