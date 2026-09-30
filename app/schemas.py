@@ -14,6 +14,11 @@ class UserOut(BaseModel):
     id: int
     name: str
 
+class UserPatch(BaseModel):
+    name: str | None
+    bio: str | None
+
+
 class LanguageCreate(BaseModel):
     name: str
 
