@@ -41,5 +41,14 @@ class Language(Base):
     name: Mapped[str] = mapped_column(String(255))
     created_at: Mapped[datetime] = mapped_column()
 
+
+class Note(Base):
+    __tablename__ = "notes"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    language_id: Mapped[int] = mapped_column()
+    content: Mapped[Text] = mapped_column()
+    created_at: Mapped[datetime] = mapped_column()
+
 def get_user_by_id(db, user_id) -> User | None:
     return db.scalars(select(User).where(User.id == user_id)).first()
