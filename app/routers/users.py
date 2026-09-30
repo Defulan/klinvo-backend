@@ -2,9 +2,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Cookie, HTTPException, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from security import hasher, get_serializer
+from security import hasher, get_serializer, create_cookie
 from database import get_db, get_user_by_id, User
 from schemas import UserCreateSchema, UserOut
+from enums import CookieKey
 
 router = APIRouter(
     prefix="/users",
@@ -41,14 +42,6 @@ def create_user(data: UserCreateSchema, response: Response,
     db.add(user)
     db.commit()
 
-    response.set_cookie(
-        key="session_id",
-        value=get_serializer().dumps(user.id),
-        path="/",
-        secure=False,
-        httponly=True,
-        max_age=86400*366,
-        samesite="lax"
-    )
+    create_cookie(response, CookieKey.SESSION_ID, user.id)
 
     return {"message": "success"}
