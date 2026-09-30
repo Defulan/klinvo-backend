@@ -29,6 +29,11 @@ def create_cookie(response: Response, key: CookieKey, value):
         samesite="lax"
     )
 
+
+def delete_cookie(response: Response, key: CookieKey):
+    response.delete_cookie(key=key, path="/")
+
+
 def get_value_from_cookie(value: str) -> str:
     try:
         return get_serializer().loads(value)
