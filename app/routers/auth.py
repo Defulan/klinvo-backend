@@ -22,12 +22,12 @@ def get_auth_cookie(session_id: Annotated[str | None, Cookie()] = None):
 
 
 @router.post("/login")
-def login(data: UserLoginSchema, response: Response,
+def login(data: UserLoginSchema, response: Response, db: Session = Depends(get_db),
           session_id: Annotated[str | None, Cookie()] = None):
     if session_id:
         raise HTTPException(status_code=409, detail="Client already in account")
     
-    user = get_user_by_id(data.id)
+    user = get_user_by_id(db, data.id)
     if user is None or not verify_password(data.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Wrong password or ID")
     
