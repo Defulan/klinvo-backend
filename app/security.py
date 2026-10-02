@@ -1,16 +1,16 @@
-import os
 from functools import lru_cache
 from fastapi import Response, HTTPException
 from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher
 from itsdangerous import BadSignature, URLSafeSerializer
 from enums import CookieKey, ErrorCode
+from config import settings
 
 hasher = PasswordHash((Argon2Hasher(),))
 
 @lru_cache
 def get_serializer():
-    return URLSafeSerializer(os.environ.get("COOKIE_KEY"))
+    return URLSafeSerializer(settings.COOKIE_KEY)
 
 def hash_password(password: str) -> str:
     return hasher.hash(password)

@@ -2,10 +2,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
+from config import settings
 from database import Base, engine
 from routers import users, auth, notes, languages
-import os
-from dotenv import load_dotenv
 
 
 @asynccontextmanager
@@ -15,11 +14,10 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-load_dotenv()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[settings.FRONTEND_URL],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,7 +25,7 @@ app.add_middleware(
 
 app.add_middleware(
     SessionMiddleware,
-    secret_key=os.environ.get("SECRET_KEY")
+    secret_key=settings.SECRET_KEY
 )
 
 app.include_router(users.router)
