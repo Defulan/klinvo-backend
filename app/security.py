@@ -3,8 +3,8 @@ from fastapi import Response, HTTPException
 from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher
 from itsdangerous import BadSignature, URLSafeSerializer
-from enums import CookieKey, ErrorCode
-from config import settings
+from app.enums import CookieKey, ErrorCode
+from app.config import settings
 
 hasher = PasswordHash((Argon2Hasher(),))
 

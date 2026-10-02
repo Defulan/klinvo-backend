@@ -5,7 +5,7 @@ from sqlalchemy import String, Integer, select, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, mapped_column, Mapped, DeclarativeBase, sessionmaker
 from sqlalchemy.sql import func
 from sqlalchemy.engine import create_engine, Engine
-from config import settings
+from app.config import settings
 
 @sqlalchemy.event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):

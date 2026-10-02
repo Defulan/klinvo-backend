@@ -2,10 +2,10 @@ from typing import Annotated
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from database import get_db, get_user_by_id, get_language_by_id, Note, Language, get_note_by_id
-from schemas import NoteCreate, NoteOut, NotePatch
-from security import get_value_from_cookie
-from enums import ErrorCode
+from app.database import get_db, get_user_by_id, get_language_by_id, Note, Language, get_note_by_id
+from app.schemas import NoteCreate, NoteOut, NotePatch
+from app.security import get_value_from_cookie
+from app.enums import ErrorCode
 
 router = APIRouter(
     prefix="/notes",
