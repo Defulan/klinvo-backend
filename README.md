@@ -5,14 +5,14 @@ README: [English](README.md) | [Русский](README.RU.md)
 Klinvo is a web application for constructing artificial languages (conlangs).
 
 * **Tech stack:** Python, FastAPI, SQLAlchemy, SQLite
-* **Frontend repository:** [klinvo-frontend]()
+* **Frontend repository:** [klinvo-frontend](https://github.com/Defulan/klinvo-frontend)
 
 ## How to Start
 * **Requirements:** Python 3.11+ (project was written and tested on Python 3.13)
 
 1. **Clone the repository**
 ```bash
-git clone <link to klinvo-backend>
+git clone https://github.com/Defulan/klinvo-backend
 cd klinvo-backend
 ```
 
