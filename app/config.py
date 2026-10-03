@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite:///../data.db"
 
     COOKIE_SECURE: bool = False
+    COOKIE_SAMESITE: str = "lax"
 
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", extra="ignore"
