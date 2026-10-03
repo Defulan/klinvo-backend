@@ -23,7 +23,7 @@ def create_cookie(response: Response, key: CookieKey, value):
         key=key,
         value=get_serializer().dumps(value),
         path="/",
-        secure=False,
+        secure=settings.COOKIE_SECURE,
         httponly=True,
         max_age=86400*366,
         samesite="lax"
