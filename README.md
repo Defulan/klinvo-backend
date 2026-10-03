@@ -72,7 +72,7 @@ All general code is located in the folder "app"
 Currently, the main goal is to bring the project to the MVP stage.
 
 ### Main (MVP)
-- [ ] Accounts system (DB table, creating, log in/log out, changing, getting data)
+- [⏳] Accounts system (DB table, creating, log in/log out, changing, getting data)
 - [ ] Database migration (SQLite -> PostgreSQL)
 - [ ] Language (DB table, CRUD)
 - [ ] Notes (DB table, CRUD)
