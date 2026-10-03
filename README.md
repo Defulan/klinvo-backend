@@ -42,8 +42,8 @@ cp .env.example .env
 * COOKIE_KEY - key used to sign cookie values
 * FRONTEND_URL - frontend URL (e.g., `http://localhost:5173`)
 * DATABASE_URL - database connection string (e.g., `sqlite:///./data.db`)
-* COOKIE_SECURE - secure param in cookies (True if HTTPS, False for local development)
-* COOKIE_SAMESITE - samesite param in cookies ("none" if HTTPS, "lax" for local development)
+* COOKIE_SECURE - secure param in cookies (`True` if HTTPS, `False` for local development)
+* COOKIE_SAMESITE - samesite param in cookies (`none` if HTTPS, `lax` for local development)
 
 5. **Run the server**
 ```bash
