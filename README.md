@@ -4,7 +4,7 @@ README: [English](README.md) | [Русский](README.RU.md)
 
 Klinvo is a web application for constructing artificial languages (conlangs).
 
-* **Tech stack:** Python, FastAPI, SQLAlchemy, SQLite
+* **Tech stack:** Python, FastAPI, SQLAlchemy, PostgreSQL, Alembic
 * **Frontend repository:** [klinvo-frontend](https://github.com/Defulan/klinvo-frontend)
 
 ## How to Start
@@ -41,11 +41,16 @@ cp .env.example .env
 * SECRET_KEY - secret key for sessions/cookies
 * COOKIE_KEY - key used to sign cookie values
 * FRONTEND_URL - frontend URL (e.g., `http://localhost:5173`)
-* DATABASE_URL - database connection string (e.g., `sqlite:///./data.db`)
+* DATABASE_URL - database connection string (e.g., `postgresql://user:password@localhost:5432/dbname`)
 * COOKIE_SECURE - secure param in cookies (`True` if HTTPS, `False` for local development)
 * COOKIE_SAMESITE - samesite param in cookies (`none` if HTTPS, `lax` for local development)
 
-5. **Run the server**
+5. **Apply database migrations**
+```bash
+alembic upgrade head
+```
+
+6. **Run the server**
 ```bash
 uvicorn app.main:app --reload
 ```
@@ -74,8 +79,8 @@ All general code is located in the folder "app"
 Currently, the main goal is to bring the project to the MVP stage.
 
 ### Main (MVP)
-- [ ] Accounts system (DB table, creating, log in/log out, changing, getting data)
-- [ ] Database migration (SQLite -> PostgreSQL)
+- [x] Accounts system (DB table, creating, log in/log out, changing, getting data)
+- [x] Database migration (from SQLite to PostgreSQL, add Alembic)
 - [ ] Language (DB table, CRUD)
 - [ ] Notes (DB table, CRUD)
 - [ ] Words (DB table/tables, CRUD)
