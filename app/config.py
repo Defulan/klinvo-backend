@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     COOKIE_KEY: str
 
     FRONTEND_URL: str
-    DATABASE_URL: str = "sqlite:///../data.db"
+    DATABASE_URL: str
 
     COOKIE_SECURE: bool = False
     COOKIE_SAMESITE: str = "lax"
