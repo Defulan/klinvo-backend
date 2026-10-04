@@ -54,7 +54,7 @@ def change_user(data: UserPatch, db: Session = Depends(get_db),
         raise HTTPException(status_code=403, detail=ErrorCode.UNAUTHORIZED)
     
     user_id = get_value_from_cookie(session_id)
-    user = get_user_by_id(user_id)
+    user = get_user_by_id(db, user_id)
 
     if user is None:
         raise HTTPException(status_code=400, detail=ErrorCode.USER_DOESNT_EXIST)
