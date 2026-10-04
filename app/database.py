@@ -1,10 +1,9 @@
 from datetime import datetime
 from typing import Optional
-import sqlalchemy
-from sqlalchemy import String, Integer, select, Text, ForeignKey, DateTime
+from sqlalchemy import String, select, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, mapped_column, Mapped, DeclarativeBase, sessionmaker
 from sqlalchemy.sql import func
-from sqlalchemy.engine import create_engine, Engine
+from sqlalchemy.engine import create_engine
 from app.config import settings
 
 
