@@ -4,7 +4,7 @@ README: [English](README.md) | [Русский](README.RU.md)
 
 Klinvo - веб-приложение для конструирования искусственных языков (конлангов).
 
-* **Технологии:** Python, FastAPI, SQLAlchemy, SQLite
+* **Технологии:** Python, FastAPI, SQLAlchemy, PostgreSQL, Alembic
 * **Frontend репозиторий:** [klinvo-frontend](https://github.com/Defulan/klinvo-frontend)
 
 ## Как запустить
@@ -41,11 +41,16 @@ cp .env.example .env
 * SECRET_KEY - ключ, которым передаются cookie
 * COOKIE_KEY - значение, которым подписываются значения в cookie
 * FRONTEND_URL - адрес фронтенда (например: `http://localhost:5173`)
-* DATABASE_URL - адрес базы данных (например: `sqlite:///./data.db`)
+* DATABASE_URL - адрес базы данных (например: `postgresql://user:password@localhost:5432/dbname`)
 * COOKIE_SECURE - параметр secure у cookie (`True` если HTTPS, `False` для локальной разработки)
 * COOKIE_SAMESITE - параметр samesite у cookie (`none` если HTTPS, `lax` для локальной разработки)
 
-5. **Запуск сервера**
+5. **Применить миграции базы данных**
+```bash
+alembic upgrade head
+```
+
+6. **Запуск сервера**
 ```bash
 uvicorn app.main:app --reload
 ```
@@ -73,8 +78,8 @@ uvicorn app.main:app --reload
 Сейчас основная задача - довести проект до MVP.
 
 ### Основные (MVP)
-- [ ] Система аккаунтов (таблица в БД, создание, вход/выход, изменение, получение данных)
-- [ ] Миграция базы данных (SQLite -> PostgreSQL)
+- [x] Система аккаунтов (таблица в БД, создание, вход/выход, изменение, получение данных)
+- [x] Миграция базы данных (SQLite -> PostgreSQL, добавление Alembic)
 - [ ] Язык (таблица в БД, создание, получение)
 - [ ] Заметки (таблица в БД, создание, изменение, получение, удаление)
 - [ ] Слова (таблица/таблицы в БД, создание, редактирование, получение, удаление)
