@@ -6,6 +6,7 @@ class Settings(BaseSettings):
 
     FRONTEND_URL: str
     DATABASE_URL: str
+    TEST_DATABASE_URL: str
 
     COOKIE_SECURE: bool = False
     COOKIE_SAMESITE: str = "lax"
