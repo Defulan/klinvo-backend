@@ -4,7 +4,7 @@ README: [English](README.md) | [Русский](README.RU.md)
 
 Klinvo - веб-приложение для конструирования искусственных языков (конлангов).
 
-* **Технологии:** Python, FastAPI, SQLAlchemy, PostgreSQL, Alembic
+* **Технологии:** Python, FastAPI, SQLAlchemy, PostgreSQL, Alembic, Pytest
 * **Frontend репозиторий:** [klinvo-frontend](https://github.com/Defulan/klinvo-frontend)
 
 ## Как запустить
@@ -55,6 +55,18 @@ alembic upgrade head
 uvicorn app.main:app --reload
 ```
 * Интерактивная API документация будет доступна на http://127.0.0.1:8000/docs
+
+## Тестирование
+Запустить проверку эндпоинтов:
+```bash
+pytest
+```
+
+На данный момент проверки готовы для:
+- [x] users.py (/users)
+- [ ] auth.py (/auth)
+- [ ] languages.py (/languages)
+- [ ] notes.py (/notes)
 
 ## Структура проекта
 Весь основной код находится в папке app
