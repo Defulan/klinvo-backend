@@ -47,10 +47,14 @@ def client(db_session):
 
 @pytest.fixture()
 def create_random_user(db_session):
-    letters = "qwertyuiopasdfghjklzxcvbnm"
-    random_name = "".join(random.choices(letters, k=6))
-    random_password = "".join(random.choices(letters, k=12))
+    def _create_random_user():
+        letters = "qwertyuiopasdfghjklzxcvbnm"
+        random_name = "".join(random.choices(letters, k=6))
+        random_password = "".join(random.choices(letters, k=12))
 
-    user = User(name=random_name, password_hash=hash_password(random_password))
-    db_session.add(user)
-    db_session.commit()
+        user = User(name=random_name, password_hash=hash_password(random_password))
+        db_session.add(user)
+        db_session.commit()
+        return user
+    
+    return _create_random_user
