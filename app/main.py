@@ -5,7 +5,10 @@ from app.config import settings
 from app.routers import users, auth, notes, languages
 
 
-app = FastAPI()
+app = FastAPI(
+    title="klinvo-backend",
+    version="0.1.0"
+)
 
 app.add_middleware(
     CORSMiddleware,
