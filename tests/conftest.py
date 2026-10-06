@@ -1,10 +1,12 @@
+import random
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.main import app
-from app.database import Base, get_db
+from app.database import Base, get_db, User
 from app.config import settings
+from app.security import hash_password
 
 test_engine = create_engine(settings.TEST_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
@@ -41,3 +43,14 @@ def client(db_session):
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
+
+
+@pytest.fixture()
+def create_random_user(db_session):
+    letters = "qwertyuiopasdfghjklzxcvbnm"
+    random_name = "".join(random.choice(letters, k=6))
+    random_password = "".join(random.choice(letters, k=12))
+
+    user = User(name=random_name, password_hash=hash_password(random_password))
+    db_session.add(user)
+    db_session.commit()
