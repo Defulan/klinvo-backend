@@ -12,8 +12,8 @@ router = APIRouter(
     tags=["Languages"]
 )
 
-@router.get("/{language_id}", response_model=LanguageOut)
-def get_language(language_id: int, db: Session = Depends(get_db)):
+@router.get("/{language_id}")
+def get_language(language_id: int, db: Session = Depends(get_db)) -> LanguageOut:
     return db.scalars(select(Language).where(Language.id == language_id)).first()
 
 
@@ -22,8 +22,8 @@ def get_languages(db: Session = Depends(get_db)):
     return db.scalars(select(Language)).all()
 
 
-@router.get("/{user_id}", response_model=list[LanguageOut])
-def get_user_languages(user_id: int, db: Session = Depends(get_db)):
+@router.get("/{user_id}")
+def get_user_languages(user_id: int, db: Session = Depends(get_db)) -> list[LanguageOut]:
     return db.scalars(select(Language).where(Language.author_id == user_id)).all()
 
 

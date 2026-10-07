@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.security import hasher, create_cookie, get_value_from_cookie
 from app.database import get_db, get_user_by_id, User
-from app.schemas import UserCreateSchema, UserOut, UserPatch
+from app.schemas import UserCreate, UserOut, UserPatch
 from app.enums import CookieKey, ErrorCode
 
 router = APIRouter(
@@ -13,21 +13,21 @@ router = APIRouter(
 )
 
 
-@router.get("/{user_id}", response_model=UserOut)
-def get_user(user_id: int, db: Session = Depends(get_db)):
+@router.get("/{user_id}")
+def get_user(user_id: int, db: Session = Depends(get_db)) -> UserOut:
     user = get_user_by_id(db, user_id)
     if user is None:
         raise HTTPException(status_code=400, detail=ErrorCode.USER_DOESNT_EXIST)
     return user
 
 
-@router.get("/", response_model=list[UserOut])
-def get_users(db: Session = Depends(get_db)):
+@router.get("/")
+def get_users(db: Session = Depends(get_db)) -> list[UserOut]:
     return db.scalars(select(User)).all()
 
 
 @router.post("/")
-def create_user(data: UserCreateSchema, response: Response,
+def create_user(data: UserCreate, response: Response,
                 db: Session = Depends(get_db),
                 session_id: Annotated[str | None, Cookie()] = None):
     if session_id:
