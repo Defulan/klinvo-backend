@@ -64,7 +64,7 @@ pytest
 
 На данный момент проверки готовы для:
 - [x] users.py (/users)
-- [ ] auth.py (/auth)
+- [x] auth.py (/auth)
 - [ ] languages.py (/languages)
 - [ ] notes.py (/notes)
 

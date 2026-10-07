@@ -64,7 +64,7 @@ pytest
 
 Currently ready tests for:
 - [x] users.py (/users)
-- [ ] auth.py (/auth)
+- [x] auth.py (/auth)
 - [ ] languages.py (/languages)
 - [ ] notes.py (/notes)
 
