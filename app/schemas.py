@@ -1,12 +1,12 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-class UserCreateSchema(BaseModel):
+class UserCreate(BaseModel):
     name: str
     password: str
     repassword: str
 
-class UserLoginSchema(BaseModel):
+class UserLogin(BaseModel):
     id: int
     password: str
 

@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from app.database import get_db, get_user_by_id
-from app.schemas import UserLoginSchema
+from app.schemas import UserLogin
 from app.security import create_cookie, verify_password, get_value_from_cookie, delete_cookie
 from app.enums import CookieKey, ErrorCode
 
@@ -22,7 +22,7 @@ def get_auth_cookie(session_id: Annotated[str | None, Cookie()] = None):
 
 
 @router.post("/login")
-def login(data: UserLoginSchema, response: Response, db: Session = Depends(get_db),
+def login(data: UserLogin, response: Response, db: Session = Depends(get_db),
           session_id: Annotated[str | None, Cookie()] = None):
     if session_id:
         raise HTTPException(status_code=409, detail=ErrorCode.AUTHORIZED)

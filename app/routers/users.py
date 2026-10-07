@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.security import hasher, create_cookie, get_value_from_cookie
 from app.database import get_db, get_user_by_id, User
-from app.schemas import UserCreateSchema, UserOut, UserPatch
+from app.schemas import UserCreate, UserOut, UserPatch
 from app.enums import CookieKey, ErrorCode
 
 router = APIRouter(
@@ -27,7 +27,7 @@ def get_users(db: Session = Depends(get_db)):
 
 
 @router.post("/")
-def create_user(data: UserCreateSchema, response: Response,
+def create_user(data: UserCreate, response: Response,
                 db: Session = Depends(get_db),
                 session_id: Annotated[str | None, Cookie()] = None):
     if session_id:
