@@ -2,7 +2,10 @@ from pydantic import BaseModel, Field, model_validator
 from datetime import datetime
 from app.enums import ErrorCode
 
-class UserCreate(BaseModel):
+class ConfiguredBaseModel(BaseModel):
+    model_config = {"from_attributes": True}
+
+class UserCreate(ConfiguredBaseModel):
     name: str = Field(min_length=1, max_length=50)
     password: str
     repassword: str
@@ -13,42 +16,42 @@ class UserCreate(BaseModel):
             raise ValueError(ErrorCode.WRONG_REGISTER_DATA)
         return self
 
-class UserLogin(BaseModel):
+class UserLogin(ConfiguredBaseModel):
     id: int
     password: str
 
-class UserOut(BaseModel):
+class UserOut(ConfiguredBaseModel):
     id: int
     name: str
     bio: str | None
 
-class UserPatch(BaseModel):
+class UserPatch(ConfiguredBaseModel):
     name: str | None = Field(min_length=1, max_length=50)
     bio: str | None
 
 
-class LanguageCreate(BaseModel):
+class LanguageCreate(ConfiguredBaseModel):
     name: str = Field(min_length=1, max_length=255)
 
-class LanguageOut(BaseModel):
+class LanguageOut(ConfiguredBaseModel):
     id: int
     author_id: int
     name: str
     created_at: datetime
     is_private: bool
 
-class NoteCreate(BaseModel):
+class NoteCreate(ConfiguredBaseModel):
     language_id: int
     title: str = Field(min_length=1, max_length=255)
 
-class NoteOut(BaseModel):
+class NoteOut(ConfiguredBaseModel):
     id: int
     language_id: int
     title: str
     content: str
     created_at: datetime
 
-class NotePatch(BaseModel):
+class NotePatch(ConfiguredBaseModel):
     id: int
     title: str | None = Field(min_length=1, max_length=255)
     content: str | None
