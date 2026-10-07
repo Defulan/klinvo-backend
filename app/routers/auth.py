@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from app.database import get_db, get_user_by_id
-from app.schemas import UserLogin
+from app.schemas import UserLogin, AuthOut
 from app.security import create_cookie, verify_password, get_value_from_cookie, delete_cookie
 from app.enums import CookieKey, ErrorCode
 
@@ -12,13 +12,13 @@ router = APIRouter(
 )
 
 @router.get("/me")
-def get_auth_cookie(session_id: Annotated[str | None, Cookie()] = None):
+def get_auth_cookie(session_id: Annotated[str | None, Cookie()] = None) -> AuthOut:
     is_auth = False
     user_id = None
     if session_id is not None:
         is_auth = True
         user_id = get_value_from_cookie(session_id)
-    return {"userId": user_id, "isAuth": is_auth}
+    return AuthOut(user_id=user_id, is_auth=is_auth)
 
 
 @router.post("/login")

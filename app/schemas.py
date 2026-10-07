@@ -30,6 +30,11 @@ class UserPatch(ConfiguredBaseModel):
     bio: str | None = None
 
 
+class AuthOut(ConfiguredBaseModel):
+    user_id: int | None = Field(serialization_alias="userId")
+    is_auth: bool = Field(serialization_alias="isAuth")
+
+
 class LanguageCreate(ConfiguredBaseModel):
     name: str = Field(min_length=1, max_length=255)
 
