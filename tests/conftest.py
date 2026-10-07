@@ -7,6 +7,7 @@ from app.main import app
 from app.database import Base, get_db, User
 from app.config import settings
 from app.security import hash_password
+from app.enums import CookieKey
 
 test_engine = create_engine(settings.TEST_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
@@ -60,3 +61,11 @@ def create_random_user(db_session):
         return user
     
     return _create_random_user
+
+
+@pytest.fixture()
+def create_session_id(client, monkeypatch):
+    def _create_session_id(module_name: str, user_id: int):
+        monkeypatch.setattr(f"app.routers.{module_name}.get_value_from_cookie", lambda session_id: user_id)
+        client.cookies.set(CookieKey.SESSION_ID, "IDontCareMonkeypatchWillDoEverythingForMe")
+    return _create_session_id
