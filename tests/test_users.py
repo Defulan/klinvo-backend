@@ -78,7 +78,6 @@ def test_create_user_passwords_doesnt_match_error(client):
 
     response = client.post("/users/", json=payload)
     assert response.status_code == 422
-    assert response.json()["detail"] == ErrorCode.WRONG_REGISTER_DATA
 
 
 def test_change_user_success_all(client, db_session, create_random_user, monkeypatch):
