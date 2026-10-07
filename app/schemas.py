@@ -26,8 +26,8 @@ class UserOut(ConfiguredBaseModel):
     bio: str | None
 
 class UserPatch(ConfiguredBaseModel):
-    name: str | None = Field(min_length=1, max_length=50)
-    bio: str | None
+    name: str | None = Field(default=None, min_length=1, max_length=50)
+    bio: str | None = None
 
 
 class LanguageCreate(ConfiguredBaseModel):
@@ -53,5 +53,5 @@ class NoteOut(ConfiguredBaseModel):
 
 class NotePatch(ConfiguredBaseModel):
     id: int
-    title: str | None = Field(min_length=1, max_length=255)
-    content: str | None
+    title: str | None = Field(default=None, min_length=1, max_length=255)
+    content: str | None = None
