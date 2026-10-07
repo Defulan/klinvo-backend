@@ -80,10 +80,9 @@ def test_create_user_passwords_doesnt_match_error(client):
     assert response.status_code == 422
 
 
-def test_change_user_success_all(client, db_session, create_random_user, monkeypatch):
+def test_change_user_success_all(client, db_session, create_random_user, monkeypatch, create_session_id):
     user = create_random_user()
-    monkeypatch.setattr("app.routers.users.get_value_from_cookie", lambda session_id: user.id)
-    client.cookies.set(CookieKey.SESSION_ID, "IDontCareMonkeypatchWillDoEverythingForMe")
+    create_session_id(module_name="users", user_id=user.id)
 
     payload = {
         "name": "asdasd",
@@ -98,10 +97,9 @@ def test_change_user_success_all(client, db_session, create_random_user, monkeyp
     assert payload["bio"] == user.bio
 
 
-def test_change_user_success_partial(client, db_session, create_random_user, monkeypatch):
+def test_change_user_success_partial(client, db_session, create_random_user, monkeypatch, create_session_id):
     user = create_random_user()
-    monkeypatch.setattr("app.routers.users.get_value_from_cookie", lambda session_id: user.id)
-    client.cookies.set(CookieKey.SESSION_ID, "IDontCareMonkeypatchWillDoEverythingForMe")
+    create_session_id(module_name="users", user_id=user.id)
 
     payload = {
         "name": None,
@@ -117,9 +115,8 @@ def test_change_user_success_partial(client, db_session, create_random_user, mon
     assert payload["bio"] == user.bio
 
 
-def test_change_user_validation_error(client, create_random_user, monkeypatch):
-    monkeypatch.setattr("app.routers.users.get_value_from_cookie", lambda session_id: "1337")
-    client.cookies.set(CookieKey.SESSION_ID, "IDontCareMonkeypatchWillDoEverythingForMe")
+def test_change_user_validation_error(client, create_random_user, monkeypatch, create_session_id):
+    create_session_id(module_name="users", user_id=1337)
 
     payload = {
         "name": "VERYMUCHTEXT"*256,
@@ -142,10 +139,9 @@ def test_change_user_unauthorized_error(client):
 
 
 
-def test_change_user_not_exist_error(client, create_random_user, monkeypatch):
+def test_change_user_not_exist_error(client, create_random_user, monkeypatch, create_session_id):
     user = create_random_user()
-    monkeypatch.setattr("app.routers.users.get_value_from_cookie", lambda session_id: 823712)
-    client.cookies.set(CookieKey.SESSION_ID, "IDontCareMonkeypatchWillDoEverythingForMe")
+    create_session_id(module_name="users", user_id=823712)
 
     payload = {
         "name": "example_data",
