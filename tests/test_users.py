@@ -80,7 +80,7 @@ def test_create_user_passwords_doesnt_match_error(client):
     assert response.status_code == 422
 
 
-def test_change_user_success_all(client, db_session, create_random_user, monkeypatch, create_session_id):
+def test_change_user_success_all(client, db_session, create_random_user, create_session_id):
     user = create_random_user()
     create_session_id(module_name="users", user_id=user.id)
 
@@ -97,7 +97,7 @@ def test_change_user_success_all(client, db_session, create_random_user, monkeyp
     assert payload["bio"] == user.bio
 
 
-def test_change_user_success_partial(client, db_session, create_random_user, monkeypatch, create_session_id):
+def test_change_user_success_partial(client, db_session, create_random_user, create_session_id):
     user = create_random_user()
     create_session_id(module_name="users", user_id=user.id)
 
@@ -115,7 +115,7 @@ def test_change_user_success_partial(client, db_session, create_random_user, mon
     assert payload["bio"] == user.bio
 
 
-def test_change_user_validation_error(client, create_random_user, monkeypatch, create_session_id):
+def test_change_user_validation_error(client, create_session_id):
     create_session_id(module_name="users", user_id=1337)
 
     payload = {
@@ -139,8 +139,7 @@ def test_change_user_unauthorized_error(client):
 
 
 
-def test_change_user_not_exist_error(client, create_random_user, monkeypatch, create_session_id):
-    user = create_random_user()
+def test_change_user_not_exist_error(client, create_session_id):
     create_session_id(module_name="users", user_id=823712)
 
     payload = {
