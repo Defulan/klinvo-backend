@@ -47,12 +47,14 @@ def client(db_session):
 
 @pytest.fixture()
 def create_random_user(db_session):
-    def _create_random_user():
+    def _create_random_user(password: str | None = None):
         letters = "qwertyuiopasdfghjklzxcvbnm"
-        random_name = "".join(random.choices(letters, k=6))
-        random_password = "".join(random.choices(letters, k=12))
+        name = "".join(random.choices(letters, k=6))
 
-        user = User(name=random_name, password_hash=hash_password(random_password))
+        if password is None:
+            password = "".join(random.choices(letters, k=12))
+
+        user = User(name=name, password_hash=hash_password(password))
         db_session.add(user)
         db_session.commit()
         return user
