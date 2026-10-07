@@ -12,13 +12,13 @@ router = APIRouter(
     tags=["Notes"]
 )
 
-@router.get("/{note_id}", response_model=NoteOut)
-def get_note(note_id: int, db: Session = Depends(get_db)):
+@router.get("/{note_id}")
+def get_note(note_id: int, db: Session = Depends(get_db)) -> NoteOut:
     return db.scalars(select(Note).where(Note.id == note_id)).first()
 
 
-@router.get("/{language_id}", response_model=list[NoteOut])
-def get_notes(language_id: int, db: Session = Depends(get_db)):
+@router.get("/{language_id}")
+def get_notes(language_id: int, db: Session = Depends(get_db)) -> list[NoteOut]:
     return db.scalars(select(Note).where(Note.language_id == language_id)).all()
 
 

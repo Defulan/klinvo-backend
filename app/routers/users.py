@@ -13,16 +13,16 @@ router = APIRouter(
 )
 
 
-@router.get("/{user_id}", response_model=UserOut)
-def get_user(user_id: int, db: Session = Depends(get_db)):
+@router.get("/{user_id}")
+def get_user(user_id: int, db: Session = Depends(get_db)) -> UserOut:
     user = get_user_by_id(db, user_id)
     if user is None:
         raise HTTPException(status_code=400, detail=ErrorCode.USER_DOESNT_EXIST)
     return user
 
 
-@router.get("/", response_model=list[UserOut])
-def get_users(db: Session = Depends(get_db)):
+@router.get("/")
+def get_users(db: Session = Depends(get_db)) -> list[UserOut]:
     return db.scalars(select(User)).all()
 
 
