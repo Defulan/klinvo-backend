@@ -52,7 +52,11 @@ alembic upgrade head
 
 6. **Запуск сервера**
 ```bash
-uvicorn app.main:app --reload
+task run
+```
+Если нужно перезагружать после сохранения файла:
+```bash
+task dev
 ```
 * Интерактивная API документация будет доступна на http://127.0.0.1:8000/docs
 
