@@ -47,19 +47,23 @@ cp .env.example .env
 
 5. **Apply database migrations**
 ```bash
-alembic upgrade head
+task migrate
 ```
 
 6. **Run the server**
 ```bash
-uvicorn app.main:app --reload
+task run
+```
+If you need reloads after saving a file:
+```bash
+task dev
 ```
 * Interactive API documentation will be available at http://127.0.0.1:8000/docs
 
 ## Testing
 To run tests of endpoints:
 ```bash
-pytest
+task test
 ```
 
 Currently ready tests for:
@@ -67,6 +71,14 @@ Currently ready tests for:
 - [x] auth.py (/auth)
 - [ ] languages.py (/languages)
 - [ ] notes.py (/notes)
+
+
+## Migrations
+If you want to do database migration:
+```bash
+task revision "Write here your message"
+task migrate
+```
 
 
 ## Project structure (app)

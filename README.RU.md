@@ -47,19 +47,23 @@ cp .env.example .env
 
 5. **Применить миграции базы данных**
 ```bash
-alembic upgrade head
+task migrate
 ```
 
 6. **Запуск сервера**
 ```bash
-uvicorn app.main:app --reload
+task run
+```
+Если нужно перезагружать после сохранения файла:
+```bash
+task dev
 ```
 * Интерактивная API документация будет доступна на http://127.0.0.1:8000/docs
 
 ## Тестирование
 Запустить проверку эндпоинтов:
 ```bash
-pytest
+task test
 ```
 
 На данный момент проверки готовы для:
@@ -67,6 +71,13 @@ pytest
 - [x] auth.py (/auth)
 - [ ] languages.py (/languages)
 - [ ] notes.py (/notes)
+
+## Миграции
+Если вы собираетесь сделать миграцию БД
+```bash
+task revision "Write here your message"
+task migrate
+```
 
 ## Структура проекта
 Весь основной код находится в папке app

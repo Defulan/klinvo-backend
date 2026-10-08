@@ -51,7 +51,7 @@ jobs:
           DATABASE_URL: postgresql://NGGYU:NGLYD@localhost:5432/test_db
           TEST_DATABASE_URL: postgresql://NGGYU:NGLYD@localhost:5432/test_db
         run: |
-          alembic upgrade head
+          task migrate
       
       - name: Run Pytest
         env:
@@ -63,4 +63,4 @@ jobs:
           DATABASE_URL: postgresql://NGGYU:NGLYD@localhost:5432/test_db
           TEST_DATABASE_URL: postgresql://NGGYU:NGLYD@localhost:5432/test_db
         run: |
-          pytest
+          task test
