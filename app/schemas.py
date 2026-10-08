@@ -31,7 +31,6 @@ class UserPatch(ConfiguredBaseModel):
 
 
 class AuthOut(ConfiguredBaseModel):
-    is_auth: bool = Field(serialization_alias="isAuth")
     user: UserOut | None
 
 
