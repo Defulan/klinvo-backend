@@ -1,3 +1,6 @@
 [tool.taskipy.tasks]
 run = "uvicorn app.main:app"
 dev = "uvicorn app.main:app --reload"
+revision = "alembic revision --autogenerate -m"
+migrate = "alembic upgrade head"
+test = "pytest"
