@@ -31,8 +31,7 @@ class UserPatch(ConfiguredBaseModel):
 
 
 class AuthOut(ConfiguredBaseModel):
-    user_id: int | None = Field(serialization_alias="userId")
-    is_auth: bool = Field(serialization_alias="isAuth")
+    user: UserOut | None
 
 
 class LanguageCreate(ConfiguredBaseModel):
