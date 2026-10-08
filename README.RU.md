@@ -4,8 +4,10 @@ README: [English](README.md) | [Русский](README.RU.md)
 
 Klinvo - веб-приложение для конструирования искусственных языков (конлангов).
 
-* **Технологии:** Python, FastAPI, SQLAlchemy, PostgreSQL, Alembic, Pytest
-* **Frontend репозиторий:** [klinvo-frontend](https://github.com/Defulan/klinvo-frontend)
+* **Frontend repository:** [klinvo-frontend ↗](https://github.com/Defulan/klinvo-frontend)
+* **API Docs (0.1.1)** https://klinvo-backend.onrender.com/docs
+* **Tech stack:** Python, FastAPI | SQLAlchemy, PostgreSQL, Alembic | Pytest
+* *Примечание: первый запрос может занять 30-60 секунд ожидания в виду особенностей работs хостинга, где размещён API*
 
 ## Как запустить
 * **Требования:** Python 3.11+ (писался и тестировался проект на Python 3.13)
