@@ -7,18 +7,18 @@ def test_get_auth_cookie_authorized(client, create_random_user, create_session_i
     response = client.get("auth/me")
     assert response.status_code == 200
     
-    data = response.json()
-    assert data["userId"] == user.id
-    assert data["isAuth"] == True
+    response_user = response.json()["user"]
+    assert response_user["id"] == user.id
+    assert response_user["name"] == user.name
+    assert response_user["bio"] == user.bio
 
 
 def test_get_auth_cookie_unauthorized(client):
     response = client.get("auth/me")
     assert response.status_code == 200
     
-    data = response.json()
-    assert data["userId"] == None
-    assert data["isAuth"] == False
+    response_user = response.json()["user"]
+    assert response_user is None
 
 
 def test_login_success(client, create_random_user):
