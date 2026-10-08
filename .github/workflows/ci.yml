@@ -64,3 +64,29 @@ jobs:
           TEST_DATABASE_URL: postgresql://NGGYU:NGLYD@localhost:5432/test_db
         run: |
           task test
+
+  readme-reminder:
+    name: Remind to update README after structure changes
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+          
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Check new files and send reminder if README doesn't updated
+        run: |
+          NEW_FILES=$(git diff --name-only --diff-filter=A origin/${{ github.base_ref }}...HEAD)
+          
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=M origin/${{ github.base_ref }}...HEAD)
+
+          README_UPDATED=$(echo "$ALL_CHANGED_FILES" | grep -i -x 'README.md' || true)
+          README_RU_UPDATED=$(echo "$ALL_CHANGED_FILES" | grep -i -x 'README.RU.md' || true)
+
+          if [ -n "$NEW_FILES" ] && { [ -z "$README_UPDATED" ] || [ -z "$README_RU_UPDATED" ]; }; then
+            echo "::warning title=Check README::New files are appeared (relative to the main branch) in this branch, but README.md or README.RU.MD doesn't changed"
+            echo "The new files:"
+            echo "$NEW_FILES"
+          fi
