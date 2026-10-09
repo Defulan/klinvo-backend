@@ -131,7 +131,6 @@ Currently, the main goal is to bring the project to the MVP stage.
 
 ### Main (MVP)
 - [x] Accounts system (DB table, creating, log in/log out, changing, getting data)
-- [x] Database migration (from SQLite to PostgreSQL, add Alembic)
 - [ ] Language (DB table, CRUD)
 - [ ] Notes (DB table, CRUD)
 - [ ] Words (DB table/tables, CRUD)
