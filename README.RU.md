@@ -8,7 +8,7 @@ Klinvo - минималистичный веб-инструмент для ко�
 * **Технологии:** Python, FastAPI | SQLAlchemy, PostgreSQL, Alembic | Pytest
 * **Frontend репозиторий:** [klinvo-frontend ↗](https://github.com/Defulan/klinvo-frontend)
 
-* *Примечание: первый запрос может занять 30-60 секунд ожидания из-за холодного старта бесплатного хоситнга*
+* *Примечание: первый запрос может занять 30-60 секунд ожидания из-за холодного старта бесплатного хостинга*
 
 ## Как запустить
 * **Требования:** Python 3.11+ (писался и тестировался проект на Python 3.13)
@@ -96,8 +96,8 @@ klinvo-backend
 │  ├─ routers/ - эндпоинты
 │  │  ├─ __init__.py
 │  │  ├─ auth.py - /auth
-│  │  ├─ languages.py - /languages (пока не готово)
-│  │  ├─ notes.py - /notes (пока не готово)
+│  │  ├─ languages.py - /languages (WIP - в разработке)
+│  │  ├─ notes.py - /notes (WIP - в разработке)
 │  │  └─ users.py - /users
 │  ├─ __init__.py
 │  ├─ config.py - переменная settings с env-значениями

@@ -98,8 +98,8 @@ klinvo-backend
 │  ├─ routers/ - endpoints
 │  │  ├─ __init__.py
 │  │  ├─ auth.py - /auth
-│  │  ├─ languages.py - /languages (doesn't ready)
-│  │  ├─ notes.py - /notes (doesn't ready)
+│  │  ├─ languages.py - /languages (WIP)
+│  │  ├─ notes.py - /notes (WIP)
 │  │  └─ users.py - /users
 │  ├─ __init__.py
 │  ├─ config.py - variable settings with environment variables
