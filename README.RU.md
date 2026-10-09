@@ -41,12 +41,13 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 Переменные в этом проекте такие:
-* SECRET_KEY - ключ, которым передаются cookie
-* COOKIE_KEY - значение, которым подписываются значения в cookie
-* FRONTEND_URL - адрес фронтенда (например: `http://localhost:5173`)
-* DATABASE_URL - адрес базы данных (например: `postgresql://user:password@localhost:5432/dbname`)
-* COOKIE_SECURE - параметр secure у cookie (`True` если HTTPS, `False` для локальной разработки)
-* COOKIE_SAMESITE - параметр samesite у cookie (`none` если HTTPS, `lax` для локальной разработки)
+* `SECRET_KEY` - ключ, которым передаются cookie
+* `COOKIE_KEY` - значение, которым подписываются значения в cookie
+* `FRONTEND_URL` - адрес фронтенда (например: `http://localhost:5173`)
+* `DATABASE_URL` - адрес базы данных (например: `postgresql://user:password@localhost:5432/db_name`)
+* `TEST_DATABASE_URL` - адрес тестовой базы данных  (например: `postgresql://user:password@localhost:5432/test_db_name`)
+* `COOKIE_SECURE` - параметр secure у cookie (`True` если HTTPS, `False` для локальной разработки)
+* `COOKIE_SAMESITE` - параметр samesite у cookie (`none` если HTTPS, `lax` для локальной разработки)
 
 5. **Применить миграции базы данных**
 ```bash

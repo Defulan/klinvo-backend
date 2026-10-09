@@ -41,12 +41,13 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 .env variables in this project:
-* SECRET_KEY - secret key for sessions/cookies
-* COOKIE_KEY - key used to sign cookie values
-* FRONTEND_URL - frontend URL (e.g., `http://localhost:5173`)
-* DATABASE_URL - database connection string (e.g., `postgresql://user:password@localhost:5432/dbname`)
-* COOKIE_SECURE - secure param in cookies (`True` if HTTPS, `False` for local development)
-* COOKIE_SAMESITE - samesite param in cookies (`none` if HTTPS, `lax` for local development)
+* `SECRET_KEY` - secret key for sessions/cookies
+* `COOKIE_KEY` - key used to sign cookie values
+* `FRONTEND_URL` - frontend URL (e.g., `http://localhost:5173`)
+* `DATABASE_URL` - database connection string (e.g., `postgresql://user:password@localhost:5432/db_name`)
+* `TEST_DATABASE_URL` - test database connection string  (e.g., `postgresql://user:password@localhost:5432/test_db_name`)
+* `COOKIE_SECURE` - secure param in cookies (`True` if HTTPS, `False` for local development)
+* `COOKIE_SAMESITE` - samesite param in cookies (`none` if HTTPS, `lax` for local development)
 
 5. **Apply database migrations**
 ```bash
