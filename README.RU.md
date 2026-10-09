@@ -83,21 +83,45 @@ task migrate
 ```
 
 ## Структура проекта
-Весь основной код находится в папке app
-
-* `__init__.py`
-* `main.py`
-* `config.py` - настройка получения .env файлов
-* `database.py` - функции для базы данных; таблицы и настройка SQLAlchemy
-* `security.py` - функции для файлов cookie и паролей
-* `enums.py` - enums
-* `schemas.py` - модели pydantic
-* `routers/` - все эндпоинты
-    * `__init__.py`
-    * `auth.py` - аутентификация и получение данных от cookie
-    * `languages.py` - получение, создание и изменение языков
-    * `notes.py` - получение, создание и изменение заметок
-    * `users.py` - получение, создание и изменение пользователей
+```
+klinvo-backend
+├─ .github/ - папка для CI (GitHub Actions)
+│
+├─ alembic/
+│  ├─ versions/ - хранилище миграций
+│  ├─ env.py - настройка Alembic
+│  └─ script.py.mako
+│
+├─ app/ - основной код
+│  ├─ routers/ - эндпоинты
+│  │  ├─ __init__.py
+│  │  ├─ auth.py - /auth
+│  │  ├─ languages.py - /languages (пока не готово)
+│  │  ├─ notes.py - /notes (пока не готово)
+│  │  └─ users.py - /users
+│  ├─ __init__.py
+│  ├─ config.py - переменная settings с env-значениями
+│  ├─ database.py - SQLAlchemy, таблицы, функции для работы с БД
+│  ├─ enums.py
+│  ├─ main.py - точка запуска; настройка REST API и подключение эндпоинтов
+│  ├─ schemas.py - pydantic схемы
+│  └─ security.py - функции для работы с паролями и cookie
+│
+├─ tests/
+│  ├─ conftest.py
+│  ├─ test_auth.py
+│  └─ test_users.py
+│
+├─ .env.example
+├─ .gitignore
+├─ alembic.ini
+├─ LICENSE
+├─ pyproject.toml
+├─ pytest.ini
+├─ README.md
+├─ README.RU.md
+└─ requirements.txt
+```
 
 
 ## Roadmap

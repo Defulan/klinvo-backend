@@ -84,22 +84,46 @@ task migrate
 ```
 
 
-## Project structure (app)
-All general code is located in the folder "app"
-
-* `__init__.py`
-* `main.py`
-* `config.py` - settings for getting .env values
-* `database.py` - functions for database; tables and settings for SQLAlchemy
-* `security.py` - functions for cookies and passwords
-* `enums.py` - enums
-* `schemas.py` - pydantic models
-* `routers/` - all endpoints
-    * `__init__.py`
-    * `auth.py` - authentication and getting values from cookies
-    * `languages.py` - getting, creating, changing languages
-    * `notes.py` - getting, creating, changing notes
-    * `users.py` - getting, creating, changing users
+## Project structure
+```
+klinvo-backend
+├─ .github/ - directory for CI jobs (GitHub Actions)
+│
+├─ alembic/
+│  ├─ versions/ - migrations storage
+│  ├─ env.py - Alembic configuration
+│  └─ script.py.mako
+│
+├─ app/ - main code
+│  ├─ routers/ - endpoints
+│  │  ├─ __init__.py
+│  │  ├─ auth.py - /auth
+│  │  ├─ languages.py - /languages (doesn't ready)
+│  │  ├─ notes.py - /notes (doesn't ready)
+│  │  └─ users.py - /users
+│  ├─ __init__.py
+│  ├─ config.py - variable settings with environment variables
+│  ├─ database.py - SQLAlchemy, tables and database functions
+│  ├─ enums.py
+│  ├─ main.py - entry point of application
+│  ├─ schemas.py - pydantic schemas
+│  └─ security.py - functions for password and cookies
+│
+├─ tests/
+│  ├─ conftest.py - fixtures
+│  ├─ test_auth.py
+│  └─ test_users.py
+│
+├─ .env.example
+├─ .gitignore
+├─ alembic.ini
+├─ LICENSE
+├─ pyproject.toml
+├─ pytest.ini
+├─ README.md
+├─ README.RU.md
+└─ requirements.txt
+```
 
 
 ## Roadmap
