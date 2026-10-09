@@ -22,7 +22,7 @@ def get_notes(language_id: int, db: DbSession) -> list[NoteOut]:
 
 
 @router.post("/")
-def create_note(data: NoteCreate, db: DbSession, session_id: CookieValue):
+def create_note(data: NoteCreate, db: DbSession, session_id: CookieValue = None):
     if not session_id:
         raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
     
@@ -42,7 +42,7 @@ def create_note(data: NoteCreate, db: DbSession, session_id: CookieValue):
 
 
 @router.patch("/")
-def change_note(data: NotePatch, db: DbSession, session_id: CookieValue):
+def change_note(data: NotePatch, db: DbSession, session_id: CookieValue = None):
     if not session_id:
         raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
     

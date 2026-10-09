@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 @router.get("/me")
-def get_auth_cookie(db: DbSession, session_id: CookieValue) -> AuthOut:
+def get_auth_cookie(db: DbSession, session_id: CookieValue = None) -> AuthOut:
     user = None
     if session_id is not None:
         user_id = get_value_from_cookie(session_id)
@@ -21,7 +21,7 @@ def get_auth_cookie(db: DbSession, session_id: CookieValue) -> AuthOut:
 
 
 @router.post("/login")
-def login(data: UserLogin, response: Response, db: DbSession, session_id: CookieValue):
+def login(data: UserLogin, response: Response, db: DbSession, session_id: CookieValue = None):
     if session_id:
         raise HTTPException(status_code=409, detail=ErrorCode.AUTHORIZED)
     
@@ -35,7 +35,7 @@ def login(data: UserLogin, response: Response, db: DbSession, session_id: Cookie
 
 
 @router.post("/logout")
-def logout(response: Response, db: DbSession, session_id: CookieValue):
+def logout(response: Response, db: DbSession, session_id: CookieValue = None):
     if not session_id:
         raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
     

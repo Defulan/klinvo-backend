@@ -26,7 +26,7 @@ def get_users(db: DbSession) -> list[UserOut]:
 
 
 @router.post("/")
-def create_user(data: UserCreate, response: Response, db: DbSession, session_id: CookieValue):
+def create_user(data: UserCreate, response: Response, db: DbSession, session_id: CookieValue = None):
     if session_id:
         raise HTTPException(status_code=400, detail=ErrorCode.AUTHORIZED)
     
@@ -45,7 +45,7 @@ def create_user(data: UserCreate, response: Response, db: DbSession, session_id:
 
 
 @router.patch("/")
-def change_user(data: UserPatch, db: DbSession, session_id: CookieValue):
+def change_user(data: UserPatch, db: DbSession, session_id: CookieValue = None):
     if not session_id:
         raise HTTPException(status_code=403, detail=ErrorCode.UNAUTHORIZED)
     

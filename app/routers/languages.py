@@ -27,7 +27,7 @@ def get_user_languages(user_id: int, db: DbSession) -> list[LanguageOut]:
 
 
 @router.post("/")
-def create_language(data: LanguageCreate, db: DbSession, session_id: CookieValue):
+def create_language(data: LanguageCreate, db: DbSession, session_id: CookieValue = None):
     if not session_id:
         raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
     
