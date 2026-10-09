@@ -6,6 +6,7 @@ from app.security import hasher, create_cookie, get_value_from_cookie
 from app.database import get_db, get_user_by_id, User
 from app.schemas import UserCreate, UserOut, UserPatch
 from app.enums import CookieKey, ErrorCode
+from app.dependencies import DbSession, CookieValue
 
 router = APIRouter(
     prefix="/users",
@@ -14,7 +15,7 @@ router = APIRouter(
 
 
 @router.get("/{user_id}")
-def get_user(user_id: int, db: Session = Depends(get_db)) -> UserOut:
+def get_user(user_id: int, db: DbSession) -> UserOut:
     user = get_user_by_id(db, user_id)
     if user is None:
         raise HTTPException(status_code=400, detail=ErrorCode.USER_DOESNT_EXIST)
@@ -22,14 +23,12 @@ def get_user(user_id: int, db: Session = Depends(get_db)) -> UserOut:
 
 
 @router.get("/")
-def get_users(db: Session = Depends(get_db)) -> list[UserOut]:
+def get_users(db: DbSession) -> list[UserOut]:
     return db.scalars(select(User)).all()
 
 
 @router.post("/")
-def create_user(data: UserCreate, response: Response,
-                db: Session = Depends(get_db),
-                session_id: Annotated[str | None, Cookie()] = None):
+def create_user(data: UserCreate, response: Response, db: DbSession, session_id: CookieValue):
     if session_id:
         raise HTTPException(status_code=400, detail=ErrorCode.AUTHORIZED)
     
@@ -48,8 +47,7 @@ def create_user(data: UserCreate, response: Response,
 
 
 @router.patch("/")
-def change_user(data: UserPatch, db: Session = Depends(get_db),
-                session_id: Annotated[str | None, Cookie()] = None):
+def change_user(data: UserPatch, db: DbSession, session_id: CookieValue):
     if not session_id:
         raise HTTPException(status_code=403, detail=ErrorCode.UNAUTHORIZED)
     
