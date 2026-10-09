@@ -1,7 +1,5 @@
-from typing import Annotated
-from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
-from sqlalchemy.orm import Session
-from app.database import get_db, get_user_by_id
+from fastapi import APIRouter, HTTPException, Response
+from app.database import get_user_by_id
 from app.schemas import UserLogin, AuthOut
 from app.security import create_cookie, verify_password, get_value_from_cookie, delete_cookie
 from app.enums import CookieKey, ErrorCode

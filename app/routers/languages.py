@@ -1,8 +1,6 @@
-from typing import Annotated
-from fastapi import APIRouter, Cookie, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
-from sqlalchemy.orm import Session
-from app.database import get_db, Language
+from app.database import Language
 from app.schemas import LanguageCreate, LanguageOut
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode

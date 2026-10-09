@@ -1,9 +1,7 @@
-from typing import Annotated
-from fastapi import APIRouter, Depends, Cookie, HTTPException, Response
+from fastapi import APIRouter, HTTPException, Response
 from sqlalchemy import select
-from sqlalchemy.orm import Session
 from app.security import hasher, create_cookie, get_value_from_cookie
-from app.database import get_db, get_user_by_id, User
+from app.database import get_user_by_id, User
 from app.schemas import UserCreate, UserOut, UserPatch
 from app.enums import CookieKey, ErrorCode
 from app.dependencies import DbSession, CookieValue
