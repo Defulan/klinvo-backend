@@ -105,6 +105,7 @@ klinvo-backend
 │  ├─ __init__.py
 │  ├─ config.py - variable settings with environment variables
 │  ├─ database.py - SQLAlchemy, tables and database functions
+│  ├─ dependencies.py - values for endpoints arguments
 │  ├─ enums.py
 │  ├─ main.py - entry point of application
 │  ├─ schemas.py - pydantic schemas
