@@ -103,6 +103,7 @@ klinvo-backend
 │  ├─ __init__.py
 │  ├─ config.py - переменная settings с env-значениями
 │  ├─ database.py - SQLAlchemy, таблицы, функции для работы с БД
+│  ├─ dependencies.py - типы для аргументов эндпоинтов
 │  ├─ enums.py
 │  ├─ main.py - точка запуска; настройка REST API и подключение эндпоинтов
 │  ├─ schemas.py - pydantic схемы

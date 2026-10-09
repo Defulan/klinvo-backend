@@ -1,11 +1,10 @@
-from typing import Annotated
-from fastapi import APIRouter, Cookie, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
-from sqlalchemy.orm import Session
-from app.database import get_db, Language
+from app.database import Language
 from app.schemas import LanguageCreate, LanguageOut
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode
+from app.dependencies import DbSession, CookieValue
 
 router = APIRouter(
     prefix="/languages",
@@ -13,23 +12,22 @@ router = APIRouter(
 )
 
 @router.get("/{language_id}")
-def get_language(language_id: int, db: Session = Depends(get_db)) -> LanguageOut:
+def get_language(language_id: int, db: DbSession) -> LanguageOut:
     return db.scalars(select(Language).where(Language.id == language_id)).first()
 
 
 @router.get("/", response_model=list[LanguageOut])
-def get_languages(db: Session = Depends(get_db)):
+def get_languages(db: DbSession):
     return db.scalars(select(Language)).all()
 
 
 @router.get("/{user_id}")
-def get_user_languages(user_id: int, db: Session = Depends(get_db)) -> list[LanguageOut]:
+def get_user_languages(user_id: int, db: DbSession) -> list[LanguageOut]:
     return db.scalars(select(Language).where(Language.author_id == user_id)).all()
 
 
 @router.post("/")
-def create_language(data: LanguageCreate, db: Session = Depends(get_db),
-                    session_id: Annotated[str | None, Cookie()] = None):
+def create_language(data: LanguageCreate, db: DbSession, session_id: CookieValue = None):
     if not session_id:
         raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
     

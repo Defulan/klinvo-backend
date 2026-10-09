@@ -1,11 +1,10 @@
-from typing import Annotated
-from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
+from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
-from sqlalchemy.orm import Session
-from app.database import get_db, get_user_by_id, get_language_by_id, Note, Language, get_note_by_id
+from app.database import get_language_by_id, Note, Language, get_note_by_id
 from app.schemas import NoteCreate, NoteOut, NotePatch
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode
+from app.dependencies import DbSession, CookieValue
 
 router = APIRouter(
     prefix="/notes",
@@ -13,18 +12,17 @@ router = APIRouter(
 )
 
 @router.get("/{note_id}")
-def get_note(note_id: int, db: Session = Depends(get_db)) -> NoteOut:
+def get_note(note_id: int, db: DbSession) -> NoteOut:
     return db.scalars(select(Note).where(Note.id == note_id)).first()
 
 
 @router.get("/{language_id}")
-def get_notes(language_id: int, db: Session = Depends(get_db)) -> list[NoteOut]:
+def get_notes(language_id: int, db: DbSession) -> list[NoteOut]:
     return db.scalars(select(Note).where(Note.language_id == language_id)).all()
 
 
 @router.post("/")
-def create_note(data: NoteCreate, db: Session = Depends(get_db),
-                session_id: Annotated[str | None, Cookie()] = None):
+def create_note(data: NoteCreate, db: DbSession, session_id: CookieValue = None):
     if not session_id:
         raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
     
@@ -44,8 +42,7 @@ def create_note(data: NoteCreate, db: Session = Depends(get_db),
 
 
 @router.patch("/")
-def change_note(data: NotePatch, db: Session = Depends(get_db),
-                session_id: Annotated[str | None, Cookie()] = None):
+def change_note(data: NotePatch, db: DbSession, session_id: CookieValue = None):
     if not session_id:
         raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
     

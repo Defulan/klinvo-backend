@@ -1,10 +1,9 @@
-from typing import Annotated
-from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
-from sqlalchemy.orm import Session
-from app.database import get_db, get_user_by_id
+from fastapi import APIRouter, HTTPException, Response
+from app.database import get_user_by_id
 from app.schemas import UserLogin, AuthOut
 from app.security import create_cookie, verify_password, get_value_from_cookie, delete_cookie
 from app.enums import CookieKey, ErrorCode
+from app.dependencies import DbSession, CookieValue
 
 router = APIRouter(
     prefix="/auth",
@@ -12,7 +11,7 @@ router = APIRouter(
 )
 
 @router.get("/me")
-def get_auth_cookie(db: Session = Depends(get_db), session_id: Annotated[str | None, Cookie()] = None) -> AuthOut:
+def get_auth_cookie(db: DbSession, session_id: CookieValue = None) -> AuthOut:
     user = None
     if session_id is not None:
         user_id = get_value_from_cookie(session_id)
@@ -22,8 +21,7 @@ def get_auth_cookie(db: Session = Depends(get_db), session_id: Annotated[str | N
 
 
 @router.post("/login")
-def login(data: UserLogin, response: Response, db: Session = Depends(get_db),
-          session_id: Annotated[str | None, Cookie()] = None):
+def login(data: UserLogin, response: Response, db: DbSession, session_id: CookieValue = None):
     if session_id:
         raise HTTPException(status_code=409, detail=ErrorCode.AUTHORIZED)
     
@@ -37,8 +35,7 @@ def login(data: UserLogin, response: Response, db: Session = Depends(get_db),
 
 
 @router.post("/logout")
-def logout(response: Response, db: Session = Depends(get_db),
-           session_id: Annotated[str | None, Cookie()] = None):
+def logout(response: Response, db: DbSession, session_id: CookieValue = None):
     if not session_id:
         raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
     
