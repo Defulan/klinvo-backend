@@ -2,10 +2,13 @@
 
 README: [English](README.md) | [Русский](README.RU.md)
 
-Klinvo - веб-приложение для конструирования искусственных языков (конлангов).
+Klinvo - минималистичный веб-инструмент для конструирования искусственных языков (конлангов).
 
-* **Технологии:** Python, FastAPI, SQLAlchemy, PostgreSQL, Alembic, Pytest
-* **Frontend репозиторий:** [klinvo-frontend](https://github.com/Defulan/klinvo-frontend)
+* **Документация API:** https://klinvo-backend.onrender.com/docs
+* **Технологии:** Python, FastAPI | SQLAlchemy, PostgreSQL, Alembic | Pytest
+* **Frontend репозиторий:** [klinvo-frontend ↗](https://github.com/Defulan/klinvo-frontend)
+
+* *Примечание: первый запрос может занять 30-60 секунд ожидания из-за холодного старта бесплатного хостинга*
 
 ## Как запустить
 * **Требования:** Python 3.11+ (писался и тестировался проект на Python 3.13)
@@ -38,12 +41,13 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 Переменные в этом проекте такие:
-* SECRET_KEY - ключ, которым передаются cookie
-* COOKIE_KEY - значение, которым подписываются значения в cookie
-* FRONTEND_URL - адрес фронтенда (например: `http://localhost:5173`)
-* DATABASE_URL - адрес базы данных (например: `postgresql://user:password@localhost:5432/dbname`)
-* COOKIE_SECURE - параметр secure у cookie (`True` если HTTPS, `False` для локальной разработки)
-* COOKIE_SAMESITE - параметр samesite у cookie (`none` если HTTPS, `lax` для локальной разработки)
+* `SECRET_KEY` - ключ, которым передаются cookie
+* `COOKIE_KEY` - значение, которым подписываются значения в cookie
+* `FRONTEND_URL` - адрес фронтенда (например: `http://localhost:5173`)
+* `DATABASE_URL` - адрес базы данных (например: `postgresql://user:password@localhost:5432/db_name`)
+* `TEST_DATABASE_URL` - адрес тестовой базы данных  (например: `postgresql://user:password@localhost:5432/test_db_name`)
+* `COOKIE_SECURE` - параметр secure у cookie (`True` если HTTPS, `False` для локальной разработки)
+* `COOKIE_SAMESITE` - параметр samesite у cookie (`none` если HTTPS, `lax` для локальной разработки)
 
 5. **Применить миграции базы данных**
 ```bash
@@ -80,21 +84,45 @@ task migrate
 ```
 
 ## Структура проекта
-Весь основной код находится в папке app
-
-* `__init__.py`
-* `main.py`
-* `config.py` - настройка получения .env файлов
-* `database.py` - функции для базы данных; таблицы и настройка SQLAlchemy
-* `security.py` - функции для файлов cookie и паролей
-* `enums.py` - enums
-* `schemas.py` - модели pydantic
-* `routers/` - все эндпоинты
-    * `__init__.py`
-    * `auth.py` - аутентификация и получение данных от cookie
-    * `languages.py` - получение, создание и изменение языков
-    * `notes.py` - получение, создание и изменение заметок
-    * `users.py` - получение, создание и изменение пользователей
+```
+klinvo-backend
+├─ .github/ - папка для CI (GitHub Actions)
+│
+├─ alembic/
+│  ├─ versions/ - хранилище миграций
+│  ├─ env.py - настройка Alembic
+│  └─ script.py.mako
+│
+├─ app/ - основной код
+│  ├─ routers/ - эндпоинты
+│  │  ├─ __init__.py
+│  │  ├─ auth.py - /auth
+│  │  ├─ languages.py - /languages (WIP - в разработке)
+│  │  ├─ notes.py - /notes (WIP - в разработке)
+│  │  └─ users.py - /users
+│  ├─ __init__.py
+│  ├─ config.py - переменная settings с env-значениями
+│  ├─ database.py - SQLAlchemy, таблицы, функции для работы с БД
+│  ├─ enums.py
+│  ├─ main.py - точка запуска; настройка REST API и подключение эндпоинтов
+│  ├─ schemas.py - pydantic схемы
+│  └─ security.py - функции для работы с паролями и cookie
+│
+├─ tests/
+│  ├─ conftest.py
+│  ├─ test_auth.py
+│  └─ test_users.py
+│
+├─ .env.example
+├─ .gitignore
+├─ alembic.ini
+├─ LICENSE
+├─ pyproject.toml
+├─ pytest.ini
+├─ README.md
+├─ README.RU.md
+└─ requirements.txt
+```
 
 
 ## Roadmap
@@ -102,10 +130,9 @@ task migrate
 
 ### Основные (MVP)
 - [x] Система аккаунтов (таблица в БД, создание, вход/выход, изменение, получение данных)
-- [x] Миграция базы данных (SQLite -> PostgreSQL, добавление Alembic)
-- [ ] Язык (таблица в БД, создание, получение)
-- [ ] Заметки (таблица в БД, создание, изменение, получение, удаление)
-- [ ] Слова (таблица/таблицы в БД, создание, редактирование, получение, удаление)
+- [ ] Язык (таблица в БД, CRUD)
+- [ ] Заметки (таблица в БД, CRUD)
+- [ ] Слова (таблица/таблицы в БД, CRUD)
 
 ### Дальнейшие
 - [ ] Регистрация/Вход по email

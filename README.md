@@ -2,10 +2,13 @@
 
 README: [English](README.md) | [Русский](README.RU.md)
 
-Klinvo is a web application for constructing artificial languages (conlangs).
+Klinvo is a minimalist web tool for constructing artificial languages (conlangs).
 
-* **Tech stack:** Python, FastAPI, SQLAlchemy, PostgreSQL, Alembic, Pytest
-* **Frontend repository:** [klinvo-frontend](https://github.com/Defulan/klinvo-frontend)
+* **API Docs:** https://klinvo-backend.onrender.com/docs
+* **Tech stack:** Python, FastAPI | SQLAlchemy, PostgreSQL, Alembic | Pytest
+* **Frontend repository:** [klinvo-frontend ↗](https://github.com/Defulan/klinvo-frontend)
+
+* *Note: first request can take 30-60 seconds due to the cold start of free hosting*
 
 ## How to Start
 * **Requirements:** Python 3.11+ (project was written and tested on Python 3.13)
@@ -38,12 +41,13 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 .env variables in this project:
-* SECRET_KEY - secret key for sessions/cookies
-* COOKIE_KEY - key used to sign cookie values
-* FRONTEND_URL - frontend URL (e.g., `http://localhost:5173`)
-* DATABASE_URL - database connection string (e.g., `postgresql://user:password@localhost:5432/dbname`)
-* COOKIE_SECURE - secure param in cookies (`True` if HTTPS, `False` for local development)
-* COOKIE_SAMESITE - samesite param in cookies (`none` if HTTPS, `lax` for local development)
+* `SECRET_KEY` - secret key for sessions/cookies
+* `COOKIE_KEY` - key used to sign cookie values
+* `FRONTEND_URL` - frontend URL (e.g., `http://localhost:5173`)
+* `DATABASE_URL` - database connection string (e.g., `postgresql://user:password@localhost:5432/db_name`)
+* `TEST_DATABASE_URL` - test database connection string  (e.g., `postgresql://user:password@localhost:5432/test_db_name`)
+* `COOKIE_SECURE` - secure param in cookies (`True` if HTTPS, `False` for local development)
+* `COOKIE_SAMESITE` - samesite param in cookies (`none` if HTTPS, `lax` for local development)
 
 5. **Apply database migrations**
 ```bash
@@ -81,22 +85,46 @@ task migrate
 ```
 
 
-## Project structure (app)
-All general code is located in the folder "app"
-
-* `__init__.py`
-* `main.py`
-* `config.py` - settings for getting .env values
-* `database.py` - functions for database; tables and settings for SQLAlchemy
-* `security.py` - functions for cookies and passwords
-* `enums.py` - enums
-* `schemas.py` - pydantic models
-* `routers/` - all endpoints
-    * `__init__.py`
-    * `auth.py` - authentication and getting values from cookies
-    * `languages.py` - getting, creating, changing languages
-    * `notes.py` - getting, creating, changing notes
-    * `users.py` - getting, creating, changing users
+## Project structure
+```
+klinvo-backend
+├─ .github/ - directory for CI jobs (GitHub Actions)
+│
+├─ alembic/
+│  ├─ versions/ - migrations storage
+│  ├─ env.py - Alembic configuration
+│  └─ script.py.mako
+│
+├─ app/ - main code
+│  ├─ routers/ - endpoints
+│  │  ├─ __init__.py
+│  │  ├─ auth.py - /auth
+│  │  ├─ languages.py - /languages (WIP)
+│  │  ├─ notes.py - /notes (WIP)
+│  │  └─ users.py - /users
+│  ├─ __init__.py
+│  ├─ config.py - variable settings with environment variables
+│  ├─ database.py - SQLAlchemy, tables and database functions
+│  ├─ enums.py
+│  ├─ main.py - entry point of application
+│  ├─ schemas.py - pydantic schemas
+│  └─ security.py - functions for password and cookies
+│
+├─ tests/
+│  ├─ conftest.py - fixtures
+│  ├─ test_auth.py
+│  └─ test_users.py
+│
+├─ .env.example
+├─ .gitignore
+├─ alembic.ini
+├─ LICENSE
+├─ pyproject.toml
+├─ pytest.ini
+├─ README.md
+├─ README.RU.md
+└─ requirements.txt
+```
 
 
 ## Roadmap
@@ -104,7 +132,6 @@ Currently, the main goal is to bring the project to the MVP stage.
 
 ### Main (MVP)
 - [x] Accounts system (DB table, creating, log in/log out, changing, getting data)
-- [x] Database migration (from SQLite to PostgreSQL, add Alembic)
 - [ ] Language (DB table, CRUD)
 - [ ] Notes (DB table, CRUD)
 - [ ] Words (DB table/tables, CRUD)
