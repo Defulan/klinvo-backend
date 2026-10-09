@@ -2,12 +2,13 @@
 
 README: [English](README.md) | [Русский](README.RU.md)
 
-Klinvo - веб-приложение для конструирования искусственных языков (конлангов).
+Klinvo - минималистичный веб-инструмент для конструирования искусственных языков (конлангов).
 
-* **Frontend repository:** [klinvo-frontend ↗](https://github.com/Defulan/klinvo-frontend)
-* **API Docs:** https://klinvo-backend.onrender.com/docs
-* **Tech stack:** Python, FastAPI | SQLAlchemy, PostgreSQL, Alembic | Pytest
-* *Примечание: первый запрос может занять 30-60 секунд ожидания в виду особенностей работs хостинга, где размещён API*
+* **Документация API:** https://klinvo-backend.onrender.com/docs
+* **Технологии:** Python, FastAPI | SQLAlchemy, PostgreSQL, Alembic | Pytest
+* **Frontend репозиторий:** [klinvo-frontend ↗](https://github.com/Defulan/klinvo-frontend)
+
+* *Примечание: первый запрос может занять 30-60 секунд ожидания из-за холодного старта бесплатного хоситнга*
 
 ## Как запустить
 * **Требования:** Python 3.11+ (писался и тестировался проект на Python 3.13)

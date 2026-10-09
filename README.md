@@ -2,12 +2,13 @@
 
 README: [English](README.md) | [Русский](README.RU.md)
 
-Klinvo is a web application for constructing artificial languages (conlangs).
+Klinvo is a minimalist web tool for constructing artificial languages (conlangs).
 
-* **Frontend repository:** [klinvo-frontend ↗](https://github.com/Defulan/klinvo-frontend)
 * **API Docs:** https://klinvo-backend.onrender.com/docs
 * **Tech stack:** Python, FastAPI | SQLAlchemy, PostgreSQL, Alembic | Pytest
-* *Note: first request can take 30-60 seconds due to the specifics of hosting, where is located API.*
+* **Frontend repository:** [klinvo-frontend ↗](https://github.com/Defulan/klinvo-frontend)
+
+* *Note: first request can take 30-60 seconds due to the cold start of free hosting*
 
 ## How to Start
 * **Requirements:** Python 3.11+ (project was written and tested on Python 3.13)
