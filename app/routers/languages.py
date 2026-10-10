@@ -59,5 +59,6 @@ def change_language(language_id: int, data: LanguageEdit, db: DbSession, session
     for key, value in filled_data.items():
         setattr(language, key, value)
     db.commit()
+    db.refresh(language)
     
     return language
