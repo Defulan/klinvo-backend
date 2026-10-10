@@ -18,7 +18,10 @@ def get_languages(db: DbSession) -> list[LanguageOut]:
 
 @router.get("/{language_id}")
 def get_language(language_id: int, db: DbSession) -> LanguageOut:
-    return get_language_by_id(db, language_id)
+    language = get_language_by_id(db, language_id)
+    if language is None:
+        raise HTTPException(status_code=404, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+    return language
 
 
 @router.post("/")
