@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
-from app.database import Language, get_language_by_id
-from app.schemas import LanguageCreate, LanguageOut
+from app.database import Language, get_language_by_id, get_user_by_id
+from app.schemas import LanguageCreate, LanguageOut, LanguageEdit
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode
 from app.dependencies import DbSession, CookieValue
@@ -34,5 +34,30 @@ def create_language(data: LanguageCreate, db: DbSession, session_id: CookieValue
     db.add(language)
     db.commit()
     db.refresh(language)
+    
+    return language
+
+
+@router.patch("/{language_id}")
+def change_language(language_id: int, data: LanguageEdit, db: DbSession, session_id: CookieValue = None):
+    if not session_id:
+        raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
+    
+    language = get_language_by_id(language_id)
+    if not language:
+        raise HTTPException(status_code=404, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+    
+    user_id = get_value_from_cookie(session_id)
+    if user_id != language.author_id:
+        raise HTTPException(status_code=405, detail=ErrorCode.NO_PERMISSIONS)
+    
+    user = get_user_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail=ErrorCode.USER_DOESNT_EXIST)
+    
+    filled_data = data.model_dump(exclude_unset=True, exclude_none=True)
+    for key, value in filled_data.items():
+        setattr(user, key, value)
+    db.commit()
     
     return language
