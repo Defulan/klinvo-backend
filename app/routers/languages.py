@@ -17,10 +17,15 @@ def get_languages(db: DbSession) -> list[LanguageOut]:
 
 
 @router.get("/{language_id}")
-def get_language(language_id: int, db: DbSession) -> LanguageOut:
+def get_language(language_id: int, db: DbSession, session_id: CookieValue = None) -> LanguageOut:
     language = get_language_by_id(db, language_id)
     if language is None:
         raise HTTPException(status_code=404, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+    
+    if not session_id or get_value_from_cookie(session_id) != language.author_id:
+        if language.is_private:
+            raise HTTPException(status_code=404, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+
     return language
 
 
