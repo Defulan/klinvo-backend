@@ -73,3 +73,21 @@ def test_create_language_unauthorized_error(client):
     response = client.post("/languages/", json=payload)
     assert response.status_code == 401
     assert response.json()["detail"] == ErrorCode.UNAUTHORIZED
+
+
+def test_change_language_full_success(client, create_random_user, create_random_language, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    create_session_id(module_name="languages", user_id=user.id)
+
+    payload = {
+        "name": "New language name",
+        "isPrivate": False
+    }
+
+    response = client.patch(f"/languages/{language.id}", json=payload)
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data["name"] == payload["name"]
+    assert data["is_private"] == payload["isPrivate"]
