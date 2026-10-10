@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
 from app.database import Language, get_language_by_id
 from app.schemas import LanguageCreate, LanguageOut
@@ -24,8 +24,8 @@ def get_language(language_id: int, db: DbSession) -> LanguageOut:
     return language
 
 
-@router.post("/")
-def create_language(data: LanguageCreate, db: DbSession, session_id: CookieValue = None):
+@router.post("/", status_code=status.HTTP_201_CREATED)
+def create_language(data: LanguageCreate, db: DbSession, session_id: CookieValue = None) -> LanguageOut:
     if not session_id:
         raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
     
