@@ -1,9 +1,14 @@
 from pydantic import BaseModel, Field, model_validator
+from pydantic.alias_generators import to_camel
 from datetime import datetime
 from app.enums import ErrorCode
 
 class ConfiguredBaseModel(BaseModel):
-    model_config = {"from_attributes": True}
+    model_config = {
+        "from_attributes": True,
+        "alias_generator": to_camel,
+        "populate_by_name": True
+    }
 
 class UserCreate(ConfiguredBaseModel):
     name: str = Field(min_length=1, max_length=50)
