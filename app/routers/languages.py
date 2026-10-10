@@ -43,7 +43,7 @@ def change_language(language_id: int, data: LanguageEdit, db: DbSession, session
     if not session_id:
         raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
     
-    language = get_language_by_id(language_id)
+    language = get_language_by_id(db, language_id)
     if not language:
         raise HTTPException(status_code=404, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
     
@@ -51,7 +51,7 @@ def change_language(language_id: int, data: LanguageEdit, db: DbSession, session
     if user_id != language.author_id:
         raise HTTPException(status_code=405, detail=ErrorCode.NO_PERMISSIONS)
     
-    user = get_user_by_id(user_id)
+    user = get_user_by_id(db, user_id)
     if not user:
         raise HTTPException(status_code=404, detail=ErrorCode.USER_DOESNT_EXIST)
     
