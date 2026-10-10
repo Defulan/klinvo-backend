@@ -49,6 +49,11 @@ class LanguageOut(ConfiguredBaseModel):
     created_at: datetime
     is_private: bool
 
+class LanguageEdit(ConfiguredBaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=255)
+    is_private: bool | None = Field(default=None)
+
+
 class NoteCreate(ConfiguredBaseModel):
     language_id: int
     title: str = Field(min_length=1, max_length=255)
