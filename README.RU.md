@@ -73,7 +73,7 @@ task test
 На данный момент проверки готовы для:
 - [x] users.py (/users)
 - [x] auth.py (/auth)
-- [ ] languages.py (/languages)
+- [x] languages.py (/languages)
 - [ ] notes.py (/notes)
 
 ## Миграции
@@ -97,7 +97,7 @@ klinvo-backend
 │  ├─ routers/ - эндпоинты
 │  │  ├─ __init__.py
 │  │  ├─ auth.py - /auth
-│  │  ├─ languages.py - /languages (WIP - в разработке)
+│  │  ├─ languages.py - /languages
 │  │  ├─ notes.py - /notes (WIP - в разработке)
 │  │  └─ users.py - /users
 │  ├─ __init__.py
@@ -131,7 +131,7 @@ klinvo-backend
 
 ### Основные (MVP)
 - [x] Система аккаунтов (таблица в БД, создание, вход/выход, изменение, получение данных)
-- [ ] Язык (таблица в БД, CRUD)
+- [x] Языки (таблица в БД, CRUD)
 - [ ] Заметки (таблица в БД, CRUD)
 - [ ] Слова (таблица/таблицы в БД, CRUD)
 
