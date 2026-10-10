@@ -26,11 +26,10 @@ def get_user_languages(user_id: int, db: DbSession, session_id: CookieValue = No
     if user is None:
         raise HTTPException(status_code=400, detail=ErrorCode.USER_DOESNT_EXIST)
     
-    session_user_id = get_value_from_cookie(session_id)
-    if user_id == session_user_id:
-        languages = db.scalars(select(Language).where(Language.author_id == user.id)).all()
-    else:
+    if not session_id or get_value_from_cookie(session_id) != user_id:
         languages = db.scalars(select(Language).where(Language.author_id == user.id).where(Language.is_private is False)).all()
+    else:
+        languages = db.scalars(select(Language).where(Language.author_id == user.id)).all()
     
     return languages
 
