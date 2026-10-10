@@ -69,7 +69,7 @@ def get_note_by_id(db, note_id) -> Note | None:
     return db.scalars(select(Note).where(Note.id == note_id)).first()
 
 
-def is_language_available_for_user(db, language: Language, user_id: int):
+def is_language_available_for_user(language: Language, user_id: int):
     if not language.is_private:
         return True
     
