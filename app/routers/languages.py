@@ -33,5 +33,6 @@ def create_language(data: LanguageCreate, db: DbSession, session_id: CookieValue
     language = Language(author_id=author_id, name=data.name)
     db.add(language)
     db.commit()
+    db.refresh(language)
     
-    return {"message": "success"}
+    return language
