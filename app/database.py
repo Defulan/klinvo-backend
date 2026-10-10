@@ -39,7 +39,7 @@ class Language(Base):
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    is_private: Mapped[bool] = mapped_column(default=False, nullable=False)
+    is_private: Mapped[bool] = mapped_column(default=True, nullable=False)
 
     author: Mapped["User"] = relationship(back_populates="languages")
     notes: Mapped[list["Note"]] = relationship(back_populates="language")
@@ -68,3 +68,9 @@ def get_language_by_id(db, language_id) -> Language | None:
 def get_note_by_id(db, note_id) -> Note | None:
     return db.scalars(select(Note).where(Note.id == note_id)).first()
 
+
+def is_language_available_for_user(language: Language, user_id: int):
+    if not language.is_private:
+        return True
+    
+    return language.author_id == user_id

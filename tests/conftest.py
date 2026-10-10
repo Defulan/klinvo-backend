@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.main import app
-from app.database import Base, get_db, User
+from app.database import Base, get_db, User, Language
 from app.config import settings
 from app.security import hash_password
 from app.enums import CookieKey
@@ -61,6 +61,20 @@ def create_random_user(db_session):
         return user
     
     return _create_random_user
+
+
+@pytest.fixture()
+def create_random_language(db_session):
+    def _create_random_language(author_id: int):
+        letters = "qwertyuiopasdfghjklzxcvbnm"
+        name = "".join(random.choices(letters, k=4))
+
+        language = Language(author_id=author_id, name=name)
+        db_session.add(language)
+        db_session.commit()
+        return language
+    
+    return _create_random_language
 
 
 @pytest.fixture()

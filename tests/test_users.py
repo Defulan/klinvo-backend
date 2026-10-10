@@ -38,6 +38,19 @@ def test_get_users_success(client, create_random_user):
     assert data[1]["name"] == user2.name
 
 
+def test_get_user_languages_success(client, create_random_user, create_random_language):
+    user = create_random_user()
+
+    user_languages = [create_random_language(author_id=user.id) for _ in range(3)]
+    other_user_languages = [create_random_language(author_id=create_random_user().id) for _ in range(3)]
+
+    response = client.get(f"/users/{user.id}/languages")
+    assert response.status_code == 200
+
+    data = response.json()
+    assert len(data) == 3
+
+
 def test_create_user_success(client, db_session):
     payload = {
         "name": "qwerty",

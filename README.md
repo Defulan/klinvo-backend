@@ -73,7 +73,7 @@ task test
 Currently ready tests for:
 - [x] users.py (/users)
 - [x] auth.py (/auth)
-- [ ] languages.py (/languages)
+- [x] languages.py (/languages)
 - [ ] notes.py (/notes)
 
 
@@ -99,7 +99,7 @@ klinvo-backend
 │  ├─ routers/ - endpoints
 │  │  ├─ __init__.py
 │  │  ├─ auth.py - /auth
-│  │  ├─ languages.py - /languages (WIP)
+│  │  ├─ languages.py - /languages
 │  │  ├─ notes.py - /notes (WIP)
 │  │  └─ users.py - /users
 │  ├─ __init__.py
@@ -133,7 +133,7 @@ Currently, the main goal is to bring the project to the MVP stage.
 
 ### Main (MVP)
 - [x] Accounts system (DB table, creating, log in/log out, changing, getting data)
-- [ ] Language (DB table, CRUD)
+- [x] Language (DB table, CRUD)
 - [ ] Notes (DB table, CRUD)
 - [ ] Words (DB table/tables, CRUD)
 
