@@ -57,7 +57,7 @@ def change_language(language_id: int, data: LanguageEdit, db: DbSession, session
     
     filled_data = data.model_dump(exclude_unset=True, exclude_none=True)
     for key, value in filled_data.items():
-        setattr(user, key, value)
+        setattr(language, key, value)
     db.commit()
     
     return language
