@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, HTTPException, Response, status
 from sqlalchemy import select
 from app.security import hasher, create_cookie, get_value_from_cookie
 from app.database import get_user_by_id, User, Language, is_language_available_for_user
@@ -39,7 +39,7 @@ def get_users(db: DbSession) -> list[UserOut]:
     return db.scalars(select(User)).all()
 
 
-@router.post("/")
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def create_user(data: UserCreate, response: Response, db: DbSession, session_id: CookieValue = None):
     if session_id:
         raise HTTPException(status_code=400, detail=ErrorCode.AUTHORIZED)
