@@ -2,17 +2,25 @@ Versions of Backend and Frontend releases at the same time — that is,
 Backend version implies compatible with the corresponding Frontend version
 
 
-## unreleased
+## v0.3.0
 #### Added
 - /languages endpoints
 - /users endpoint for getting languages of specific user
 - Tests for all /languages endpoints and for new one in /users
 - Specific `task`-commands for tests (`testusers`, `testauth`, `testlang`)
+- Implemented Changelog
 
 #### Changed
 - CI optimized
 - Refactor: argument types of endpoints (`DbSession`, `CookieValue`)
 - Disabled `notes.py` module (no more available with fetch/Frontend)
+
+#### Roadmap of this version
+- [x] Accounts system (DB table, creating, log in/log out, changing, getting data)
+- [x] Language (DB table, creation, getting, changing)
+- [ ] Notes (DB table, CRUD)
+- [ ] Words (DB table/tables, CRUD)
+> In Language CRUD was changed to *creation, getting, changing* because deletion wasn't planned
 
 
 ## 0.2.0
