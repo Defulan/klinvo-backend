@@ -65,9 +65,15 @@ task dev
 * Interactive API documentation will be available at http://127.0.0.1:8000/docs
 
 ## Testing
-To run tests of endpoints:
+To run tests for all endpoints:
 ```bash
 task test
+```
+Also you can run tests for specific module:
+```bash
+task testusers
+task testauth
+task testlang
 ```
 
 Currently ready tests for:
