@@ -65,11 +65,11 @@ def create_random_user(db_session):
 
 @pytest.fixture()
 def create_random_language(db_session):
-    def _create_random_language(author_id: int):
+    def _create_random_language(author_id: int, is_private: bool = True):
         letters = "qwertyuiopasdfghjklzxcvbnm"
         name = "".join(random.choices(letters, k=4))
 
-        language = Language(author_id=author_id, name=name)
+        language = Language(author_id=author_id, name=name, is_private=is_private)
         db_session.add(language)
         db_session.commit()
         return language

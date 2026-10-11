@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Response
 from sqlalchemy import select
 from app.security import hasher, create_cookie, get_value_from_cookie
-from app.database import get_user_by_id, User, Language
+from app.database import get_user_by_id, User, Language, is_language_available_for_user
 from app.schemas import UserCreate, UserOut, UserPatch, LanguageOut
 from app.enums import CookieKey, ErrorCode
 from app.dependencies import DbSession, CookieValue
@@ -21,12 +21,16 @@ def get_user(user_id: int, db: DbSession) -> UserOut:
 
 
 @router.get("/{user_id}/languages")
-def get_user_languages(user_id: int, db: DbSession) -> list[LanguageOut]:
+def get_user_languages(user_id: int, db: DbSession, session_id: CookieValue = None) -> list[LanguageOut]:
     user = get_user_by_id(db, user_id)
     if user is None:
         raise HTTPException(status_code=400, detail=ErrorCode.USER_DOESNT_EXIST)
     
-    languages = db.scalars(select(Language).where(Language.author_id == user.id)).all()
+    if not session_id or get_value_from_cookie(session_id) != user_id:
+        languages = db.scalars(select(Language).where(Language.author_id == user.id).where(Language.is_private.is_(False))).all()
+    else:
+        languages = db.scalars(select(Language).where(Language.author_id == user.id)).all()
+    
     return languages
 
 

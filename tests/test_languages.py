@@ -1,26 +1,32 @@
 from app.enums import ErrorCode
 
 
-def test_get_languages_success(client, create_random_user, create_random_language):
+def test_get_public_languages_success(client, create_random_user, create_random_language):
     author_id = create_random_user().id
-    languages = [create_random_language(author_id=author_id) for _ in range(3)]
+    languages = [create_random_language(author_id=author_id, is_private=bool(i % 2)) for i in range(5)]
 
     response = client.get("/languages/")
     assert response.status_code == 200
 
     data = response.json()
-    for index, language in enumerate(languages):
-        response_language = data[index]
+    assert len(data) == 3
+
+    languages_map = {lang.id: lang for lang in languages}
+
+    for response_language in data:
+        language = languages_map[response_language["id"]]
 
         assert response_language["id"] == language.id
-        assert response_language["authorId"] == language.author.id
+        assert response_language["authorId"] == language.author_id
         assert response_language["name"] == language.name
         assert response_language["createdAt"] is not None
+        assert response_language["isPrivate"] is False
 
 
-def test_get_language_success(client, create_random_user, create_random_language):
+def test_get_language_success(client, create_random_user, create_random_language, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
+    create_session_id(module_name="languages", user_id=user.id)
 
     response = client.get(f"/languages/{language.id}")
     assert response.status_code == 200
@@ -30,6 +36,7 @@ def test_get_language_success(client, create_random_user, create_random_language
     assert data["authorId"] == language.author.id == user.id
     assert data["name"] == language.name
     assert data["createdAt"] is not None
+    assert data["isPrivate"] is True
 
 
 def test_get_language_not_found_error(client):
@@ -38,9 +45,18 @@ def test_get_language_not_found_error(client):
     assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
 
 
+def test_get_language_no_permissions_error(client, create_random_user, create_random_language):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+
+    response = client.get(f"/languages/{language.id}")
+    assert response.status_code == 404
+    assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
+
+
 def test_create_language_success(client, create_random_user, create_session_id):
     user = create_random_user()
-    create_session_id("languages", user.id)
+    create_session_id(module_name="languages", user_id=user.id)
 
     payload = {
         "name": "qwertyu"

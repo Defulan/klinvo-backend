@@ -12,15 +12,20 @@ router = APIRouter(
 )
 
 @router.get("/")
-def get_languages(db: DbSession) -> list[LanguageOut]:
-    return db.scalars(select(Language)).all()
+def get_public_languages(db: DbSession) -> list[LanguageOut]:
+    return db.scalars(select(Language).where(Language.is_private == False)).all()
 
 
 @router.get("/{language_id}")
-def get_language(language_id: int, db: DbSession) -> LanguageOut:
+def get_language(language_id: int, db: DbSession, session_id: CookieValue = None) -> LanguageOut:
     language = get_language_by_id(db, language_id)
     if language is None:
         raise HTTPException(status_code=404, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+    
+    if not session_id or get_value_from_cookie(session_id) != language.author_id:
+        if language.is_private:
+            raise HTTPException(status_code=404, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+
     return language
 
 
@@ -49,7 +54,7 @@ def change_language(language_id: int, data: LanguageEdit, db: DbSession, session
     
     user_id = get_value_from_cookie(session_id)
     if user_id != language.author_id:
-        raise HTTPException(status_code=405, detail=ErrorCode.NO_PERMISSIONS)
+        raise HTTPException(status_code=404, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
     
     user = get_user_by_id(db, user_id)
     if not user:
