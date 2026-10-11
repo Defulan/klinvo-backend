@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Response, status
 from sqlalchemy import select
 from app.security import hasher, create_cookie, get_value_from_cookie
-from app.database import get_user_by_id, User, Language, is_language_available_for_user
+from app.database import get_user_by_id, User, Language
 from app.schemas import UserCreate, UserOut, UserPatch, LanguageOut
 from app.enums import CookieKey, ErrorCode
 from app.dependencies import DbSession, CookieValue

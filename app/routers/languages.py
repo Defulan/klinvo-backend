@@ -22,9 +22,8 @@ def get_language(language_id: int, db: DbSession, session_id: CookieValue = None
     if language is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
     
-    if not session_id or get_value_from_cookie(session_id) != language.author_id:
-        if language.is_private:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+    if language.is_private and (not session_id or get_value_from_cookie(session_id) != language.author_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
 
     return language
 
