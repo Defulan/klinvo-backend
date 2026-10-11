@@ -42,8 +42,10 @@ def test_get_users_success(client, create_random_user):
 def test_get_user_languages_by_guest_success(client, create_random_user, create_random_language):
     user = create_random_user()
 
-    user_languages = [create_random_language(author_id=user.id, is_private=bool(i % 2)) for i in range(3)]
-    other_user_languages = [create_random_language(author_id=create_random_user().id) for _ in range(4)]
+    for i in range(3):
+        create_random_language(author_id=user.id, is_private=bool(i % 2))
+    for i in range(4):
+        create_random_language(author_id=create_random_user().id)
 
     response = client.get(f"/users/{user.id}/languages")
     assert response.status_code == status.HTTP_200_OK
@@ -60,8 +62,10 @@ def test_get_user_languages_by_author_success(client, create_random_user, create
     user = create_random_user()
     create_session_id(module_name="users", user_id=user.id)
 
-    user_languages = [create_random_language(author_id=user.id, is_private=bool(i % 2)) for i in range(3)]
-    other_user_languages = [create_random_language(author_id=create_random_user().id) for _ in range(4)]
+    for i in range(3):
+        create_random_language(author_id=user.id, is_private=bool(i % 2))
+    for i in range(4):
+        create_random_language(author_id=create_random_user().id)
 
     response = client.get(f"/users/{user.id}/languages")
     assert response.status_code == status.HTTP_200_OK
