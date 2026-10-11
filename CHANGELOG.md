@@ -2,6 +2,11 @@ Versions of Backend and Frontend releases at the same time — that is,
 Backend version implies compatible with the corresponding Frontend version
 
 
+## unreleased
+#### Added
+- ruff formatter and related task commands (`format`, `lint`, `lintdiff`)
+
+
 ## v0.3.0
 #### Added
 - /languages endpoints
