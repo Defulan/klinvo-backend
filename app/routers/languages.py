@@ -13,7 +13,7 @@ router = APIRouter(
 
 @router.get("/")
 def get_public_languages(db: DbSession) -> list[LanguageOut]:
-    return db.scalars(select(Language).where(Language.is_private is False)).all()
+    return db.scalars(select(Language).where(Language.is_private == False)).all()
 
 
 @router.get("/{language_id}")
