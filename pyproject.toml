@@ -7,3 +7,6 @@ test = "pytest"
 testusers = "pytest tests/test_users.py"
 testauth = "pytest tests/test_auth.py"
 testlang = "pytest tests/test_languages.py"
+
+[tool.ruff.lint]
+ignore=["I001"]
