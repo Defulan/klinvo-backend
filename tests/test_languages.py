@@ -41,7 +41,7 @@ def test_get_language_success(client, create_random_user, create_random_language
 
 
 def test_get_language_not_found_error(client):
-    response = client.get(f"/languages/8721321")
+    response = client.get("/languages/8721321")
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
 
