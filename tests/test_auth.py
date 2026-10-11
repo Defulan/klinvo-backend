@@ -1,3 +1,4 @@
+from fastapi import status
 from app.enums import CookieKey, ErrorCode
 
 def test_get_auth_cookie_authorized(client, create_random_user, create_session_id):
@@ -5,7 +6,7 @@ def test_get_auth_cookie_authorized(client, create_random_user, create_session_i
     create_session_id(module_name="auth", user_id=user.id)
 
     response = client.get("auth/me")
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     
     response_user = response.json()["user"]
     assert response_user["id"] == user.id
@@ -15,7 +16,7 @@ def test_get_auth_cookie_authorized(client, create_random_user, create_session_i
 
 def test_get_auth_cookie_unauthorized(client):
     response = client.get("auth/me")
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     
     response_user = response.json()["user"]
     assert response_user is None
@@ -31,7 +32,7 @@ def test_login_success(client, create_random_user):
     }
 
     response = client.post("/auth/login", json=payload)
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert CookieKey.SESSION_ID in response.cookies
 
 
@@ -45,7 +46,7 @@ def test_login_wrong_login_error(client, create_random_user):
     }
 
     response = client.post("/auth/login", json=payload)
-    assert response.status_code == 401
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
     assert response.json()["detail"] == ErrorCode.WRONG_LOGIN_DATA
 
 
@@ -59,7 +60,7 @@ def test_login_authorized_error(client, create_random_user, create_session_id):
     }
 
     response = client.post("/auth/login", json=payload)
-    assert response.status_code == 409
+    assert response.status_code == status.HTTP_403_FORBIDDEN
     assert response.json()["detail"] == ErrorCode.AUTHORIZED
 
 
@@ -68,13 +69,13 @@ def test_logout_success(client, create_random_user, create_session_id):
     create_session_id(module_name="auth", user_id=user.id)
 
     response = client.post("/auth/logout")
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert CookieKey.SESSION_ID not in response.cookies 
 
 
 def test_logout_unauthorized_error(client):
     response = client.post("/auth/logout")
-    assert response.status_code == 401
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
     assert response.json()["detail"] == ErrorCode.UNAUTHORIZED
 
 
@@ -82,5 +83,5 @@ def test_logout_not_exist_error(client, create_session_id):
     create_session_id(module_name="auth", user_id=9218374)
 
     response = client.post("/auth/logout")
-    assert response.status_code == 401
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["detail"] == ErrorCode.USER_DOESNT_EXIST

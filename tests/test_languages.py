@@ -1,3 +1,4 @@
+from fastapi import status
 from app.enums import ErrorCode
 
 
@@ -6,7 +7,7 @@ def test_get_public_languages_success(client, create_random_user, create_random_
     languages = [create_random_language(author_id=author_id, is_private=bool(i % 2)) for i in range(5)]
 
     response = client.get("/languages/")
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     data = response.json()
     assert len(data) == 3
@@ -29,7 +30,7 @@ def test_get_language_success(client, create_random_user, create_random_language
     create_session_id(module_name="languages", user_id=user.id)
 
     response = client.get(f"/languages/{language.id}")
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     data = response.json()
     assert data["id"] == language.id
@@ -41,7 +42,7 @@ def test_get_language_success(client, create_random_user, create_random_language
 
 def test_get_language_not_found_error(client):
     response = client.get(f"/languages/8721321")
-    assert response.status_code == 404
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
 
 
@@ -50,7 +51,7 @@ def test_get_language_no_permissions_error(client, create_random_user, create_ra
     language = create_random_language(author_id=user.id)
 
     response = client.get(f"/languages/{language.id}")
-    assert response.status_code == 404
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
 
 
@@ -63,7 +64,7 @@ def test_create_language_success(client, create_random_user, create_session_id):
     }
 
     response = client.post("/languages/", json=payload)
-    assert response.status_code == 201
+    assert response.status_code == status.HTTP_201_CREATED
 
     data = response.json()
     assert data["authorId"] == user.id
@@ -78,7 +79,7 @@ def test_create_language_validation_error(client):
     }
 
     response = client.post("/languages/", json=payload)
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
 
 def test_create_language_unauthorized_error(client):
@@ -87,7 +88,7 @@ def test_create_language_unauthorized_error(client):
     }
 
     response = client.post("/languages/", json=payload)
-    assert response.status_code == 401
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
     assert response.json()["detail"] == ErrorCode.UNAUTHORIZED
 
 
@@ -102,7 +103,7 @@ def test_change_language_full_success(client, create_random_user, create_random_
     }
 
     response = client.patch(f"/languages/{language.id}", json=payload)
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     data = response.json()
     assert data["name"] == payload["name"]
