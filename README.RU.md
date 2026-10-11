@@ -7,6 +7,7 @@ Klinvo - минималистичный веб-инструмент для ко�
 * **Документация API:** https://klinvo-backend.onrender.com/docs
 * **Технологии:** Python, FastAPI | SQLAlchemy, PostgreSQL, Alembic | Pytest
 * **Frontend репозиторий:** [klinvo-frontend ↗](https://github.com/Defulan/klinvo-frontend)
+* **[Список изменений](CHANGELOG.md)** *(только на английском)*
 
 > *Примечание: первый запрос может занять 30-60 секунд ожидания из-за холодного старта бесплатного хостинга*
 
