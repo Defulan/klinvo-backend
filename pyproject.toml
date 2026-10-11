@@ -7,6 +7,9 @@ test = "pytest"
 testusers = "pytest tests/test_users.py"
 testauth = "pytest tests/test_auth.py"
 testlang = "pytest tests/test_languages.py"
+format = "ruff check --fix"
+lint = "ruff check"
+lintdiff = "ruff check --fix --diff"
 
 [tool.ruff.lint]
 ignore=["I001"]
