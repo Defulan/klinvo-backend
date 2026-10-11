@@ -54,7 +54,7 @@ def change_language(language_id: int, data: LanguageEdit, db: DbSession, session
     
     user_id = get_value_from_cookie(session_id)
     if user_id != language.author_id:
-        raise HTTPException(status_code=405, detail=ErrorCode.NO_PERMISSIONS)
+        raise HTTPException(status_code=404, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
     
     user = get_user_by_id(db, user_id)
     if not user:
