@@ -13,3 +13,4 @@ lintdiff = "ruff check --fix --diff"
 
 [tool.ruff.lint]
 ignore=["I001"]
+exclude=["alembic/versions/*"]
