@@ -5,7 +5,7 @@ README: [English](README.md) | [Русский](README.RU.md)
 Klinvo is a minimalist web tool for constructing artificial languages (conlangs).
 
 * **API Docs:** https://klinvo-backend.onrender.com/docs
-* **Tech stack:** Python, FastAPI | SQLAlchemy, PostgreSQL, Alembic | Pytest
+* **Tech stack:** Python, FastAPI | SQLAlchemy, PostgreSQL, Alembic | Pytest | ruff
 * **Frontend repository:** [klinvo-frontend ↗](https://github.com/Defulan/klinvo-frontend)
 * **[Changelog](CHANGELOG.md)**
 
@@ -77,6 +77,18 @@ task testauth
 task testlang
 ```
 
+## Formatting
+To run formating (on the entire project):
+```bash
+task format
+```
+
+To run linter, you can write one of these commands below. `lintdiff` shows exactly how `task format` will work. `lint` showing errors without taking subsequent changes into account
+```bash
+task lint
+task lintdiff
+```
+
 
 ## Migrations
 If you want to do database migration:
@@ -121,7 +133,7 @@ klinvo-backend
 ├─ .gitignore
 ├─ alembic.ini
 ├─ LICENSE
-├─ pyproject.toml
+├─ pyproject.toml - task commands and formatter set up
 ├─ pytest.ini
 ├─ README.md
 ├─ README.RU.md
