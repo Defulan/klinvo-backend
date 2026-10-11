@@ -65,7 +65,26 @@ task dev
 ```
 * Интерактивная API документация будет доступна на http://127.0.0.1:8000/docs
 
-## Тестирование
+
+## `task` commands
+All task commands set up in the `pyproject.toml`.
+There is list of all possible commands and below it more specific info:
+- `task run` — run the project
+- `task dev` — run the project & reload when saving a file
+- `task revision "message"` — create alembic migration
+- `task migrate` — database migration
+- `task test` — run all tests
+- `task testusers` — run only `/users` tests
+- `task testauth` — run only `/auth` tests
+- `task testlang` — run only `/languages` tests
+- `task format` — format entire project
+- `task format [path]` — format only the specified directory/file
+- `task lint` — run linter on the entire project
+- `task lint [path]` — run linter only on the specified directory/file
+- `task lintdiff` — run linter (`--fix --diff`) on the entire project
+- `task lintdiff [path]` — run linter (`--fix --diff`) only on the specified directory/file
+
+### Тестирование
 Запустить проверку всех эндпоинтов:
 ```bash
 task test
@@ -77,7 +96,7 @@ task testauth
 task testlang
 ```
 
-## Форматирование
+### Форматирование
 Запустить форматирование (всего проекта):
 ```bash
 task format
@@ -89,12 +108,20 @@ task lint
 task lintdiff
 ```
 
-## Миграции
-Если вы собираетесь сделать миграцию БД
+Также можно запустить форматтер только в конкретной папке или файле, например:
+```bash
+task format app/routers
+task lint tests
+task lintdiff app/database.py
+```
+
+### Миграции
+Если вы собираетесь сделать миграцию базы данных:
 ```bash
 task revision "Write here your message"
 task migrate
 ```
+
 
 ## Структура проекта
 ```
