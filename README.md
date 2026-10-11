@@ -76,12 +76,6 @@ task testauth
 task testlang
 ```
 
-Currently ready tests for:
-- [x] users.py (/users)
-- [x] auth.py (/auth)
-- [x] languages.py (/languages)
-- [ ] notes.py (/notes)
-
 
 ## Migrations
 If you want to do database migration:
@@ -106,7 +100,7 @@ klinvo-backend
 │  │  ├─ __init__.py
 │  │  ├─ auth.py - /auth
 │  │  ├─ languages.py - /languages
-│  │  ├─ notes.py - /notes (WIP)
+│  │  ├! notes.py - /notes (*WIP, check the footnote below)
 │  │  └─ users.py - /users
 │  ├─ __init__.py
 │  ├─ config.py - variable settings with environment variables
@@ -132,6 +126,7 @@ klinvo-backend
 ├─ README.RU.md
 └─ requirements.txt
 ```
+> *In project already exist /notes endpoints, but they was implemented too early in the project development, so they are disabled (you can't fetch them from frontend)
 
 
 ## Roadmap

@@ -76,12 +76,6 @@ task testauth
 task testlang
 ```
 
-На данный момент проверки готовы для:
-- [x] users.py (/users)
-- [x] auth.py (/auth)
-- [x] languages.py (/languages)
-- [ ] notes.py (/notes)
-
 ## Миграции
 Если вы собираетесь сделать миграцию БД
 ```bash
@@ -104,7 +98,7 @@ klinvo-backend
 │  │  ├─ __init__.py
 │  │  ├─ auth.py - /auth
 │  │  ├─ languages.py - /languages
-│  │  ├─ notes.py - /notes (WIP - в разработке)
+│  │  ├! notes.py - /notes (*WIP, посмотрите сноску ниже)
 │  │  └─ users.py - /users
 │  ├─ __init__.py
 │  ├─ config.py - переменная settings с env-значениями
@@ -130,6 +124,7 @@ klinvo-backend
 ├─ README.RU.md
 └─ requirements.txt
 ```
+> В проекте уже есть /notes эндпоинты, однако они были написаны слишком рано в разработке проекта, потому они отключены (вы не сможете вызвать их через фронтенд)
 
 
 ## Roadmap

@@ -2,12 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from app.config import settings
-from app.routers import users, auth, notes, languages
+from app.routers import users, auth, languages
 
 
 app = FastAPI(
     title="klinvo-backend",
-    version="0.2.0"
+    version="0.3.0"
 )
 
 app.add_middleware(
@@ -25,5 +25,4 @@ app.add_middleware(
 
 app.include_router(users.router)
 app.include_router(auth.router)
-app.include_router(notes.router)
 app.include_router(languages.router)
