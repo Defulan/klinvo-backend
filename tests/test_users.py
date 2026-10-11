@@ -38,17 +38,38 @@ def test_get_users_success(client, create_random_user):
     assert data[1]["name"] == user2.name
 
 
-def test_get_user_languages_success(client, create_random_user, create_random_language):
+def test_get_user_languages_by_guest_success(client, create_random_user, create_random_language):
     user = create_random_user()
 
-    user_languages = [create_random_language(author_id=user.id) for _ in range(3)]
-    other_user_languages = [create_random_language(author_id=create_random_user().id) for _ in range(3)]
+    user_languages = [create_random_language(author_id=user.id, is_private=bool(i % 2)) for i in range(3)]
+    other_user_languages = [create_random_language(author_id=create_random_user().id) for _ in range(4)]
+
+    response = client.get(f"/users/{user.id}/languages")
+    assert response.status_code == 200
+
+    data = response.json()
+    assert len(data) == 2
+
+    for language in data:
+        assert language["authorId"] == user.id
+        assert language["isPrivate"] is False
+
+
+def test_get_user_languages_by_author_success(client, create_random_user, create_random_language, create_session_id):
+    user = create_random_user()
+    create_session_id(module_name="users", user_id=user.id)
+
+    user_languages = [create_random_language(author_id=user.id, is_private=bool(i % 2)) for i in range(3)]
+    other_user_languages = [create_random_language(author_id=create_random_user().id) for _ in range(4)]
 
     response = client.get(f"/users/{user.id}/languages")
     assert response.status_code == 200
 
     data = response.json()
     assert len(data) == 3
+
+    for language in data:
+        assert language["authorId"] == user.id
 
 
 def test_create_user_success(client, db_session):
