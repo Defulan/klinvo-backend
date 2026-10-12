@@ -55,6 +55,44 @@ def test_get_language_no_permissions_error(client, create_random_user, create_ra
     assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
 
 
+def test_get_language_notes_success(client, create_random_user, create_random_language, create_random_note):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id, is_private=False)
+
+    for _ in range(3):
+        create_random_note(language_id=language.id)
+
+    response = client.get(f"/languages/{language.id}/notes")
+    assert response.status_code == status.HTTP_200_OK
+    
+    data = response.json()
+    assert len(data) == 3
+    
+    for note in data:
+        assert note["languageId"] == language.id
+        assert len(note["title"]) > 0
+        assert note["content"] is None
+        assert note["createdAt"] is not None
+
+
+def test_get_language_notes_not_found_error(client):
+    response = client.get("/languages/2831924/notes")
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
+
+
+def test_get_language_notes_private_error(client, create_random_user, create_random_language, create_random_note):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+
+    for _ in range(3):
+        create_random_note(language_id=language.id)
+
+    response = client.get(f"/languages/{language.id}/notes")
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
+
+
 def test_create_language_success(client, create_random_user, create_session_id):
     user = create_random_user()
     create_session_id(module_name="languages", user_id=user.id)

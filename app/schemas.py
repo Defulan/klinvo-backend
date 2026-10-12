@@ -55,17 +55,15 @@ class LanguageEdit(ConfiguredBaseModel):
 
 
 class NoteCreate(ConfiguredBaseModel):
-    language_id: int
     title: str = Field(min_length=1, max_length=255)
 
 class NoteOut(ConfiguredBaseModel):
     id: int
     language_id: int
     title: str
-    content: str
+    content: str | None
     created_at: datetime
 
 class NotePatch(ConfiguredBaseModel):
-    id: int
     title: str | None = Field(default=None, min_length=1, max_length=255)
-    content: str | None = None
+    content: str | None = Field(default=None)

@@ -138,7 +138,7 @@ klinvo-backend
 │  │  ├─ __init__.py
 │  │  ├─ auth.py - /auth
 │  │  ├─ languages.py - /languages
-│  │  ├! notes.py - /notes (*WIP, check the footnote below)
+│  │  ├─ notes.py - /notes
 │  │  └─ users.py - /users
 │  ├─ __init__.py
 │  ├─ config.py - variable settings with environment variables
@@ -164,7 +164,6 @@ klinvo-backend
 ├─ README.RU.md
 └─ requirements.txt
 ```
-> *In project already exist /notes endpoints, but they was implemented too early in the project development, so they are disabled (you can't fetch them from frontend)
 
 
 ## Roadmap
@@ -173,7 +172,7 @@ Currently, the main goal is to bring the project to the MVP stage.
 ### Main (MVP)
 - [x] Accounts system (DB table, creating, log in/log out, changing, getting data)
 - [x] Language (DB table, creation, getting, changing)
-- [ ] Notes (DB table, CRUD)
+- [x] Notes (DB table, CRUD)
 - [ ] Words (DB table/tables, CRUD)
 
 ### Future Enhancements

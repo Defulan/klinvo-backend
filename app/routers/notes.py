@@ -1,6 +1,5 @@
-from fastapi import APIRouter, HTTPException
-from sqlalchemy import select
-from app.database import get_language_by_id, Note, Language, get_note_by_id
+from fastapi import APIRouter, HTTPException, status
+from app.database import get_user_by_id, get_language_by_id, Note, get_note_by_id
 from app.schemas import NoteCreate, NoteOut, NotePatch
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode
@@ -12,52 +11,83 @@ router = APIRouter(
 )
 
 @router.get("/{note_id}")
-def get_note(note_id: int, db: DbSession) -> NoteOut:
-    return db.scalars(select(Note).where(Note.id == note_id)).first()
+def get_note(note_id: int, db: DbSession, session_id: CookieValue = None) -> NoteOut:
+    note = get_note_by_id(db, note_id)
+
+    if note is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+    
+    language = note.language
+    if language.is_private and (not session_id or get_value_from_cookie(session_id) != language.author_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+
+    return note
 
 
-@router.get("/{language_id}")
-def get_notes(language_id: int, db: DbSession) -> list[NoteOut]:
-    return db.scalars(select(Note).where(Note.language_id == language_id)).all()
-
-
-@router.post("/")
-def create_note(data: NoteCreate, db: DbSession, session_id: CookieValue = None):
+@router.post("/{language_id}", status_code=status.HTTP_201_CREATED)
+def create_note(language_id: int, data: NoteCreate, db: DbSession, session_id: CookieValue = None) -> NoteOut:
     if not session_id:
-        raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
     
-    language: Language = get_language_by_id(data.language_id)
-    if language is None:
-        raise HTTPException(status_code=400, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+    user = get_user_by_id(db, get_value_from_cookie(session_id))
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
     
-    session_user_id = get_value_from_cookie(session_id)
-    if language.author_id != int(session_user_id):
-        raise HTTPException(status_code=403, detail=ErrorCode.NO_PERMISSIONS)
-
-    note = Note(language_id=data.language_id, title=data.title)
+    language = get_language_by_id(db, language_id)
+    if not language:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+    
+    if user.id != language.author_id:
+        if language.is_private:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.NO_PERMISSIONS)
+    
+    note = Note(language_id=language_id, title=data.title)
     db.add(note)
     db.commit()
 
-    return {"message": "success"}
+    return note
 
 
-@router.patch("/")
-def change_note(data: NotePatch, db: DbSession, session_id: CookieValue = None):
+@router.patch("/{note_id}")
+def change_note(note_id: int, data: NotePatch, db: DbSession, session_id: CookieValue = None) -> NoteOut:
     if not session_id:
-        raise HTTPException(status_code=401, detail=ErrorCode.UNAUTHORIZED)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
     
-    note: Note = get_note_by_id(db, data.id)
-    if note is None:
-        raise HTTPException(status_code=400, detail=ErrorCode.NOTE_DOESNT_EXIST)
+    note = get_note_by_id(db, note_id)
+    if not note:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
     
-    user = note.language.author
-    session_user_id = get_value_from_cookie(session_id)
-    if user.id != int(session_user_id):
-        raise HTTPException(status_code=403, detail=ErrorCode.NO_PERMISSIONS)
-    
+    user_id = get_value_from_cookie(session_id)
+    if note.language.author_id != user_id:
+        if note.language.is_private:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.NO_PERMISSIONS)
+
     filled_data = data.model_dump(exclude_unset=True, exclude_none=True)
     for key, value in filled_data.items():
         setattr(note, key, value)
+    
     db.commit()
+    db.refresh(note)
+    
+    return note
 
-    return {"message": "success"}
+
+@router.delete("/{note_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_note(note_id: int, db: DbSession, session_id: CookieValue = None):
+    if not session_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+    
+    note = get_note_by_id(db, note_id)
+    if not note:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+    
+    user_id = get_value_from_cookie(session_id)
+    if note.language.author_id != user_id:
+        if note.language.is_private:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.NO_PERMISSIONS)
+    
+    db.delete(note)
+    db.commit()
