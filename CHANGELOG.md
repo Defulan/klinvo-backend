@@ -1,6 +1,13 @@
 Versions of Backend and Frontend releases at the same time — that is, 
 Backend version implies compatible with the corresponding Frontend version
 
+## unreleased
+> The next planned version: v0.4.0
+
+#### Added
+- CRUD `/notes` endpoints and their success/error tests
+- Getting language's notes endpoint (`GET /languages/<language_id>/notes`) and it's success/error tests
+
 
 ## v0.3.1
 
