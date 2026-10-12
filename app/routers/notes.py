@@ -37,3 +37,28 @@ def create_note(language_id: int, data: NoteCreate, db: DbSession, session_id: C
     db.commit()
 
     return note
+
+
+@router.patch("/{note_id}")
+def change_note(note_id: int, data: NotePatch, db: DbSession, session_id: CookieValue = None) -> NoteOut:
+    if not session_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+    
+    note = get_note_by_id(db, note_id)
+    if not note:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+    
+    user_id = get_value_from_cookie(session_id)
+    if note.language.author_id != user_id:
+        if note.language.is_private:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.NO_PERMISSIONS)
+
+    filled_data = data.model_dump(exclude_unset=True, exclude_none=True)
+    for key, value in filled_data.items():
+        setattr(note, key, value)
+    
+    db.commit()
+    db.refresh(note)
+    
+    return note
