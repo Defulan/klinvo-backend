@@ -2,7 +2,7 @@ Versions of Backend and Frontend releases at the same time — that is,
 Backend version implies compatible with the corresponding Frontend version
 
 
-## unreleased
+## v0.3.1
 
 #### Added
 - ruff formatter
@@ -11,8 +11,9 @@ Backend version implies compatible with the corresponding Frontend version
 #### Changed
 - Using HTTP codes instead of just numbers
 - Returning 201 CREATED code in POST endpoints
-- Added section "task commands" in the README (Testing & Migrations are now subsections)
+- Added section "`task` commands" in the README (Testing & Migrations are now subsections)
 - (CI) Reminder to update Changelog after changes in a branch
+- (CI) Job `readme-reminder` renamed to `to-change-reminder`
 
 
 ## v0.3.0
