@@ -7,7 +7,7 @@ from app.routers import users, auth, languages
 
 app = FastAPI(
     title="klinvo-backend",
-    version="0.3.0"
+    version="0.3.1"
 )
 
 app.add_middleware(
