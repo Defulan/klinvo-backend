@@ -342,3 +342,18 @@ def test_change_note_non_author_private_error(client, create_random_user, create
     response = client.patch(f"/notes/{note.id}", json=payload)
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["detail"] == ErrorCode.NOTE_DOESNT_EXIST
+
+
+# DELETE /notes/<note_id> - success
+def test_delete_note_success(client, create_random_user, create_random_language, create_random_note, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    note = create_random_note(language_id=language.id)
+    create_session_id(module_name="notes", user_id=user.id)
+
+    response = client.delete(f"/notes/{note.id}")
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    
+    get_response = client.get(f"/notes/{note.id}")
+    assert get_response.status_code == status.HTTP_404_NOT_FOUND
+    assert get_response.json()["detail"] == ErrorCode.NOTE_DOESNT_EXIST
