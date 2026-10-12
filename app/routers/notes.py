@@ -10,3 +10,7 @@ router = APIRouter(
     prefix="/notes",
     tags=["Notes"]
 )
+
+@router.get("/{note_id}")
+def get_note(note_id: int, db: DbSession) -> NoteOut:
+    return get_note_by_id(db, note_id)
