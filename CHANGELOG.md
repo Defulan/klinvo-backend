@@ -3,8 +3,15 @@ Backend version implies compatible with the corresponding Frontend version
 
 
 ## unreleased
+
 #### Added
-- ruff formatter and related task commands (`format`, `lint`, `lintdiff`)
+- ruff formatter
+- `task` commands (`format`, `lint`, `lintdiff`)
+
+#### Changed
+- Using HTTP codes instead of just numbers
+- Returning 201 CREATED code in POST endpoints
+- Added section "task commands" in the README (Testing & Migrations are now subsections)
 
 
 ## v0.3.0
