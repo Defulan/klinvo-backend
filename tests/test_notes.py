@@ -53,3 +53,23 @@ def test_get_note_not_found_error(client):
     response = client.get("/notes/9218")
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["detail"] == ErrorCode.NOTE_DOESNT_EXIST
+
+
+def test_create_note_success(client, create_random_user, create_random_language, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    create_session_id(module_name="notes", user_id=user.id)
+
+    payload = {
+        "title": "qwertyui"
+    }
+
+    response = client.post(f"/notes/{language.id}", json=payload)
+    assert response.status_code == status.HTTP_201_CREATED
+
+    data = response.json()
+    assert data["languageId"] == language.id
+    assert data["title"] == payload["title"]
+    assert data["content"] is None
+    assert data["createdAt"] is not None
+
