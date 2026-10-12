@@ -238,3 +238,101 @@ def test_change_note_empty_success(client, create_random_user, create_random_lan
     assert data["title"] == note.title
     assert data["content"] == note.content
     assert data["createdAt"] is not None
+
+
+def test_change_note_unauthorized_error(client, create_random_user, create_random_language, create_random_note):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    note = create_random_note(language_id=language.id)
+
+    payload = {
+        "title": "Juaqo, lasiUQm llas",
+        "content": (
+            "**This is**\nstill a line\n\n"
+            "but this is something new!\n\n"
+            "* list item 1\n* *list* item2\n* **list item 3**\n\n"
+            "* ***list*** item... oh, it's already a different list"
+        )}
+
+    response = client.patch(f"/notes/{note.id}", json=payload)
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    assert response.json()["detail"] == ErrorCode.UNAUTHORIZED
+
+
+def test_change_note_not_found_error(client, create_random_user, create_session_id):
+    user = create_random_user()
+    create_session_id(module_name="notes", user_id=user.id)
+
+    payload = {
+        "title": "Juaqo, lasiUQm llas",
+        "content": (
+            "**This is**\nstill a line\n\n"
+            "but this is something new!\n\n"
+            "* list item 1\n* *list* item2\n* **list item 3**\n\n"
+            "* ***list*** item... oh, it's already a different list"
+        )}
+
+    response = client.patch("/notes/8381", json=payload)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["detail"] == ErrorCode.NOTE_DOESNT_EXIST
+
+
+def test_change_note_validation_error(client, create_random_user, create_random_language, create_random_note, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    note = create_random_note(language_id=language.id)
+    create_session_id(module_name="notes", user_id=user.id)
+
+    payload = {
+        "title": "Juaqo, lasiUQm llas"*251,
+        "content": (
+            "**This is**\nstill a line\n\n"
+            "but this is something new!\n\n"
+            "* list item 1\n* *list* item2\n* **list item 3**\n\n"
+            "* ***list*** item... oh, it's already a different list"
+        )}
+
+    response = client.patch(f"/notes/{note.id}", json=payload)
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+
+
+def test_change_note_non_author_public_error(client, create_random_user, create_random_language, create_random_note, create_session_id):
+    author_user = create_random_user()
+    other_user = create_random_user()
+    language = create_random_language(author_id=author_user.id, is_private=False)
+    note = create_random_note(language_id=language.id)
+    create_session_id(module_name="notes", user_id=other_user.id)
+
+    payload = {
+        "title": "Juaqo, lasiUQm llas",
+        "content": (
+            "**This is**\nstill a line\n\n"
+            "but this is something new!\n\n"
+            "* list item 1\n* *list* item2\n* **list item 3**\n\n"
+            "* ***list*** item... oh, it's already a different list"
+        )}
+
+    response = client.patch(f"/notes/{note.id}", json=payload)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.json()["detail"] == ErrorCode.NO_PERMISSIONS
+
+
+def test_change_note_non_author_private_error(client, create_random_user, create_random_language, create_random_note, create_session_id):
+    author_user = create_random_user()
+    other_user = create_random_user()
+    language = create_random_language(author_id=author_user.id)
+    note = create_random_note(language_id=language.id)
+    create_session_id(module_name="notes", user_id=other_user.id)
+
+    payload = {
+        "title": "Juaqo, lasiUQm llas",
+        "content": (
+            "**This is**\nstill a line\n\n"
+            "but this is something new!\n\n"
+            "* list item 1\n* *list* item2\n* **list item 3**\n\n"
+            "* ***list*** item... oh, it's already a different list"
+        )}
+
+    response = client.patch(f"/notes/{note.id}", json=payload)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["detail"] == ErrorCode.NOTE_DOESNT_EXIST
