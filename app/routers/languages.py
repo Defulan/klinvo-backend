@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
 from app.database import Language, get_language_by_id, get_user_by_id
-from app.schemas import LanguageCreate, LanguageOut, LanguageEdit
+from app.schemas import LanguageCreate, LanguageOut, LanguageEdit, NoteOut
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode
 from app.dependencies import DbSession, CookieValue
@@ -26,6 +26,18 @@ def get_language(language_id: int, db: DbSession, session_id: CookieValue = None
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
 
     return language
+
+
+@router.get("/{language_id}/notes")
+def get_language_notes(language_id: int, db: DbSession, session_id: CookieValue = None) -> list[NoteOut]:
+    language = get_language_by_id(db, language_id)
+    if language is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+    
+    if language.is_private and (not session_id or get_value_from_cookie(session_id) != language.author_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+
+    return language.notes
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
