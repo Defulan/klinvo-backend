@@ -153,6 +153,8 @@ klinvo-backend
 │  ├─ conftest.py - fixtures
 │  ├─ enums.py
 │  ├─ test_auth.py
+│  ├─ test_languages.py
+│  ├─ test_notes.py
 │  └─ test_users.py
 │
 ├─ .env.example
