@@ -2,6 +2,7 @@ from fastapi import status
 from app.database import User
 from app.security import verify_password
 from app.enums import CookieKey, ErrorCode
+from enums import ModuleName
 
 
 def test_get_user_success(client, create_random_user):
@@ -60,7 +61,7 @@ def test_get_user_languages_by_guest_success(client, create_random_user, create_
 
 def test_get_user_languages_by_author_success(client, create_random_user, create_random_language, create_session_id):
     user = create_random_user()
-    create_session_id(module_name="users", user_id=user.id)
+    create_session_id(module_name=ModuleName.USERS, user_id=user.id)
 
     for i in range(3):
         create_random_language(author_id=user.id, is_private=bool(i % 2))
@@ -121,7 +122,7 @@ def test_create_user_passwords_doesnt_match_error(client):
 
 def test_change_user_success_all(client, db_session, create_random_user, create_session_id):
     user = create_random_user()
-    create_session_id(module_name="users", user_id=user.id)
+    create_session_id(module_name=ModuleName.USERS, user_id=user.id)
 
     payload = {
         "name": "asdasd",
@@ -138,7 +139,7 @@ def test_change_user_success_all(client, db_session, create_random_user, create_
 
 def test_change_user_success_partial(client, db_session, create_random_user, create_session_id):
     user = create_random_user()
-    create_session_id(module_name="users", user_id=user.id)
+    create_session_id(module_name=ModuleName.USERS, user_id=user.id)
 
     payload = {
         "name": None,
@@ -155,7 +156,7 @@ def test_change_user_success_partial(client, db_session, create_random_user, cre
 
 
 def test_change_user_validation_error(client, create_session_id):
-    create_session_id(module_name="users", user_id=1337)
+    create_session_id(module_name=ModuleName.USERS, user_id=1337)
 
     payload = {
         "name": "VERYMUCHTEXT"*256,
@@ -179,7 +180,7 @@ def test_change_user_unauthorized_error(client):
 
 
 def test_change_user_not_exist_error(client, create_session_id):
-    create_session_id(module_name="users", user_id=823712)
+    create_session_id(module_name=ModuleName.USERS, user_id=823712)
 
     payload = {
         "name": "example_data",

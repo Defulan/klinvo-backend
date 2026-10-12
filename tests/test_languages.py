@@ -1,5 +1,6 @@
 from fastapi import status
 from app.enums import ErrorCode
+from enums import ModuleName
 
 
 def test_get_public_languages_success(client, create_random_user, create_random_language):
@@ -27,7 +28,7 @@ def test_get_public_languages_success(client, create_random_user, create_random_
 def test_get_language_success(client, create_random_user, create_random_language, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
-    create_session_id(module_name="languages", user_id=user.id)
+    create_session_id(module_name=ModuleName.LANGUAGES, user_id=user.id)
 
     response = client.get(f"/languages/{language.id}")
     assert response.status_code == status.HTTP_200_OK
@@ -95,7 +96,7 @@ def test_get_language_notes_private_error(client, create_random_user, create_ran
 
 def test_create_language_success(client, create_random_user, create_session_id):
     user = create_random_user()
-    create_session_id(module_name="languages", user_id=user.id)
+    create_session_id(module_name=ModuleName.LANGUAGES, user_id=user.id)
 
     payload = {
         "name": "qwertyu"
@@ -133,7 +134,7 @@ def test_create_language_unauthorized_error(client):
 def test_change_language_full_success(client, create_random_user, create_random_language, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
-    create_session_id(module_name="languages", user_id=user.id)
+    create_session_id(module_name=ModuleName.LANGUAGES, user_id=user.id)
 
     payload = {
         "name": "New language name",
