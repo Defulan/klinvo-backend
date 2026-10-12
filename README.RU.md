@@ -138,7 +138,7 @@ klinvo-backend
 │  │  ├─ __init__.py
 │  │  ├─ auth.py - /auth
 │  │  ├─ languages.py - /languages
-│  │  ├─ notes.py - /notes (*WIP, посмотрите сноску ниже)
+│  │  ├─ notes.py - /notes
 │  │  └─ users.py - /users
 │  ├─ __init__.py
 │  ├─ config.py - переменная settings с env-значениями
