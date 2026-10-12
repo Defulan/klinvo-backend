@@ -151,6 +151,7 @@ klinvo-backend
 │
 ├─ tests/
 │  ├─ conftest.py
+│  ├─ enums.py
 │  ├─ test_auth.py
 │  └─ test_users.py
 │
