@@ -7,6 +7,7 @@ Backend version implies compatible with the corresponding Frontend version
 #### Added
 - CRUD `/notes` endpoints and their success/error tests
 - Getting language's notes endpoint (`GET /languages/<language_id>/notes`) and it's success/error tests
+- Enum `ModuleName` in `tests/` directory for `module_name` argument in `create_session_id` fixture
 
 
 ## v0.3.1
