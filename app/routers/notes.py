@@ -29,7 +29,7 @@ def create_note(language_id: int, data: NoteCreate, db: DbSession, session_id: C
     if not session_id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
     
-    user = get_user_by_id(get_value_from_cookie(session_id))
+    user = get_user_by_id(db, get_value_from_cookie(session_id))
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
     
