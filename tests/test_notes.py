@@ -2,6 +2,7 @@ from fastapi import status
 from app.enums import ErrorCode
 
 
+# GET /notes/<note_id> - success
 def test_get_note_private_success(client, create_random_user, create_random_language, create_random_note, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
@@ -37,6 +38,7 @@ def test_get_note_public_success(client, create_random_user, create_random_langu
     assert data["createdAt"] is not None
 
 
+# GET /notes/<note_id> - errors
 def test_get_note_private_error(client, create_random_user, create_random_language, create_random_note, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
@@ -55,6 +57,7 @@ def test_get_note_not_found_error(client):
     assert response.json()["detail"] == ErrorCode.NOTE_DOESNT_EXIST
 
 
+# POST /notes/<language_id> - success
 def test_create_note_success(client, create_random_user, create_random_language, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
@@ -74,6 +77,7 @@ def test_create_note_success(client, create_random_user, create_random_language,
     assert data["createdAt"] is not None
 
 
+# POST /notes/<language_id> - errors
 def test_create_note_validation_too_long_error(client, create_random_user, create_random_language, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
@@ -170,6 +174,7 @@ def test_create_note_not_author_private_error(client, create_random_user, create
     assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
 
 
+# PATCH /notes/<note_id> - success
 def test_change_note_full_success(client, create_random_user, create_random_language, create_random_note, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
@@ -240,6 +245,7 @@ def test_change_note_empty_success(client, create_random_user, create_random_lan
     assert data["createdAt"] is not None
 
 
+# PATCH /notes/<note_id> - errors
 def test_change_note_unauthorized_error(client, create_random_user, create_random_language, create_random_note):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
