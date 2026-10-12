@@ -1,6 +1,6 @@
 from fastapi import status
 from app.enums import ErrorCode
-from enums import ModuleNames
+from enums import ModuleName
 
 
 # GET /notes/<note_id> - success
@@ -8,7 +8,7 @@ def test_get_note_private_success(client, create_random_user, create_random_lang
     user = create_random_user()
     language = create_random_language(author_id=user.id)
     note = create_random_note(language_id=language.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     response = client.get(f"/notes/{note.id}")
     assert response.status_code == status.HTTP_200_OK
@@ -44,7 +44,7 @@ def test_get_note_private_error(client, create_random_user, create_random_langua
     user = create_random_user()
     language = create_random_language(author_id=user.id)
     note = create_random_note(language_id=language.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=456789)
+    create_session_id(module_name=ModuleName.NOTES, user_id=456789)
 
     response = client.get(f"/notes/{note.id}")
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -62,7 +62,7 @@ def test_get_note_not_found_error(client):
 def test_create_note_success(client, create_random_user, create_random_language, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     payload = {
         "title": "qwertyui"
@@ -82,7 +82,7 @@ def test_create_note_success(client, create_random_user, create_random_language,
 def test_create_note_validation_too_long_error(client, create_random_user, create_random_language, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     payload = {
         "title": "qwertyui"*256
@@ -95,7 +95,7 @@ def test_create_note_validation_too_long_error(client, create_random_user, creat
 def test_create_note_validation_empty_error(client, create_random_user, create_random_language, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     payload = {
         "title": None
@@ -121,7 +121,7 @@ def test_create_note_unauthorized_error(client, create_random_user, create_rando
 def test_create_note_user_not_found_error(client, create_random_user, create_random_language, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=1920827)
+    create_session_id(module_name=ModuleName.NOTES, user_id=1920827)
 
     payload = {
         "title": "qwertyui"
@@ -134,7 +134,7 @@ def test_create_note_user_not_found_error(client, create_random_user, create_ran
 
 def test_create_note_language_not_found_error(client, create_random_user, create_session_id):
     user = create_random_user()
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     payload = {
         "title": "qwertyui"
@@ -149,7 +149,7 @@ def test_create_note_not_author_public_error(client, create_random_user, create_
     author_user = create_random_user()
     other_user = create_random_user()
     language = create_random_language(author_id=author_user.id, is_private=False)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=other_user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=other_user.id)
 
     payload = {
         "title": "qwertyui"
@@ -164,7 +164,7 @@ def test_create_note_not_author_private_error(client, create_random_user, create
     author_user = create_random_user()
     other_user = create_random_user()
     language = create_random_language(author_id=author_user.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=other_user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=other_user.id)
 
     payload = {
         "title": "qwertyui"
@@ -180,7 +180,7 @@ def test_change_note_full_success(client, create_random_user, create_random_lang
     user = create_random_user()
     language = create_random_language(author_id=user.id)
     note = create_random_note(language_id=language.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     payload = {
         "title": "Juaqo, lasiUQm llas",
@@ -206,7 +206,7 @@ def test_change_note_only_content_success(client, create_random_user, create_ran
     user = create_random_user()
     language = create_random_language(author_id=user.id)
     note = create_random_note(language_id=language.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     payload = {
         "content": (
@@ -231,7 +231,7 @@ def test_change_note_empty_success(client, create_random_user, create_random_lan
     user = create_random_user()
     language = create_random_language(author_id=user.id)
     note = create_random_note(language_id=language.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     payload = {}
 
@@ -268,7 +268,7 @@ def test_change_note_unauthorized_error(client, create_random_user, create_rando
 
 def test_change_note_not_found_error(client, create_random_user, create_session_id):
     user = create_random_user()
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     payload = {
         "title": "Juaqo, lasiUQm llas",
@@ -288,7 +288,7 @@ def test_change_note_validation_error(client, create_random_user, create_random_
     user = create_random_user()
     language = create_random_language(author_id=user.id)
     note = create_random_note(language_id=language.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     payload = {
         "title": "Juaqo, lasiUQm llas"*251,
@@ -308,7 +308,7 @@ def test_change_note_non_author_public_error(client, create_random_user, create_
     other_user = create_random_user()
     language = create_random_language(author_id=author_user.id, is_private=False)
     note = create_random_note(language_id=language.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=other_user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=other_user.id)
 
     payload = {
         "title": "Juaqo, lasiUQm llas",
@@ -329,7 +329,7 @@ def test_change_note_non_author_private_error(client, create_random_user, create
     other_user = create_random_user()
     language = create_random_language(author_id=author_user.id)
     note = create_random_note(language_id=language.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=other_user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=other_user.id)
 
     payload = {
         "title": "Juaqo, lasiUQm llas",
@@ -350,7 +350,7 @@ def test_delete_note_success(client, create_random_user, create_random_language,
     user = create_random_user()
     language = create_random_language(author_id=user.id)
     note = create_random_note(language_id=language.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     response = client.delete(f"/notes/{note.id}")
     assert response.status_code == status.HTTP_204_NO_CONTENT
@@ -373,7 +373,7 @@ def test_delete_note_unauthorized_error(client, create_random_user, create_rando
 
 def test_delete_note_not_found_error(client, create_random_user, create_session_id):
     user = create_random_user()
-    create_session_id(module_name=ModuleNames.NOTES, user_id=user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=user.id)
 
     response = client.delete("/notes/44")
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -385,7 +385,7 @@ def test_delete_note_non_author_public_error(client, create_random_user, create_
     other_user = create_random_user()
     language = create_random_language(author_id=author_user.id, is_private=False)
     note = create_random_note(language_id=language.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=other_user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=other_user.id)
 
     response = client.delete(f"/notes/{note.id}")
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -397,7 +397,7 @@ def test_delete_note_non_author_private_error(client, create_random_user, create
     other_user = create_random_user()
     language = create_random_language(author_id=author_user.id)
     note = create_random_note(language_id=language.id)
-    create_session_id(module_name=ModuleNames.NOTES, user_id=other_user.id)
+    create_session_id(module_name=ModuleName.NOTES, user_id=other_user.id)
 
     response = client.delete(f"/notes/{note.id}")
     assert response.status_code == status.HTTP_404_NOT_FOUND

@@ -1,10 +1,10 @@
 from fastapi import status
 from app.enums import CookieKey, ErrorCode
-from enums import ModuleNames
+from enums import ModuleName
 
 def test_get_auth_cookie_authorized(client, create_random_user, create_session_id):
     user = create_random_user()
-    create_session_id(module_name=ModuleNames.AUTH, user_id=user.id)
+    create_session_id(module_name=ModuleName.AUTH, user_id=user.id)
 
     response = client.get("auth/me")
     assert response.status_code == status.HTTP_200_OK
@@ -53,7 +53,7 @@ def test_login_wrong_login_error(client, create_random_user):
 
 def test_login_authorized_error(client, create_random_user, create_session_id):
     user = create_random_user()
-    create_session_id(module_name=ModuleNames.AUTH, user_id=user.id)
+    create_session_id(module_name=ModuleName.AUTH, user_id=user.id)
 
     payload = {
         "id": 99992221,
@@ -67,7 +67,7 @@ def test_login_authorized_error(client, create_random_user, create_session_id):
 
 def test_logout_success(client, create_random_user, create_session_id):
     user = create_random_user()
-    create_session_id(module_name=ModuleNames.AUTH, user_id=user.id)
+    create_session_id(module_name=ModuleName.AUTH, user_id=user.id)
 
     response = client.post("/auth/logout")
     assert response.status_code == status.HTTP_200_OK
@@ -81,7 +81,7 @@ def test_logout_unauthorized_error(client):
 
 
 def test_logout_not_exist_error(client, create_session_id):
-    create_session_id(module_name=ModuleNames.AUTH, user_id=9218374)
+    create_session_id(module_name=ModuleName.AUTH, user_id=9218374)
 
     response = client.post("/auth/logout")
     assert response.status_code == status.HTTP_404_NOT_FOUND
