@@ -37,8 +37,10 @@ def create_note(language_id: int, data: NoteCreate, db: DbSession, session_id: C
     if not language:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
     
-    if language.is_private and user.id != language.author_id:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+    if user.id != language.author_id:
+        if language.is_private:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.NO_PERMISSIONS)
     
     note = Note(language_id=language_id, title=data.title)
     db.add(note)
