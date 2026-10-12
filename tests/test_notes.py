@@ -20,7 +20,7 @@ def test_get_note_private_success(client, create_random_user, create_random_lang
     assert data["createdAt"] is not None
 
 
-def test_get_note_public_success(client, create_random_user, create_random_language, create_random_note, create_session_id):
+def test_get_note_public_success(client, create_random_user, create_random_language, create_random_note):
     user = create_random_user()
     language = create_random_language(author_id=user.id, is_private=False)
     note = create_random_note(language_id=language.id)
