@@ -69,7 +69,7 @@ jobs:
         run: |
           task test
 
-  readme-reminder:
+  to-change-reminder:
     name: Remind to update README after structure changes
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
