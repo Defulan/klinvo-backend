@@ -72,3 +72,22 @@ def change_note(note_id: int, data: NotePatch, db: DbSession, session_id: Cookie
     db.refresh(note)
     
     return note
+
+
+@router.delete("/{note_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_note(note_id: int, db: DbSession, session_id: CookieValue = None):
+    if not session_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+    
+    note = get_note_by_id(db, note_id)
+    if not note:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+    
+    user_id = get_value_from_cookie(session_id)
+    if note.language.author_id != user_id:
+        if note.language.is_private:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.NO_PERMISSIONS)
+    
+    db.delete(note)
+    db.commit()
