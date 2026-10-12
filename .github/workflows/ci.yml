@@ -69,8 +69,8 @@ jobs:
         run: |
           task test
 
-  readme-reminder:
-    name: Remind to update README after structure changes
+  to-change-reminder:
+    name: Updating README and CHANGELOG reminder
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
           
@@ -94,3 +94,14 @@ jobs:
             echo "The new files:"
             echo "$NEW_FILES"
           fi
+            
+      - name: Check changed files and send reminder if CHANGELOG doesn't updated
+        run: |
+          ALL_CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+
+          CHANGELOG_UPDATED=$(echo "$ALL_CHANGED_FILES" | grep -i -x 'CHANGELOG.md' || true)
+
+          if [ -n "$ALL_CHANGED_FILES" ] && [ -z "$CHANGELOG_UPDATED" ]; then
+            echo "::warning title=Check CHANGELOG::After changes CHANGELOG wasn't updated"
+          fi
+
