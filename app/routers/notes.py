@@ -11,8 +11,17 @@ router = APIRouter(
 )
 
 @router.get("/{note_id}")
-def get_note(note_id: int, db: DbSession) -> NoteOut:
-    return get_note_by_id(db, note_id)
+def get_note(note_id: int, db: DbSession, session_id: CookieValue = None) -> NoteOut:
+    note = get_note_by_id(db, note_id)
+
+    if note is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+    
+    language = note.language
+    if language.is_private and (not session_id or get_value_from_cookie(session_id) != language.author_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+
+    return note
 
 
 @router.post("/{language_id}", status_code=status.HTTP_201_CREATED)
