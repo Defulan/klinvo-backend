@@ -168,3 +168,73 @@ def test_create_note_not_author_private_error(client, create_random_user, create
     response = client.post(f"/notes/{language.id}", json=payload)
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
+
+
+def test_change_note_full_success(client, create_random_user, create_random_language, create_random_note, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    note = create_random_note(language_id=language.id)
+    create_session_id(module_name="notes", user_id=user.id)
+
+    payload = {
+        "title": "Juaqo, lasiUQm llas",
+        "content": (
+            "**This is**\nstill a line\n\n"
+            "but this is something new!\n\n"
+            "* list item 1\n* *list* item2\n* **list item 3**\n\n"
+            "* ***list*** item... oh, it's already a different list"
+        )}
+
+    response = client.patch(f"/notes/{note.id}", json=payload)
+    assert response.status_code == status.HTTP_200_OK
+    
+    data = response.json()
+    assert data["id"] == note.id
+    assert data["languageId"] == language.id
+    assert data["title"] == payload["title"]
+    assert data["content"] == payload["content"]
+    assert data["createdAt"] is not None
+
+
+def test_change_note_only_content_success(client, create_random_user, create_random_language, create_random_note, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    note = create_random_note(language_id=language.id)
+    create_session_id(module_name="notes", user_id=user.id)
+
+    payload = {
+        "content": (
+            "**This is**\nstill a line\n\n"
+            "but this is something new!\n\n"
+            "* list item 1\n* *list* item2\n* **list item 3**\n\n"
+            "* ***list*** item... oh, it's already a different list"
+        )}
+
+    response = client.patch(f"/notes/{note.id}", json=payload)
+    assert response.status_code == status.HTTP_200_OK
+    
+    data = response.json()
+    assert data["id"] == note.id
+    assert data["languageId"] == language.id
+    assert data["title"] == note.title
+    assert data["content"] == payload["content"]
+    assert data["createdAt"] is not None
+
+
+def test_change_note_empty_success(client, create_random_user, create_random_language, create_random_note, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    note = create_random_note(language_id=language.id)
+    create_session_id(module_name="notes", user_id=user.id)
+
+    payload = {}
+
+    response = client.patch(f"/notes/{note.id}", json=payload)
+    assert response.status_code == status.HTTP_200_OK
+    
+    data = response.json()
+    assert data["id"] == note.id
+    assert data["languageId"] == language.id
+    assert data["title"] == note.title
+    assert data["content"] == note.content
+    assert data["createdAt"] is not None
