@@ -25,7 +25,7 @@ def get_note(note_id: int, db: DbSession, session_id: CookieValue = None) -> Not
 
 
 @router.post("/{language_id}", status_code=status.HTTP_201_CREATED)
-def create_note(language_id: int, data: NoteCreate, db: DbSession, session_id: CookieValue) -> NoteOut:
+def create_note(language_id: int, data: NoteCreate, db: DbSession, session_id: CookieValue = None) -> NoteOut:
     if not session_id:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
     
