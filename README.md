@@ -162,6 +162,7 @@ klinvo-backend
 ├─ .env.example
 ├─ .gitignore
 ├─ alembic.ini
+├─ CHANGELOG.md
 ├─ LICENSE
 ├─ pyproject.toml - task commands and formatter set up
 ├─ pytest.ini
