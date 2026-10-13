@@ -77,6 +77,7 @@ There is list of all possible commands and below it more specific info:
 - `task testusers` — run only `/users` tests
 - `task testauth` — run only `/auth` tests
 - `task testlang` — run only `/languages` tests
+- `task testnotes` — run only `/notes` tests
 - `task format` — format entire project
 - `task format [path]` — format only the specified directory/file
 - `task lint` — run linter on the entire project
@@ -94,6 +95,7 @@ Also you can run tests for specific module:
 task testusers
 task testauth
 task testlang
+task testnotes
 ```
 
 ### Formatting
