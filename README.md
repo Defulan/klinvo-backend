@@ -142,6 +142,7 @@ klinvo-backend
 │  │  ├─ languages.py - /languages
 │  │  ├─ notes.py - /notes
 │  │  └─ users.py - /users
+│  │
 │  ├─ __init__.py
 │  ├─ config.py - variable settings with environment variables
 │  ├─ database.py - SQLAlchemy, tables and database functions
