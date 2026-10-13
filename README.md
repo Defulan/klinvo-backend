@@ -77,6 +77,7 @@ There is list of all possible commands and below it more specific info:
 - `task testusers` — run only `/users` tests
 - `task testauth` — run only `/auth` tests
 - `task testlang` — run only `/languages` tests
+- `task testnotes` — run only `/notes` tests
 - `task format` — format entire project
 - `task format [path]` — format only the specified directory/file
 - `task lint` — run linter on the entire project
@@ -94,6 +95,7 @@ Also you can run tests for specific module:
 task testusers
 task testauth
 task testlang
+task testnotes
 ```
 
 ### Formatting
@@ -140,6 +142,7 @@ klinvo-backend
 │  │  ├─ languages.py - /languages
 │  │  ├─ notes.py - /notes
 │  │  └─ users.py - /users
+│  │
 │  ├─ __init__.py
 │  ├─ config.py - variable settings with environment variables
 │  ├─ database.py - SQLAlchemy, tables and database functions
@@ -153,11 +156,14 @@ klinvo-backend
 │  ├─ conftest.py - fixtures
 │  ├─ enums.py
 │  ├─ test_auth.py
+│  ├─ test_languages.py
+│  ├─ test_notes.py
 │  └─ test_users.py
 │
 ├─ .env.example
 ├─ .gitignore
 ├─ alembic.ini
+├─ CHANGELOG.md
 ├─ LICENSE
 ├─ pyproject.toml - task commands and formatter set up
 ├─ pytest.ini
@@ -174,7 +180,7 @@ Currently, the main goal is to bring the project to the MVP stage.
 - [x] Accounts system (DB table, creating, log in/log out, changing, getting data)
 - [x] Language (DB table, creation, getting, changing)
 - [x] Notes (DB table, CRUD)
-- [ ] Words (DB table/tables, CRUD)
+- [ ] Words (DB table, CRUD)
 
 ### Future Enhancements
 - [ ] Auth with email

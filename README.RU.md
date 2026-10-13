@@ -66,23 +66,24 @@ task dev
 * Интерактивная API документация будет доступна на http://127.0.0.1:8000/docs
 
 
-## `task` commands
-All task commands set up in the `pyproject.toml`.
-There is list of all possible commands and below it more specific info:
-- `task run` — run the project
-- `task dev` — run the project & reload when saving a file
-- `task revision "message"` — create alembic migration
-- `task migrate` — database migration
-- `task test` — run all tests
-- `task testusers` — run only `/users` tests
-- `task testauth` — run only `/auth` tests
-- `task testlang` — run only `/languages` tests
-- `task format` — format entire project
-- `task format [path]` — format only the specified directory/file
-- `task lint` — run linter on the entire project
-- `task lint [path]` — run linter only on the specified directory/file
-- `task lintdiff` — run linter (`--fix --diff`) on the entire project
-- `task lintdiff [path]` — run linter (`--fix --diff`) only on the specified directory/file
+## `task` команды
+Все task-команды настроены в `pyproject.toml`.
+Здесь список всех возмодных комманд, ниже — более конкретное объяснение
+- `task run` — запустить проект
+- `task dev` — запустить проект с перезагрузкой после сохранения файла
+- `task revision "message"` — сделать версию миграции
+- `task migrate` — мигрировать БД
+- `task test` — запустить все тесты
+- `task testusers` — запустить только `/users` тесты
+- `task testauth` — запустить только `/auth` тесты
+- `task testlang` — запустить только `/languages` тесты
+- `task testnotes` — запустить только `/notes` тесты
+- `task format` — форматировать весь проект
+- `task format [path]` — форматировать только конкретную папку или файл
+- `task lint` — запустить линтер во всём проекте
+- `task lint [path]` — запустить линтер только в конкретной папке или файле
+- `task lintdiff` — запустить линтер (`--fix --diff`) во всём проекте
+- `task lintdiff [path]` — запустить линтер (`--fix --diff`) только в конкретной папке или файле
 
 ### Тестирование
 Запустить проверку всех эндпоинтов:
@@ -94,6 +95,7 @@ task test
 task testusers
 task testauth
 task testlang
+task testnotes
 ```
 
 ### Форматирование
@@ -138,8 +140,9 @@ klinvo-backend
 │  │  ├─ __init__.py
 │  │  ├─ auth.py - /auth
 │  │  ├─ languages.py - /languages
-│  │  ├─ notes.py - /notes (*WIP, посмотрите сноску ниже)
+│  │  ├─ notes.py - /notes
 │  │  └─ users.py - /users
+│  │
 │  ├─ __init__.py
 │  ├─ config.py - переменная settings с env-значениями
 │  ├─ database.py - SQLAlchemy, таблицы, функции для работы с БД
@@ -153,11 +156,14 @@ klinvo-backend
 │  ├─ conftest.py
 │  ├─ enums.py
 │  ├─ test_auth.py
+│  ├─ test_languages.py
+│  ├─ test_notes.py
 │  └─ test_users.py
 │
 ├─ .env.example
 ├─ .gitignore
 ├─ alembic.ini
+├─ CHANGELOG.md
 ├─ LICENSE
 ├─ pyproject.toml - task-команды и настройка форматтера
 ├─ pytest.ini
@@ -174,7 +180,7 @@ klinvo-backend
 - [x] Система аккаунтов (таблица в БД, создание, вход/выход, изменение, получение данных)
 - [x] Языки (таблица в БД, CRUD)
 - [x] Заметки (таблица в БД, CRUD)
-- [ ] Слова (таблица/таблицы в БД, CRUD)
+- [ ] Слова (таблица в БД, CRUD)
 
 ### Дальнейшие
 - [ ] Регистрация/Вход по email
