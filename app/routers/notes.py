@@ -4,7 +4,7 @@ from app.schemas import NoteCreate, NoteOut, NotePatch
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode
 from app.dependencies import DbSession, CookieValue
-from app.exceptions import NotFoundUserException, UnauthorizedException, NoPermissionsException
+from app.exceptions import NotFoundUserException, UnauthorizedException, NoPermissionsException, NotFoundLanguageException
 
 router = APIRouter(
     prefix="/notes",
@@ -36,11 +36,11 @@ def create_note(language_id: int, data: NoteCreate, db: DbSession, session_id: C
     
     language = get_language_by_id(db, language_id)
     if not language:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+        raise NotFoundLanguageException()
     
     if user.id != language.author_id:
         if language.is_private:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+            raise NotFoundLanguageException()
         raise NoPermissionsException()
     
     note = Note(language_id=language_id, title=data.title)

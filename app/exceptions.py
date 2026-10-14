@@ -31,3 +31,9 @@ class NoPermissionsException(AppException):
     def __init__(self):
         super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.NO_PERMISSIONS)
 
+
+class NotFoundLanguageException(AppException):
+    """Language doesn't exist or it's private"""
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+

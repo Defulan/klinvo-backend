@@ -5,7 +5,7 @@ from app.schemas import LanguageCreate, LanguageOut, LanguageEdit, NoteOut
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode
 from app.dependencies import DbSession, CookieValue
-from app.exceptions import NotFoundUserException, UnauthorizedException
+from app.exceptions import NotFoundUserException, UnauthorizedException, NotFoundLanguageException
 
 router = APIRouter(
     prefix="/languages",
@@ -21,10 +21,10 @@ def get_public_languages(db: DbSession) -> list[LanguageOut]:
 def get_language(language_id: int, db: DbSession, session_id: CookieValue = None) -> LanguageOut:
     language = get_language_by_id(db, language_id)
     if language is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+        raise NotFoundLanguageException()
     
     if language.is_private and (not session_id or get_value_from_cookie(session_id) != language.author_id):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+        raise NotFoundLanguageException()
 
     return language
 
@@ -33,10 +33,10 @@ def get_language(language_id: int, db: DbSession, session_id: CookieValue = None
 def get_language_notes(language_id: int, db: DbSession, session_id: CookieValue = None) -> list[NoteOut]:
     language = get_language_by_id(db, language_id)
     if language is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+        raise NotFoundLanguageException()
     
     if language.is_private and (not session_id or get_value_from_cookie(session_id) != language.author_id):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+        raise NotFoundLanguageException()
 
     return language.notes
 
@@ -62,11 +62,11 @@ def change_language(language_id: int, data: LanguageEdit, db: DbSession, session
     
     language = get_language_by_id(db, language_id)
     if not language:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+        raise NotFoundLanguageException()
     
     user_id = get_value_from_cookie(session_id)
     if user_id != language.author_id:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
+        raise NotFoundLanguageException()
     
     user = get_user_by_id(db, user_id)
     if not user:
