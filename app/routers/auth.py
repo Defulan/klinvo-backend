@@ -4,6 +4,7 @@ from app.schemas import UserLogin, AuthOut
 from app.security import create_cookie, verify_password, get_value_from_cookie, delete_cookie
 from app.enums import CookieKey, ErrorCode
 from app.dependencies import DbSession, CookieValue
+from app.exceptions import NotFoundUserException
 
 router = APIRouter(
     prefix="/auth",
@@ -42,7 +43,7 @@ def logout(response: Response, db: DbSession, session_id: CookieValue = None):
     user_id = get_value_from_cookie(session_id)
     user = get_user_by_id(db, user_id)
     if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
+        raise NotFoundUserException()
     
     delete_cookie(response, key=CookieKey.SESSION_ID)
 

@@ -5,6 +5,7 @@ from app.database import get_user_by_id, User, Language
 from app.schemas import UserCreate, UserOut, UserPatch, LanguageOut
 from app.enums import CookieKey, ErrorCode
 from app.dependencies import DbSession, CookieValue
+from app.exceptions import NotFoundUserException
 
 router = APIRouter(
     prefix="/users",
@@ -16,7 +17,7 @@ router = APIRouter(
 def get_user(user_id: int, db: DbSession) -> UserOut:
     user = get_user_by_id(db, user_id)
     if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
+        raise NotFoundUserException()
     return user
 
 
@@ -24,7 +25,7 @@ def get_user(user_id: int, db: DbSession) -> UserOut:
 def get_user_languages(user_id: int, db: DbSession, session_id: CookieValue = None) -> list[LanguageOut]:
     user = get_user_by_id(db, user_id)
     if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
+        raise NotFoundUserException()
     
     if not session_id or get_value_from_cookie(session_id) != user_id:
         languages = db.scalars(select(Language).where(Language.author_id == user.id).where(Language.is_private.is_(False))).all()
@@ -67,7 +68,7 @@ def change_user(data: UserPatch, db: DbSession, session_id: CookieValue = None):
     user = get_user_by_id(db, user_id)
 
     if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
+        raise NotFoundUserException()
     
     filled_data = data.model_dump(exclude_unset=True, exclude_none=True)
     for key, value in filled_data.items():

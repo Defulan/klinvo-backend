@@ -5,6 +5,7 @@ from app.schemas import LanguageCreate, LanguageOut, LanguageEdit, NoteOut
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode
 from app.dependencies import DbSession, CookieValue
+from app.exceptions import NotFoundUserException
 
 router = APIRouter(
     prefix="/languages",
@@ -69,7 +70,7 @@ def change_language(language_id: int, data: LanguageEdit, db: DbSession, session
     
     user = get_user_by_id(db, user_id)
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
+        raise NotFoundUserException()
     
     filled_data = data.model_dump(exclude_unset=True, exclude_none=True)
     for key, value in filled_data.items():
