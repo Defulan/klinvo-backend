@@ -4,7 +4,7 @@ from app.schemas import UserLogin, AuthOut
 from app.security import create_cookie, verify_password, get_value_from_cookie, delete_cookie
 from app.enums import CookieKey, ErrorCode
 from app.dependencies import DbSession, CookieValue
-from app.exceptions import NotFoundUserException
+from app.exceptions import NotFoundUserException, UnauthorizedException
 
 router = APIRouter(
     prefix="/auth",
@@ -38,7 +38,7 @@ def login(data: UserLogin, response: Response, db: DbSession, session_id: Cookie
 @router.post("/logout")
 def logout(response: Response, db: DbSession, session_id: CookieValue = None):
     if not session_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+        raise UnauthorizedException()
     
     user_id = get_value_from_cookie(session_id)
     user = get_user_by_id(db, user_id)

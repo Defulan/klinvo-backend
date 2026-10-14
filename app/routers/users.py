@@ -5,7 +5,7 @@ from app.database import get_user_by_id, User, Language
 from app.schemas import UserCreate, UserOut, UserPatch, LanguageOut
 from app.enums import CookieKey, ErrorCode
 from app.dependencies import DbSession, CookieValue
-from app.exceptions import NotFoundUserException
+from app.exceptions import NotFoundUserException, UnauthorizedException
 
 router = APIRouter(
     prefix="/users",
@@ -62,7 +62,7 @@ def create_user(data: UserCreate, response: Response, db: DbSession, session_id:
 @router.patch("/")
 def change_user(data: UserPatch, db: DbSession, session_id: CookieValue = None):
     if not session_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+        raise UnauthorizedException()
     
     user_id = get_value_from_cookie(session_id)
     user = get_user_by_id(db, user_id)

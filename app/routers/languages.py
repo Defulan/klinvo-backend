@@ -5,7 +5,7 @@ from app.schemas import LanguageCreate, LanguageOut, LanguageEdit, NoteOut
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode
 from app.dependencies import DbSession, CookieValue
-from app.exceptions import NotFoundUserException
+from app.exceptions import NotFoundUserException, UnauthorizedException
 
 router = APIRouter(
     prefix="/languages",
@@ -44,7 +44,7 @@ def get_language_notes(language_id: int, db: DbSession, session_id: CookieValue 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_language(data: LanguageCreate, db: DbSession, session_id: CookieValue = None) -> LanguageOut:
     if not session_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+        raise UnauthorizedException()
     
     author_id = get_value_from_cookie(session_id)
     language = Language(author_id=author_id, name=data.name)
@@ -58,7 +58,7 @@ def create_language(data: LanguageCreate, db: DbSession, session_id: CookieValue
 @router.patch("/{language_id}")
 def change_language(language_id: int, data: LanguageEdit, db: DbSession, session_id: CookieValue = None):
     if not session_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+        raise UnauthorizedException()
     
     language = get_language_by_id(db, language_id)
     if not language:

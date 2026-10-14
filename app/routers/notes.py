@@ -4,7 +4,7 @@ from app.schemas import NoteCreate, NoteOut, NotePatch
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode
 from app.dependencies import DbSession, CookieValue
-from app.exceptions import NotFoundUserException
+from app.exceptions import NotFoundUserException, UnauthorizedException
 
 router = APIRouter(
     prefix="/notes",
@@ -28,7 +28,7 @@ def get_note(note_id: int, db: DbSession, session_id: CookieValue = None) -> Not
 @router.post("/{language_id}", status_code=status.HTTP_201_CREATED)
 def create_note(language_id: int, data: NoteCreate, db: DbSession, session_id: CookieValue = None) -> NoteOut:
     if not session_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+        raise UnauthorizedException()
     
     user = get_user_by_id(db, get_value_from_cookie(session_id))
     if not user:
@@ -53,7 +53,7 @@ def create_note(language_id: int, data: NoteCreate, db: DbSession, session_id: C
 @router.patch("/{note_id}")
 def change_note(note_id: int, data: NotePatch, db: DbSession, session_id: CookieValue = None) -> NoteOut:
     if not session_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+        raise UnauthorizedException()
     
     note = get_note_by_id(db, note_id)
     if not note:
@@ -78,7 +78,7 @@ def change_note(note_id: int, data: NotePatch, db: DbSession, session_id: Cookie
 @router.delete("/{note_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_note(note_id: int, db: DbSession, session_id: CookieValue = None):
     if not session_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+        raise UnauthorizedException()
     
     note = get_note_by_id(db, note_id)
     if not note:

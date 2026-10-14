@@ -12,3 +12,10 @@ class NotFoundUserException(AppException):
     """User doesn't exist"""
     def __init__(self):
         super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
+
+
+class UnauthorizedException(AppException):
+    """User is unauthorized"""
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+
