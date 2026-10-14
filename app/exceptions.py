@@ -24,3 +24,10 @@ class AuthorizedException(AppException):
     """User is authorized"""
     def __init__(self):
         super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.AUTHORIZED)
+
+
+class NoPermissionsException(AppException):
+    """User don't have permissions for this action"""
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.NO_PERMISSIONS)
+

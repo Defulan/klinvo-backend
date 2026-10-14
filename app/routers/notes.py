@@ -4,7 +4,7 @@ from app.schemas import NoteCreate, NoteOut, NotePatch
 from app.security import get_value_from_cookie
 from app.enums import ErrorCode
 from app.dependencies import DbSession, CookieValue
-from app.exceptions import NotFoundUserException, UnauthorizedException
+from app.exceptions import NotFoundUserException, UnauthorizedException, NoPermissionsException
 
 router = APIRouter(
     prefix="/notes",
@@ -41,7 +41,7 @@ def create_note(language_id: int, data: NoteCreate, db: DbSession, session_id: C
     if user.id != language.author_id:
         if language.is_private:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.NO_PERMISSIONS)
+        raise NoPermissionsException()
     
     note = Note(language_id=language_id, title=data.title)
     db.add(note)
@@ -63,7 +63,7 @@ def change_note(note_id: int, data: NotePatch, db: DbSession, session_id: Cookie
     if note.language.author_id != user_id:
         if note.language.is_private:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.NO_PERMISSIONS)
+        raise NoPermissionsException()
 
     filled_data = data.model_dump(exclude_unset=True, exclude_none=True)
     for key, value in filled_data.items():
@@ -88,7 +88,7 @@ def delete_note(note_id: int, db: DbSession, session_id: CookieValue = None):
     if note.language.author_id != user_id:
         if note.language.is_private:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.NO_PERMISSIONS)
+        raise NoPermissionsException()
     
     db.delete(note)
     db.commit()
