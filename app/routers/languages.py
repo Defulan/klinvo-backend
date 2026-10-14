@@ -1,9 +1,8 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, status
 from sqlalchemy import select
 from app.database import Language, get_language_by_id, get_user_by_id
 from app.schemas import LanguageCreate, LanguageOut, LanguageEdit, NoteOut
 from app.security import get_value_from_cookie
-from app.enums import ErrorCode
 from app.dependencies import DbSession, CookieValue
 from app.exceptions import NotFoundUserException, UnauthorizedException, NotFoundLanguageException
 

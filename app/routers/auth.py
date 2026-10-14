@@ -1,8 +1,8 @@
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, Response
 from app.database import get_user_by_id
 from app.schemas import UserLogin, AuthOut
 from app.security import create_cookie, verify_password, get_value_from_cookie, delete_cookie
-from app.enums import CookieKey, ErrorCode
+from app.enums import CookieKey
 from app.dependencies import DbSession, CookieValue
 from app.exceptions import NotFoundUserException, UnauthorizedException, AuthorizedException, WrongLoginException
 
