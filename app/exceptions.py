@@ -43,3 +43,9 @@ class NotFoundNoteException(AppException):
     def __init__(self):
         super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
 
+
+class WrongLoginException(AppException):
+    """Wrong login data"""
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=ErrorCode.WRONG_LOGIN_DATA)
+

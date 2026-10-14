@@ -4,7 +4,7 @@ from app.schemas import UserLogin, AuthOut
 from app.security import create_cookie, verify_password, get_value_from_cookie, delete_cookie
 from app.enums import CookieKey, ErrorCode
 from app.dependencies import DbSession, CookieValue
-from app.exceptions import NotFoundUserException, UnauthorizedException, AuthorizedException
+from app.exceptions import NotFoundUserException, UnauthorizedException, AuthorizedException, WrongLoginException
 
 router = APIRouter(
     prefix="/auth",
@@ -28,7 +28,7 @@ def login(data: UserLogin, response: Response, db: DbSession, session_id: Cookie
     
     user = get_user_by_id(db, data.id)
     if user is None or not verify_password(data.password, user.password_hash):
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=ErrorCode.WRONG_LOGIN_DATA)
+        raise WrongLoginException()
     
     create_cookie(response, CookieKey.SESSION_ID, user.id)
 
