@@ -37,3 +37,9 @@ class NotFoundLanguageException(AppException):
     def __init__(self):
         super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.LANGUAGE_DOESNT_EXIST)
 
+
+class NotFoundNoteException(AppException):
+    """Note doesn't exist or it's language is private"""
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
+
