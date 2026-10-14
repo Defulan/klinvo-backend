@@ -49,3 +49,9 @@ class WrongLoginException(AppException):
     def __init__(self):
         super().__init__(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=ErrorCode.WRONG_LOGIN_DATA)
 
+
+class WrongRegisterException(AppException):
+    """Wrong register data"""
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=ErrorCode.WRONG_REGISTER_DATA)
+
