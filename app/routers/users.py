@@ -5,7 +5,7 @@ from app.database import get_user_by_id, User, Language
 from app.schemas import UserCreate, UserOut, UserPatch, LanguageOut
 from app.enums import CookieKey, ErrorCode
 from app.dependencies import DbSession, CookieValue
-from app.exceptions import NotFoundUserException, UnauthorizedException
+from app.exceptions import NotFoundUserException, UnauthorizedException, AuthorizedException
 
 router = APIRouter(
     prefix="/users",
@@ -43,7 +43,7 @@ def get_users(db: DbSession) -> list[UserOut]:
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_user(data: UserCreate, response: Response, db: DbSession, session_id: CookieValue = None):
     if session_id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.AUTHORIZED)
+        raise AuthorizedException()
     
     if data.password != data.repassword:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=ErrorCode.WRONG_REGISTER_DATA)

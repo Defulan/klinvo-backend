@@ -19,3 +19,8 @@ class UnauthorizedException(AppException):
     def __init__(self):
         super().__init__(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
 
+
+class AuthorizedException(AppException):
+    """User is authorized"""
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.AUTHORIZED)
