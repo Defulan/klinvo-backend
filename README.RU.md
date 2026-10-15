@@ -148,6 +148,7 @@ klinvo-backend
 │  ├─ database.py - SQLAlchemy, таблицы, функции для работы с БД
 │  ├─ dependencies.py - типы для аргументов эндпоинтов
 │  ├─ enums.py
+│  ├─ exceptions.py - собственные исключения
 │  ├─ main.py - точка запуска; настройка REST API и подключение эндпоинтов
 │  ├─ schemas.py - pydantic схемы
 │  └─ security.py - функции для работы с паролями и cookie

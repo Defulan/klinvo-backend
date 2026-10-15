@@ -148,6 +148,7 @@ klinvo-backend
 │  ├─ database.py - SQLAlchemy, tables and database functions
 │  ├─ dependencies.py - values for endpoints arguments
 │  ├─ enums.py
+│  ├─ exceptions.py - custom exceptions
 │  ├─ main.py - entry point of application
 │  ├─ schemas.py - pydantic schemas
 │  └─ security.py - functions for password and cookies
