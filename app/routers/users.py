@@ -1,10 +1,11 @@
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, Response, status
 from sqlalchemy import select
 from app.security import hasher, create_cookie, get_value_from_cookie
 from app.database import get_user_by_id, User, Language
 from app.schemas import UserCreate, UserOut, UserPatch, LanguageOut
-from app.enums import CookieKey, ErrorCode
+from app.enums import CookieKey
 from app.dependencies import DbSession, CookieValue
+from app.exceptions import NotFoundUserException, UnauthorizedException, AuthorizedException, WrongRegisterException
 
 router = APIRouter(
     prefix="/users",
@@ -16,7 +17,7 @@ router = APIRouter(
 def get_user(user_id: int, db: DbSession) -> UserOut:
     user = get_user_by_id(db, user_id)
     if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
+        raise NotFoundUserException()
     return user
 
 
@@ -24,7 +25,7 @@ def get_user(user_id: int, db: DbSession) -> UserOut:
 def get_user_languages(user_id: int, db: DbSession, session_id: CookieValue = None) -> list[LanguageOut]:
     user = get_user_by_id(db, user_id)
     if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
+        raise NotFoundUserException()
     
     if not session_id or get_value_from_cookie(session_id) != user_id:
         languages = db.scalars(select(Language).where(Language.author_id == user.id).where(Language.is_private.is_(False))).all()
@@ -42,10 +43,10 @@ def get_users(db: DbSession) -> list[UserOut]:
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_user(data: UserCreate, response: Response, db: DbSession, session_id: CookieValue = None):
     if session_id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.AUTHORIZED)
+        raise AuthorizedException()
     
     if data.password != data.repassword:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=ErrorCode.WRONG_REGISTER_DATA)
+        raise WrongRegisterException()
     
     password_hash = hasher.hash(data.password)
 
@@ -61,13 +62,13 @@ def create_user(data: UserCreate, response: Response, db: DbSession, session_id:
 @router.patch("/")
 def change_user(data: UserPatch, db: DbSession, session_id: CookieValue = None):
     if not session_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+        raise UnauthorizedException()
     
     user_id = get_value_from_cookie(session_id)
     user = get_user_by_id(db, user_id)
 
     if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
+        raise NotFoundUserException()
     
     filled_data = data.model_dump(exclude_unset=True, exclude_none=True)
     for key, value in filled_data.items():

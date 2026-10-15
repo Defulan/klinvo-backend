@@ -8,6 +8,7 @@ Backend version implies compatible with the corresponding Frontend version
 - CRUD `/notes` endpoints and their success/error tests
 - Getting language's notes endpoint (`GET /languages/<language_id>/notes`) and it's success/error tests
 - Enum `ModuleName` in `tests/` directory for `module_name` argument in `create_session_id` fixture
+- Custom exceptions with pre-set status_code & detail (`AppException`)
 
 
 ## v0.3.1

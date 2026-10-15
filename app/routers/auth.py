@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, Response
 from app.database import get_user_by_id
 from app.schemas import UserLogin, AuthOut
 from app.security import create_cookie, verify_password, get_value_from_cookie, delete_cookie
-from app.enums import CookieKey, ErrorCode
+from app.enums import CookieKey
 from app.dependencies import DbSession, CookieValue
+from app.exceptions import NotFoundUserException, UnauthorizedException, AuthorizedException, WrongLoginException
 
 router = APIRouter(
     prefix="/auth",
@@ -23,11 +24,11 @@ def get_auth_cookie(db: DbSession, session_id: CookieValue = None) -> AuthOut:
 @router.post("/login")
 def login(data: UserLogin, response: Response, db: DbSession, session_id: CookieValue = None):
     if session_id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=ErrorCode.AUTHORIZED)
+        raise AuthorizedException()
     
     user = get_user_by_id(db, data.id)
     if user is None or not verify_password(data.password, user.password_hash):
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=ErrorCode.WRONG_LOGIN_DATA)
+        raise WrongLoginException()
     
     create_cookie(response, CookieKey.SESSION_ID, user.id)
 
@@ -37,12 +38,12 @@ def login(data: UserLogin, response: Response, db: DbSession, session_id: Cookie
 @router.post("/logout")
 def logout(response: Response, db: DbSession, session_id: CookieValue = None):
     if not session_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=ErrorCode.UNAUTHORIZED)
+        raise UnauthorizedException()
     
     user_id = get_value_from_cookie(session_id)
     user = get_user_by_id(db, user_id)
     if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.USER_DOESNT_EXIST)
+        raise NotFoundUserException()
     
     delete_cookie(response, key=CookieKey.SESSION_ID)
 
