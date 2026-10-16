@@ -27,19 +27,6 @@ def test_get_user_invalid_id_error(client):
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
 
-def test_get_users_success(client, create_random_user):
-    user1 = create_random_user()
-    user2 = create_random_user()
-
-    response = client.get("/users/")
-    assert response.status_code == status.HTTP_200_OK
-
-    data = response.json()
-    assert len(data) == 2
-    assert data[0]["name"] == user1.name
-    assert data[1]["name"] == user2.name
-
-
 def test_get_user_languages_by_guest_success(client, create_random_user, create_random_language):
     user = create_random_user()
 

@@ -10,6 +10,9 @@ Backend version implies compatible with the corresponding Frontend version
 - Enum `ModuleName` in `tests/` directory for `module_name` argument in `create_session_id` fixture
 - Custom exceptions with pre-set status_code & detail (`AppException`)
 
+#### Removed
+- `GET /users` endpoint
+
 
 ## v0.3.1
 

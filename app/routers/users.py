@@ -35,11 +35,6 @@ def get_user_languages(user_id: int, db: DbSession, session_id: CookieValue = No
     return languages
 
 
-@router.get("/")
-def get_users(db: DbSession) -> list[UserOut]:
-    return db.scalars(select(User)).all()
-
-
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_user(data: UserCreate, response: Response, db: DbSession, session_id: CookieValue = None):
     if session_id:
