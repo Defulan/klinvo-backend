@@ -1,8 +1,7 @@
 Versions of Backend and Frontend releases at the same time — that is, 
 Backend version implies compatible with the corresponding Frontend version
 
-## unreleased
-> The next planned version: v0.4.0
+## v0.4.0
 
 #### Added
 - CRUD `/notes` endpoints and their success/error tests
@@ -12,6 +11,12 @@ Backend version implies compatible with the corresponding Frontend version
 
 #### Removed
 - `GET /users` endpoint
+
+#### Roadmap of this version
+- [x] Accounts system (DB table, creating, log in/log out, changing, getting data)
+- [x] Language (DB table, creation, getting, changing)
+- [x] Notes (DB table, CRUD)
+- [ ] Words (DB table, CRUD)
 
 
 ## v0.3.1
