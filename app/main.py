@@ -9,6 +9,10 @@ from app.routers import users, auth, languages, notes
 
 app = FastAPI(
     title="klinvo-backend",
+    description=(
+        "**Klinvo** - web application for making artificial languages (conlangs)."
+        "The application is set of tools for it"
+    ),
     version="0.3.1",
     docs_url="/docs",
     redoc_url="/redoc",
