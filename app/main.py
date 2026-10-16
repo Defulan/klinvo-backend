@@ -13,7 +13,7 @@ app = FastAPI(
         "**Klinvo** - web application for making artificial languages (conlangs)."
         "The application is set of tools for it"
     ),
-    version="0.3.1",
+    version="0.4.0",
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",
