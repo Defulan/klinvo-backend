@@ -9,7 +9,10 @@ from app.routers import users, auth, languages, notes
 
 app = FastAPI(
     title="klinvo-backend",
-    version="0.3.1"
+    version="0.3.1",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
 )
 
 app.add_middleware(
