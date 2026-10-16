@@ -12,7 +12,12 @@ app = FastAPI(
     version="0.3.1",
     docs_url="/docs",
     redoc_url="/redoc",
-    openapi_url="/openapi.json"
+    openapi_url="/openapi.json",
+
+    contact={
+        "name": "Defulan",
+        "url": "https://github.com/Defulan"
+    },
 )
 
 app.add_middleware(
