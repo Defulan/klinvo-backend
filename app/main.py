@@ -9,7 +9,24 @@ from app.routers import users, auth, languages, notes
 
 app = FastAPI(
     title="klinvo-backend",
-    version="0.3.1"
+    description=(
+        "**Klinvo** - web application for making artificial languages (conlangs)."
+        "The application is set of tools for it"
+    ),
+    version="0.3.1",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
+
+    contact={
+        "name": "Defulan",
+        "url": "https://github.com/Defulan"
+    },
+
+    license_info={
+        "name": "MIT License",
+        "url": "https://github.com/Defulan/klinvo-frontend/blob/main/LICENSE"
+    }
 )
 
 app.add_middleware(
