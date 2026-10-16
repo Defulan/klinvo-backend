@@ -18,6 +18,11 @@ app = FastAPI(
         "name": "Defulan",
         "url": "https://github.com/Defulan"
     },
+
+    license_info={
+        "name": "MIT License",
+        "url": "https://github.com/Defulan/klinvo-frontend/blob/main/LICENSE"
+    }
 )
 
 app.add_middleware(
