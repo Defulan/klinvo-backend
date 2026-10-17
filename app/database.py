@@ -42,6 +42,7 @@ class Language(Base):
 
     author: Mapped["User"] = relationship(back_populates="languages")
     notes: Mapped[list["Note"]] = relationship(back_populates="language")
+    words: Mapped[list["Word"]] = relationship(back_populates="language")
 
 
 class Note(Base):
@@ -65,6 +66,8 @@ class Word(Base):
     position: Mapped[str] = mapped_column(nullable=False)
     value: Mapped[str] = mapped_column(String(255), nullable=False)
     meaning: Mapped[str] = mapped_column(String(255), nullable=False)
+
+    language: Mapped["Language"] = relationship(back_populates="words")
 
 
 def get_user_by_id(db, user_id) -> User | None:
