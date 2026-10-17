@@ -56,6 +56,17 @@ class Note(Base):
     language: Mapped["Language"] = relationship(back_populates="notes")
 
 
+class Word(Base):
+    __tablename__ = "words"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    language_id: Mapped[int] = mapped_column(ForeignKey("languages.id"), nullable=False)
+    category_id: Mapped[int | None] = mapped_column(ForeignKey("categories.id"))
+    position: Mapped[str] = mapped_column(nullable=False)
+    value: Mapped[str] = mapped_column(String(255), nullable=False)
+    meaning: Mapped[str] = mapped_column(String(255), nullable=False)
+
+
 def get_user_by_id(db, user_id) -> User | None:
     return db.scalars(select(User).where(User.id == user_id)).first()
 
