@@ -1,7 +1,7 @@
 Versions of Backend and Frontend releases at the same time — that is, 
 Backend version implies compatible with the corresponding Frontend version
 
-## unversioned
+## v0.4.1
 
 #### Added
 - `GET /` endpoint
