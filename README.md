@@ -9,6 +9,8 @@ Klinvo is a minimalist web tool for constructing artificial languages (conlangs)
 * **Frontend repository:** [klinvo-frontend ↗](https://github.com/Defulan/klinvo-frontend)
 * **[Changelog](CHANGELOG.md)**
 
+> Note: if you are located in Russia, you may experience connection issues with the live demo of Klinvo due to regional network restrictions of hostings platforms.
+
 ## How to Start
 * **Requirements:** Python 3.11+ (project was written and tested on Python 3.13)
 
