@@ -70,6 +70,15 @@ class Word(Base):
     language: Mapped["Language"] = relationship(back_populates="words")
 
 
+class Category(Base):
+    __tablename__ = "categories"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    language_id: Mapped[int] = mapped_column(ForeignKey("languages.id"), nullable=False)
+    position: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(String(255))
+
+
 def get_user_by_id(db, user_id) -> User | None:
     return db.scalars(select(User).where(User.id == user_id)).first()
 
