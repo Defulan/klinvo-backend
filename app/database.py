@@ -98,6 +98,10 @@ def get_word_by_id(db, word_id) -> Word | None:
     return db.scalars(select(Word).where(Word.id == word_id)).first()
 
 
+def get_category_by_id(db, category_id) -> Category | None:
+    return db.scalars(select(Category).where(Category.id == category_id)).first()
+
+
 def is_language_available_for_user(language: Language, user_id: int):
     if not language.is_private:
         return True
