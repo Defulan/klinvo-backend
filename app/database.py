@@ -79,7 +79,7 @@ class Category(Base):
     position: Mapped[str] = mapped_column(nullable=False)
     name: Mapped[str] = mapped_column(String(255))
 
-    words = Mapped["Word"] = relationship(back_populates="category")
+    words = Mapped[list["Word"]] = relationship(back_populates="category")
 
 
 def get_user_by_id(db, user_id) -> User | None:
