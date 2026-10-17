@@ -94,6 +94,10 @@ def get_note_by_id(db, note_id) -> Note | None:
     return db.scalars(select(Note).where(Note.id == note_id)).first()
 
 
+def get_word_by_id(db, word_id) -> Word | None:
+    return db.scalars(select(Word).where(Word.id == word_id)).first()
+
+
 def is_language_available_for_user(language: Language, user_id: int):
     if not language.is_private:
         return True
