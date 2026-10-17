@@ -68,7 +68,7 @@ class Word(Base):
     meaning: Mapped[str] = mapped_column(String(255), nullable=False)
 
     language: Mapped["Language"] = relationship(back_populates="words")
-    category = Mapped["Category"] = relationship(back_populates="words")
+    category = Mapped["Category | None"] = relationship(back_populates="words")
 
 
 class Category(Base):
