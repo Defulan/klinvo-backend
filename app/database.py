@@ -62,7 +62,7 @@ class Word(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     language_id: Mapped[int] = mapped_column(ForeignKey("languages.id"), nullable=False)
-    category_id: Mapped[int | None] = mapped_column(ForeignKey("categories.id"))
+    category_id: Mapped[int | None] = mapped_column(ForeignKey("categories.id"), nullable=True)
     position: Mapped[str] = mapped_column(nullable=False)
     value: Mapped[str] = mapped_column(String(255), nullable=False)
     meaning: Mapped[str] = mapped_column(String(255), nullable=False)
