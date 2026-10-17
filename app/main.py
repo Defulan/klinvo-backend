@@ -51,6 +51,13 @@ async def app_exception_handler(request: Request, exception: AppException):
         }
     )
 
+@app.get("/")
+def health_function():
+    return {
+        "message": f"{app.title} | {app.version} | {app.docs_url}",
+        "contact": f"{app.contact.name}, {app.contact.url}"
+    }
+
 app.include_router(users.router)
 app.include_router(auth.router)
 app.include_router(languages.router)
