@@ -44,6 +44,18 @@ class NotFoundNoteException(AppException):
         super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.NOTE_DOESNT_EXIST)
 
 
+class NotFoundWordException(AppException):
+    """Word doesn't exist or it's language is private"""
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.WORD_DOESNT_EXIST)
+
+
+class NotFoundCategoryException(AppException):
+    """Category doesn't exist or it's language is private"""
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail=ErrorCode.CATEGORY_DOESNT_EXIST)
+
+
 class WrongLoginException(AppException):
     """Wrong login data"""
     def __init__(self):
