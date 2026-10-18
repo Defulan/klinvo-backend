@@ -67,3 +67,23 @@ class NoteOut(ConfiguredBaseModel):
 class NotePatch(ConfiguredBaseModel):
     title: str | None = Field(default=None, min_length=1, max_length=255)
     content: str | None = Field(default=None)
+
+
+class WordCreate(ConfiguredBaseModel):
+    category_id: int | None = Field(default=None)
+    value: str = Field(min_length=1, max_length=255)
+    meaning: str = Field(min_length=1, max_length=255)
+
+class WordOut(ConfiguredBaseModel):
+    id: int
+    language_id: int
+    category_id: int | None
+    position: str
+    value: str
+    meaning: str
+
+class WordPatch(ConfiguredBaseModel):
+    category_id: int | None = Field(default=None)
+    position: str
+    value: str = Field(min_length=1, max_length=255)
+    meaning: str = Field(min_length=1, max_length=255)
