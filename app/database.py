@@ -102,6 +102,15 @@ def get_category_by_id(db, category_id) -> Category | None:
     return db.scalars(select(Category).where(Category.id == category_id)).first()
 
 
+def get_last_word(db, language_id: int, category_id: int | None):
+    category_words = db.query(Word).filter(
+        Word.language_id == language_id,
+        Word.category_id == category_id
+    )
+    
+    return category_words.order_by(Word.position.desc()).first()
+
+
 def is_language_available_for_user(language: Language, user_id: int):
     if not language.is_private:
         return True
