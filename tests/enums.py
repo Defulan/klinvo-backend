@@ -5,3 +5,4 @@ class ModuleName(StrEnum):
     AUTH = "auth"
     LANGUAGES = "languages"
     NOTES = "notes"
+    WORDS = "words"
