@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.main import app
-from app.database import Base, get_db, User, Language, Note
+from app.database import Base, get_db, User, Language, Note, Word
 from app.config import settings
 from app.security import hash_password
 from app.enums import CookieKey
@@ -90,6 +90,21 @@ def create_random_note(db_session):
         return note
     
     return _create_random_note
+
+
+@pytest.fixture()
+def create_random_word(db_session):
+    def _create_random_word(language_id: int, category_id: int | None = None):
+        letters = "qwertyuiopasdfghjklzxcvbnm"
+        value = "".join(random.choices(letters, k=6))
+        meaning = "".join(random.choices(letters, k=24))
+
+        word = Word(language_id=language_id, value=value, meaning=meaning, category_id=category_id)
+        db_session.add(word)
+        db_session.commit()
+        return word
+    
+    return _create_random_word()
 
 
 @pytest.fixture()
