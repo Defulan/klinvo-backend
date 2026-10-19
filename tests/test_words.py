@@ -1,0 +1,60 @@
+from fastapi import status
+from enums import ModuleName
+from app.position import new_last_position
+
+# GET /words/<word_id> - success
+def test_get_word_private_success(client, create_random_user, create_random_language, create_random_word, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    word = create_random_word(language_id=language.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
+
+    response = client.get(f"/words/{word.id}")
+    assert response.status_code == status.HTTP_200_OK
+    assert language.is_private is True
+    
+    data = response.json()
+    assert data["id"] == word.id
+    assert data["languageId"] == word.language_id
+    assert data["categoryId"] is None
+    assert data["position"] == new_last_position(None)
+    assert data["value"] == word.value
+    assert data["meaning"] == word.meaning
+
+
+def test_get_word_public_success(client, create_random_user, create_random_language, create_random_word):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id, is_private=False)
+    word = create_random_word(language_id=language.id)
+
+    response = client.get(f"/words/{word.id}")
+    assert response.status_code == status.HTTP_200_OK
+    assert language.is_private is False
+    
+    data = response.json()
+    assert data["id"] == word.id
+    assert data["languageId"] == word.language_id
+    assert data["categoryId"] is None
+    assert data["position"] == new_last_position(None)
+    assert data["value"] == word.value
+    assert data["meaning"] == word.meaning
+
+
+def test_get_word_after_multiple_public_success(client, create_random_user, create_random_language, create_random_word):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id, is_private=False)
+    for _ in range(5):
+        create_random_word(language_id=language.id)
+    word = create_random_word(language_id=language.id)
+
+    response = client.get(f"/words/{word.id}")
+    assert response.status_code == status.HTTP_200_OK
+    assert language.is_private is False
+    
+    data = response.json()
+    assert data["id"] == word.id
+    assert data["languageId"] == word.language_id
+    assert data["categoryId"] is None
+    assert data["position"] == word.position
+    assert data["value"] == word.value
+    assert data["meaning"] == word.meaning
