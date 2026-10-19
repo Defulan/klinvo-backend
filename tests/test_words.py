@@ -1,6 +1,7 @@
 from fastapi import status
 from enums import ModuleName
 from app.position import new_last_position
+from app.enums import ErrorCode
 
 # GET /words/<word_id> - success
 def test_get_word_private_success(client, create_random_user, create_random_language, create_random_word, create_session_id):
@@ -58,3 +59,22 @@ def test_get_word_after_multiple_public_success(client, create_random_user, crea
     assert data["position"] == word.position
     assert data["value"] == word.value
     assert data["meaning"] == word.meaning
+
+
+# GET /words/<word_id> - error
+def test_get_word_not_found_error(client):
+    response = client.get("/words/842661")
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["detail"] == ErrorCode.WORD_DOESNT_EXIST
+
+
+
+def test_get_word_private_error(client, create_random_user, create_random_language, create_random_word):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    word = create_random_word(language_id=language.id)
+
+    response = client.get(f"/words/{word.id}")
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert language.is_private is True
+    assert response.json()["detail"] == ErrorCode.WORD_DOESNT_EXIST
