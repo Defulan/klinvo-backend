@@ -6,3 +6,4 @@ class ModuleName(StrEnum):
     LANGUAGES = "languages"
     NOTES = "notes"
     WORDS = "words"
+    CATEGORY = "categories"
