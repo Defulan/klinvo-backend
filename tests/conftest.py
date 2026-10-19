@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.main import app
-from app.database import Base, get_db, User, Language, Note, Word, get_last_word
+from app.database import Base, get_db, User, Language, Note, Word, Category, get_last_word, get_last_category
 from app.config import settings
 from app.security import hash_password
 from app.enums import CookieKey
@@ -116,6 +116,30 @@ def create_random_word(db_session):
         return word
     
     return _create_random_word
+
+
+@pytest.fixture()
+def create_random_category(db_session):
+    def _create_random_category(language_id: int) -> Category:
+        letters = "qwertyuiopasdfghjklzxcvbnm"
+        name = "".join(random.choices(letters, k=5))
+
+        last_category = get_last_category(db_session, language_id=language_id)
+
+        if last_category is None:
+            new_position = new_last_position(None)
+        else:
+            new_position = new_last_position(last_category.position)
+
+        category = Category(
+            language_id=language_id, position=new_position,
+            name=name
+        )
+        db_session.add(category)
+        db_session.commit()
+        return category
+    
+    return _create_random_category
 
 
 @pytest.fixture()
