@@ -4,10 +4,11 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.main import app
-from app.database import Base, get_db, User, Language, Note, Word
+from app.database import Base, get_db, User, Language, Note, Word, get_last_word
 from app.config import settings
 from app.security import hash_password
 from app.enums import CookieKey
+from app.position import new_last_position
 from enums import ModuleName
 
 test_engine = create_engine(settings.TEST_DATABASE_URL)
@@ -99,7 +100,17 @@ def create_random_word(db_session):
         value = "".join(random.choices(letters, k=6))
         meaning = "".join(random.choices(letters, k=24))
 
-        word = Word(language_id=language_id, value=value, meaning=meaning, category_id=category_id)
+        last_word = get_last_word(db_session, language_id=language_id, category_id=category_id)
+
+        if last_word is None:
+            new_position = new_last_position(None)
+        else:
+            new_position = new_last_position(last_word.position)
+
+        word = Word(
+            language_id=language_id, category_id=category_id,
+            position=new_position, value=value, meaning=meaning,
+        )
         db_session.add(word)
         db_session.commit()
         return word
