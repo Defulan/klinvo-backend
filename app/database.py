@@ -63,7 +63,7 @@ class Word(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     language_id: Mapped[int] = mapped_column(ForeignKey("languages.id"), nullable=False)
     category_id: Mapped[int | None] = mapped_column(ForeignKey("categories.id"), nullable=True)
-    position: Mapped[str] = mapped_column(nullable=False)
+    position: Mapped[str] = mapped_column(String(collation="C"), nullable=False)
     value: Mapped[str] = mapped_column(String(255), nullable=False)
     meaning: Mapped[str] = mapped_column(String(255), nullable=False)
 
@@ -76,7 +76,7 @@ class Category(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     language_id: Mapped[int] = mapped_column(ForeignKey("languages.id"), nullable=False)
-    position: Mapped[str] = mapped_column(nullable=False)
+    position: Mapped[str] = mapped_column(String(collation="C"), nullable=False)
     name: Mapped[str] = mapped_column(String(255))
 
     words: Mapped[list["Word"]] = relationship(back_populates="category")
@@ -107,7 +107,7 @@ def get_last_word(db, language_id: int, category_id: int | None):
         Word.language_id == language_id,
         Word.category_id == category_id
     )
-    
+
     return category_words.order_by(Word.position.desc()).first()
 
 
