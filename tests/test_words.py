@@ -68,7 +68,6 @@ def test_get_word_not_found_error(client):
     assert response.json()["detail"] == ErrorCode.WORD_DOESNT_EXIST
 
 
-
 def test_get_word_private_error(client, create_random_user, create_random_language, create_random_word):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
@@ -78,3 +77,51 @@ def test_get_word_private_error(client, create_random_user, create_random_langua
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert language.is_private is True
     assert response.json()["detail"] == ErrorCode.WORD_DOESNT_EXIST
+
+
+# POST /words/<language_id> - success
+def test_create_word_no_category_success(client, create_random_user, create_random_language, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
+
+    payload = {
+        "value": "nggyu",
+        "meaning": "nglyd"
+    }
+
+    response = client.post(f"/words/{language.id}", json=payload)
+    assert response.status_code == status.HTTP_201_CREATED
+    
+    data = response.json()
+    assert data["id"] is not None
+    assert data["languageId"] == language.id
+    assert data["categoryId"] is None
+    assert data["position"] == new_last_position(None)
+    assert data["value"] == payload["value"]
+    assert data["meaning"] == payload["meaning"]
+
+
+def test_create_word_with_category_success(client, create_random_user, create_random_language, create_random_category, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    category = create_random_category(language_id=language.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
+
+    payload = {
+        "value": "nggyu",
+        "meaning": "nglyd",
+        "categoryId": category.id
+    }
+
+    response = client.post(f"/words/{language.id}", json=payload)
+    assert response.status_code == status.HTTP_201_CREATED
+    
+    data = response.json()
+    assert data["id"] is not None
+    assert data["languageId"] == language.id
+    assert data["categoryId"] == category.id
+    assert data["position"] == new_last_position(None)
+    assert data["value"] == payload["value"]
+    assert data["meaning"] == payload["meaning"]
+
