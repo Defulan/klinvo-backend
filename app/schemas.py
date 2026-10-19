@@ -86,3 +86,16 @@ class WordPatch(ConfiguredBaseModel):
     category_id: int | None = Field(default=None)
     value: str = Field(min_length=1, max_length=255)
     meaning: str = Field(min_length=1, max_length=255)
+
+
+class CategoryCreate(ConfiguredBaseModel):
+    name: str = Field(min_length=1, max_length=255)
+
+class CategoryOut(ConfiguredBaseModel):
+    id: int
+    language_id: int
+    position: str
+    name: str
+
+class CategoryPatch(ConfiguredBaseModel):
+    name: str
