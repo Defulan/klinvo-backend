@@ -44,10 +44,13 @@ def create_word(language_id: int, data: WordCreate, db: DbSession, session_id: C
     
     last_word: Word = get_last_word(db, language_id, data.category_id)
 
-    position = new_last_position(last_word.position)
+    if last_word is None:
+        new_position = new_last_position(None)
+    else:
+        new_position = new_last_position(last_word.position)
 
     word = Word(
-        language_id=language_id, category_id=data.category_id, position=position,
+        language_id=language_id, category_id=data.category_id, position=new_position,
         value=data.value, meaning=data.meaning,
     )
 
