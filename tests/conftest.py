@@ -104,7 +104,7 @@ def create_random_word(db_session):
         db_session.commit()
         return word
     
-    return _create_random_word()
+    return _create_random_word
 
 
 @pytest.fixture()
