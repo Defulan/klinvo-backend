@@ -102,7 +102,7 @@ def get_category_by_id(db, category_id) -> Category | None:
     return db.scalars(select(Category).where(Category.id == category_id)).first()
 
 
-def get_last_word(db, language_id: int, category_id: int | None):
+def get_last_word(db, language_id: int, category_id: int | None) -> Word | None:
     category_words = db.query(Word).filter(
         Word.language_id == language_id,
         Word.category_id == category_id
