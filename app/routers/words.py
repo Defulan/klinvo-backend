@@ -1,7 +1,8 @@
 from fastapi import APIRouter, status
 from app.security import get_value_from_cookie
-from app.database import get_word_by_id, get_language_by_id, Word, get_user_by_id, User, Language
+from app.database import get_word_by_id, get_language_by_id, Word, get_user_by_id, get_last_word, User, Language
 from app.schemas import WordOut, WordCreate, WordPatch
+from app.position import new_last_position
 from app.dependencies import DbSession, CookieValue
 from app.exceptions import NotFoundWordException, NotFoundLanguageException, NotFoundUserException, NoPermissionsException
 
@@ -16,7 +17,7 @@ def get_word(word_id: int, db: DbSession, session_id: CookieValue = None) -> Wor
     if not word:
         raise NotFoundWordException()
     
-    language = get_language_by_id(word.language_id)
+    language = get_language_by_id(db, word.language_id)
     if language.is_private and (not session_id or (int(get_value_from_cookie(session_id)) != language.author_id)):
         raise NotFoundWordException()
     
@@ -25,7 +26,7 @@ def get_word(word_id: int, db: DbSession, session_id: CookieValue = None) -> Wor
 
 @router.post("/{language_id}", status_code=status.HTTP_201_CREATED)
 def create_word(language_id: int, data: WordCreate, db: DbSession, session_id: CookieValue = None) -> WordOut:
-    language = get_language_by_id(language_id)
+    language = get_language_by_id(db, language_id)
     if not language:
         raise NotFoundLanguageException()
     
@@ -37,8 +38,16 @@ def create_word(language_id: int, data: WordCreate, db: DbSession, session_id: C
         if language.is_private:
             raise NotFoundLanguageException()
         raise NoPermissionsException()
+    
+    last_word: Word = get_last_word(db, language_id, data.category_id)
 
-    word = Word(language_id=language_id, value=data.value, meaning=data.meaning, category_id=data.category_id)
+    position = new_last_position(last_word.position)
+
+    word = Word(
+        language_id=language_id, category_id=data.category_id, position=position,
+        value=data.value, meaning=data.meaning,
+    )
+
     db.add(word)
     db.commit()
 
