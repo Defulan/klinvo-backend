@@ -23,7 +23,10 @@ def position_to_number(pos: str) -> int:
     return result
 
 
-def new_last_position(position: str) -> str:
+def new_last_position(position: str | None) -> str:
+    if position is None:
+        return CHARACTERS[0]
+    
     if position[-1] == CHARACTERS[-1]:
         return position + CHARACTERS[0]
     
