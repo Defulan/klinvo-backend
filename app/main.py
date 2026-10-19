@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from app.config import settings
 from app.exceptions import AppException
-from app.routers import users, auth, languages, notes, words
+from app.routers import users, auth, languages, notes, words, categories
 
 
 app = FastAPI(
@@ -63,3 +63,4 @@ app.include_router(auth.router)
 app.include_router(languages.router)
 app.include_router(notes.router)
 app.include_router(words.router)
+app.include_router(categories.router)
