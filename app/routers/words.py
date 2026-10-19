@@ -4,7 +4,10 @@ from app.database import get_word_by_id, get_language_by_id, Word, get_user_by_i
 from app.schemas import WordOut, WordCreate, WordPatch
 from app.position import new_last_position
 from app.dependencies import DbSession, CookieValue
-from app.exceptions import NotFoundWordException, NotFoundLanguageException, NotFoundUserException, NoPermissionsException
+from app.exceptions import (
+    NotFoundWordException, NotFoundLanguageException, NotFoundUserException,
+    NoPermissionsException, UnauthorizedException
+)
 
 router = APIRouter(
     prefix="/words",
@@ -51,4 +54,32 @@ def create_word(language_id: int, data: WordCreate, db: DbSession, session_id: C
     db.add(word)
     db.commit()
 
+    return word
+
+
+@router.patch("/{word_id}")
+def change_word(word_id: int, data: WordPatch, db: DbSession, session_id: CookieValue) -> WordOut:
+    if not session_id:
+        raise UnauthorizedException()
+    
+    word = get_word_by_id(db, word_id)
+    if not word:
+        raise NotFoundWordException()
+    
+    user = get_user_by_id(db, get_value_from_cookie(session_id))
+    if not user:
+        raise NotFoundUserException()
+
+    if user.id != word.language.author_id:
+        if word.language.is_private:
+            raise NotFoundWordException()
+        raise NoPermissionsException()
+
+    filled_data = data.model_dump(exclude_unset=True, exclude_none=True)
+    for key, value in filled_data.items():
+        setattr(word, key, value)
+    
+    db.commit()
+    db.refresh(word)
+    
     return word
