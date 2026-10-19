@@ -21,3 +21,12 @@ def position_to_number(pos: str) -> int:
     for index, char in enumerate(reversed(pos)):
         result += get_char_index(char) * (LENGTH ** index)
     return result
+
+
+def new_last_position(position: str) -> str:
+    if position[-1] == CHARACTERS[-1]:
+        return position + CHARACTERS[0]
+    
+    last_index = get_char_index(position[-1])
+    new_position = position[:-1] + CHARACTERS[last_index + 1]
+    return new_position
