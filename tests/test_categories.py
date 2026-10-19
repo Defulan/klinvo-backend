@@ -38,14 +38,14 @@ def test_get_category_public_success(client, create_random_user, create_random_l
 
 def test_get_category_after_multiple_public_success(client, create_random_user, create_random_language, create_random_category):
     user = create_random_user()
-    language = create_random_language(author_id=user.id)
+    language = create_random_language(author_id=user.id, is_private=False)
     for _ in range(5):
         create_random_category(language_id=language.id)
     category = create_random_category(language_id=language.id)
 
     response = client.get(f"/categories/{category.id}")
     assert response.status_code == status.HTTP_200_OK
-    assert language.is_private is True
+    assert language.is_private is False
     
     data = response.json()
     assert data["id"] == category.id
