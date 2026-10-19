@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status
 from app.security import get_value_from_cookie
-from app.database import get_word_by_id, get_language_by_id, Word, get_user_by_id, get_last_word, User, Language
+from app.database import get_word_by_id, get_language_by_id, Word, get_user_by_id, get_last_word
 from app.schemas import WordOut, WordCreate, WordPatch
 from app.position import new_last_position
 from app.dependencies import DbSession, CookieValue
