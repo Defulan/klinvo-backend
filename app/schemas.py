@@ -83,8 +83,8 @@ class WordOut(ConfiguredBaseModel):
     meaning: str
 
 class WordPatch(ConfiguredBaseModel):
-    value: str = Field(min_length=1, max_length=255)
-    meaning: str = Field(min_length=1, max_length=255)
+    value: str | None = Field(min_length=1, max_length=255, default=None)
+    meaning: str | None = Field(min_length=1, max_length=255, default=None)
 
 
 class CategoryCreate(ConfiguredBaseModel):
@@ -97,4 +97,4 @@ class CategoryOut(ConfiguredBaseModel):
     name: str
 
 class CategoryPatch(ConfiguredBaseModel):
-    name: str
+    name: str | None = Field(default=None)
