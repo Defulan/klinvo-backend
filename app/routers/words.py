@@ -29,6 +29,9 @@ def get_word(word_id: int, db: DbSession, session_id: CookieValue = None) -> Wor
 
 @router.post("/{language_id}", status_code=status.HTTP_201_CREATED)
 def create_word(language_id: int, data: WordCreate, db: DbSession, session_id: CookieValue = None) -> WordOut:
+    if not session_id:
+        raise UnauthorizedException()
+    
     user = get_user_by_id(db, get_value_from_cookie(session_id))
     if not user:
         raise NotFoundUserException()
