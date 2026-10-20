@@ -125,3 +125,89 @@ def test_create_word_with_category_success(client, create_random_user, create_ra
     assert data["value"] == payload["value"]
     assert data["meaning"] == payload["meaning"]
 
+
+# POST /words/<language_id> - error
+def test_create_word_unauthorized_error(client):
+    payload = {
+        "value": "nggyu",
+        "meaning": "nglyd"
+    }
+
+    response = client.post("/words/62234", json=payload)
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    assert response.json()["detail"] == ErrorCode.UNAUTHORIZED
+
+
+def test_create_word_no_language_error(client, create_random_user, create_session_id):
+    user = create_random_user()
+    create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
+
+    payload = {
+        "value": "nggyu",
+        "meaning": "nglyd"
+    }
+
+    response = client.post("/words/72117", json=payload)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
+
+
+def test_create_word_no_user_error(client, create_random_user, create_random_language, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=12456789)
+
+    payload = {
+        "value": "nggyu",
+        "meaning": "nglyd"
+    }
+
+    response = client.post(f"/words/{language.id}", json=payload)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["detail"] == ErrorCode.USER_DOESNT_EXIST
+
+
+def test_create_word_invalid_payload_error(client, create_random_user, create_random_language, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
+
+    payload = {
+        "value": "nggyu",
+        "meaning": None
+    }
+
+    response = client.post(f"/words/{language.id}", json=payload)
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+
+
+def test_create_word_non_author_private_error(client, create_random_user, create_random_language, create_session_id):
+    author_user = create_random_user()
+    side_user = create_random_user()
+    language = create_random_language(author_id=author_user.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=side_user.id)
+
+    payload = {
+        "value": "nggyu",
+        "meaning": "nglyd"
+    }
+
+    response = client.post(f"/words/{language.id}", json=payload)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
+
+
+def test_create_word_non_author_public_error(client, create_random_user, create_random_language, create_session_id):
+    author_user = create_random_user()
+    side_user = create_random_user()
+    language = create_random_language(author_id=author_user.id, is_private=False)
+    create_session_id(module_name=ModuleName.WORDS, user_id=side_user.id)
+
+    payload = {
+        "value": "nggyu",
+        "meaning": "nglyd"
+    }
+
+    response = client.post(f"/words/{language.id}", json=payload)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.json()["detail"] == ErrorCode.NO_PERMISSIONS
