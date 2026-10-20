@@ -17,6 +17,11 @@ class Position:
 
     def get_char_index(self, char: str) -> int:
         return self.CHARACTERS.index(char)
+
+
+    def get_char_by_index(self, index: int) -> str:
+        return self.CHARACTERS[index]
+    
     
     @classmethod
     def number_to_position(cls, num: int) -> str:
