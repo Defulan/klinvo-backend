@@ -1,35 +1,36 @@
-CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-LENGTH = len(CHARACTERS)
+class Position:
+    CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    LENGTH = len(CHARACTERS)
 
-
-def get_char_index(character: str) -> int:
-    return CHARACTERS.index(character)
-
-
-def number_to_position(num: int) -> str:
-    result = ""
+    value: str
     
-    while num > 0:
-        result += CHARACTERS[num % LENGTH]
-        num //= LENGTH
+    def __init__(self, value: str):
+        self.value = value
+
+    def get_next_position(self):
+        if self.value[-1] == self.CHARACTERS[-1]:
+            return self.value + self.CHARACTERS[0]
+        
+        next_char = self.get_char_index(self.value[-1])
+        return self.value[:-1] + next_char
     
-    return "".join(reversed(result))
 
-
-def position_to_number(pos: str) -> int:
-    result = 0
-    for index, char in enumerate(reversed(pos)):
-        result += get_char_index(char) * (LENGTH ** index)
-    return result
-
-
-def new_last_position(position: str | None) -> str:
-    if position is None:
-        return CHARACTERS[0]
+    def get_char_index(self, char: str) -> int:
+        return self.CHARACTERS.index(char)
     
-    if position[-1] == CHARACTERS[-1]:
-        return position + CHARACTERS[0]
+
+    def number_to_position(self, num: int) -> str:
+        result = ""
+        
+        while num > 0:
+            result += self.CHARACTERS[num % self.LENGTH]
+            num //= self.LENGTH
+        
+        return "".join(reversed(result))
     
-    last_index = get_char_index(position[-1])
-    new_position = position[:-1] + CHARACTERS[last_index + 1]
-    return new_position
+
+    def position_to_number(self, pos: str) -> int:
+        result = 0
+        for index, char in enumerate(reversed(pos)):
+            result += self.get_char_index(char) * (self.LENGTH ** index)
+        return result
