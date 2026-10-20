@@ -29,13 +29,13 @@ def get_word(word_id: int, db: DbSession, session_id: CookieValue = None) -> Wor
 
 @router.post("/{language_id}", status_code=status.HTTP_201_CREATED)
 def create_word(language_id: int, data: WordCreate, db: DbSession, session_id: CookieValue = None) -> WordOut:
-    language = get_language_by_id(db, language_id)
-    if not language:
-        raise NotFoundLanguageException()
-    
     user = get_user_by_id(db, get_value_from_cookie(session_id))
     if not user:
         raise NotFoundUserException()
+    
+    language = get_language_by_id(db, language_id)
+    if not language:
+        raise NotFoundLanguageException()
     
     if not session_id or (user.id != language.author_id):
         if language.is_private:
