@@ -7,7 +7,7 @@ class Position:
     def __init__(self, value: str):
         self.value = value
 
-    def get_next_position(self):
+    def get_next_position_value(self) -> str:
         if self.value[-1] == self.CHARACTERS[-1]:
             return self.value + self.CHARACTERS[0]
         
