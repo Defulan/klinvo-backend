@@ -83,7 +83,6 @@ class WordOut(ConfiguredBaseModel):
     meaning: str
 
 class WordPatch(ConfiguredBaseModel):
-    category_id: int | None = Field(default=None)
     value: str = Field(min_length=1, max_length=255)
     meaning: str = Field(min_length=1, max_length=255)
 
