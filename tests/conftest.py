@@ -8,7 +8,7 @@ from app.database import Base, get_db, User, Language, Note, Word, Category, get
 from app.config import settings
 from app.security import hash_password
 from app.enums import CookieKey
-from app.position import new_last_position
+from app.position import Position
 from enums import ModuleName
 
 test_engine = create_engine(settings.TEST_DATABASE_URL)
@@ -103,9 +103,9 @@ def create_random_word(db_session):
         last_word = get_last_word(db_session, language_id=language_id, category_id=category_id)
 
         if last_word is None:
-            new_position = new_last_position(None)
+            new_position = Position.none_position_value()
         else:
-            new_position = new_last_position(last_word.position)
+            new_position = Position(last_word.position).get_next_position_value()
 
         word = Word(
             language_id=language_id, category_id=category_id,
@@ -127,9 +127,9 @@ def create_random_category(db_session):
         last_category = get_last_category(db_session, language_id=language_id)
 
         if last_category is None:
-            new_position = new_last_position(None)
+            new_position = Position.none_position_value()
         else:
-            new_position = new_last_position(last_category.position)
+            new_position = Position(last_category.position).get_next_position_value()
 
         category = Category(
             language_id=language_id, position=new_position,

@@ -1,6 +1,6 @@
 from fastapi import status
 from enums import ModuleName
-from app.position import new_last_position
+from app.position import Position
 from app.enums import ErrorCode
 
 
@@ -18,7 +18,7 @@ def test_get_category_private_success(client, create_random_user, create_random_
     data = response.json()
     assert data["id"] == category.id
     assert data["languageId"] == category.language_id
-    assert data["position"] == new_last_position(None)
+    assert data["position"] == Position.none_position_value()
     assert data["name"] == category.name
 
 
@@ -34,7 +34,7 @@ def test_get_category_public_success(client, create_random_user, create_random_l
     data = response.json()
     assert data["id"] == category.id
     assert data["languageId"] == category.language_id
-    assert data["position"] == new_last_position(None)
+    assert data["position"] == Position.none_position_value()
     assert data["name"] == category.name
 
 
