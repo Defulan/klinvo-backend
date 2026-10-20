@@ -11,7 +11,7 @@ class Position:
         if self.value[-1] == self.CHARACTERS[-1]:
             return self.value + self.CHARACTERS[0]
         
-        next_char_index = self.get_char_index(self.value[-1])
+        next_char_index = self.get_char_index(self.value[-1]) + 1
         return self.value[:-1] + self.CHARACTERS[next_char_index]
     
 
@@ -28,7 +28,7 @@ class Position:
         result = ""
         
         while num > 0:
-            result += cls.CHARACTERS[num % cls.LENGTH]
+            result += cls.CHARACTERS[(num - 1) % cls.LENGTH]
             num //= cls.LENGTH
         
         return "".join(reversed(result))
@@ -38,7 +38,7 @@ class Position:
     def position_to_number(cls, pos: str) -> int:
         result = 0
         for index, char in enumerate(reversed(pos)):
-            result += cls.get_char_index(char) * (cls.LENGTH ** index)
+            result += (cls.get_char_index(char) + 1) * (cls.LENGTH ** index)
         return result
     
     
