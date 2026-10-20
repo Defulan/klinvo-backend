@@ -1,6 +1,20 @@
 Versions of Backend and Frontend releases at the same time — that is, 
 Backend version implies compatible with the corresponding Frontend version
 
+
+## unversioned
+
+#### Added
+* `words` table
+* `categories` table
+* GET, POST, PATCH for `/words`
+* GET, POST, PATCH for `/categories`
+* `position.py` file for functions with position values in corresponding DB columns
+
+#### Important for Frontend
+* Added error codes `WORD_DOESNT_EXIST` and `CATEGORY_DOESNT_EXIST`
+
+
 ## v0.4.1
 
 #### Added
