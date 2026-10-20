@@ -18,19 +18,20 @@ class Position:
     def get_char_index(self, char: str) -> int:
         return self.CHARACTERS.index(char)
     
-
-    def number_to_position(self, num: int) -> str:
+    @classmethod
+    def number_to_position(cls, num: int) -> str:
         result = ""
         
         while num > 0:
-            result += self.CHARACTERS[num % self.LENGTH]
-            num //= self.LENGTH
+            result += cls.CHARACTERS[num % cls.LENGTH]
+            num //= cls.LENGTH
         
         return "".join(reversed(result))
     
 
-    def position_to_number(self, pos: str) -> int:
+    @classmethod
+    def position_to_number(cls, pos: str) -> int:
         result = 0
         for index, char in enumerate(reversed(pos)):
-            result += self.get_char_index(char) * (self.LENGTH ** index)
+            result += cls.get_char_index(char) * (cls.LENGTH ** index)
         return result
