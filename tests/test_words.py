@@ -211,3 +211,58 @@ def test_create_word_non_author_public_error(client, create_random_user, create_
     response = client.post(f"/words/{language.id}", json=payload)
     assert response.status_code == status.HTTP_403_FORBIDDEN
     assert response.json()["detail"] == ErrorCode.NO_PERMISSIONS
+
+
+# PATCH /words/<word_id> - success
+def test_change_word_full_success(client, create_random_user, create_random_language, create_random_word, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    word = create_random_word(language_id=language.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
+
+    old_value = word.value
+    old_meaning = word.meaning
+
+    payload = {
+        "value": "wertykfywquvbnm,.rtyuioxcvbnm,rtyuhjk",
+        "meaning": "Author playing on piano with keyboard, don't pay attention"
+    }
+
+    response = client.patch(f"/words/{word.id}", json=payload)
+    assert response.status_code == status.HTTP_200_OK
+    
+    data = response.json()
+    assert data["id"] == word.id
+    assert data["languageId"] == language.id
+    assert data["categoryId"] == word.category_id
+    assert data["position"] == new_last_position(None)
+    assert data["value"] == payload["value"]
+    assert data["value"] != old_value
+    assert data["meaning"] == payload["meaning"]
+    assert data["meaning"] != old_meaning
+
+
+def test_change_word_partial_success(client, create_random_user, create_random_language, create_random_word, create_session_id):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    word = create_random_word(language_id=language.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
+
+    old_value = word.value
+    old_meaning = word.meaning
+
+    payload = {
+        "meaning": "I've changed my mind now it means different"
+    }
+
+    response = client.patch(f"/words/{word.id}", json=payload)
+    assert response.status_code == status.HTTP_200_OK
+    
+    data = response.json()
+    assert data["id"] == word.id
+    assert data["languageId"] == language.id
+    assert data["categoryId"] == word.category_id
+    assert data["position"] == new_last_position(None)
+    assert data["value"] == old_value
+    assert data["meaning"] == payload["meaning"]
+    assert data["meaning"] != old_meaning
