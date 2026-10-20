@@ -35,3 +35,8 @@ class Position:
         for index, char in enumerate(reversed(pos)):
             result += cls.get_char_index(char) * (cls.LENGTH ** index)
         return result
+    
+    
+    @classmethod
+    def none_position_value(cls) -> str:
+        return cls.CHARACTERS[0]
