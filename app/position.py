@@ -11,8 +11,8 @@ class Position:
         if self.value[-1] == self.CHARACTERS[-1]:
             return self.value + self.CHARACTERS[0]
         
-        next_char = self.get_char_index(self.value[-1])
-        return self.value[:-1] + next_char
+        next_char_index = self.get_char_index(self.value[-1])
+        return self.value[:-1] + self.CHARACTERS[next_char_index]
     
 
     def get_char_index(self, char: str) -> int:
