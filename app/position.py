@@ -12,6 +12,5 @@ class Position:
         self.value = value
     
     @classmethod
-    def get_index(cls, char: str) -> int:
-        return cls.CHARACTERS.index(char)
-
+    def get_char_number(cls, char: str) -> int:
+        return cls.CHARACTERS.index(char) + 1
