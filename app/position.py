@@ -38,7 +38,7 @@ class Position:
     def position_to_number(cls, pos: str) -> int:
         result = 0
         for index, char in enumerate(reversed(pos)):
-            result += (cls.get_char_index(char) + 1) * (cls.LENGTH ** index)
+            result += (cls.get_char_index(cls, char) + 1) * (cls.LENGTH ** index)
         return result
     
     
