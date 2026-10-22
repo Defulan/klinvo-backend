@@ -55,8 +55,6 @@ class Position:
     
 
     def get_next_position(self) -> str:
-        if self.value[-1] == self.CHARACTERS[-1]:
-            return self.value + self.CHARACTERS[0]
-        
-        next_char: str = self.get_next_char(self.value[-1])
-        return self.value[:-1] + next_char
+        next_number = self.to_number() + 1
+        next_position: str = self.get_char_by_charnumber(next_number)
+        return next_position
