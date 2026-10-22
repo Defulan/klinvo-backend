@@ -21,6 +21,15 @@ class Position:
         return cls.CHARACTERS[charnumber - 1]
     
 
+    @classmethod
+    def get_next_char(cls, char: str) -> str:
+        if char[-1] == cls.CHARACTERS[-1]:
+            raise ValueError("Argument is final character")
+        
+        next_index = cls.CHARACTERS.index(char) + 1
+        return cls.CHARACTERS[next_index]
+    
+
     def to_number(self) -> int:
         result: int = 0
 
