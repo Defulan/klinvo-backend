@@ -10,4 +10,8 @@ class Position:
     # TODO there was: none_position_value (-> str)
     def __init__(self, value: str):
         self.value = value
+    
+    @classmethod
+    def get_index(cls, char: str) -> int:
+        return cls.CHARACTERS.index(char)
 
