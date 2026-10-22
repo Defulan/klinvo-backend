@@ -61,3 +61,20 @@ class Position:
     @classmethod
     def get_none_position(cls) -> str:
         return cls.CHARACTERS[0]
+    
+
+    @classmethod
+    def get_average_position(cls, left: str, right: str) -> str:
+        if left == right:
+            raise ValueError("Left and right positions are equal")
+        
+        left_number = Position(left).to_number()
+        right_number = Position(right).to_number()
+
+        average_number = (left_number + right_number) // 2
+        average_position = cls.number_to_position(average_number)
+        
+        if average_number == left_number or average_number == right_number:
+            average_position += cls.CHARACTERS[cls.LENGTH // 2]
+
+        return average_position
