@@ -16,6 +16,11 @@ class Position:
         return cls.CHARACTERS.index(char) + 1
     
 
+    @classmethod
+    def get_char_by_charnumber(cls, charnumber: int) -> str:
+        return cls.CHARACTERS[charnumber - 1]
+    
+
     def to_number(self) -> int:
         result: int = 0
 
