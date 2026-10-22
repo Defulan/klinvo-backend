@@ -58,3 +58,8 @@ class Position:
         next_number = self.to_number() + 1
         next_position: str = self.get_char_by_charnumber(next_number)
         return next_position
+    
+
+    @classmethod
+    def get_none_position(cls) -> str:
+        return cls.CHARACTERS[0]
