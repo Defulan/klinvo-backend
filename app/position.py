@@ -14,3 +14,12 @@ class Position:
     @classmethod
     def get_char_number(cls, char: str) -> int:
         return cls.CHARACTERS.index(char) + 1
+    
+
+    def to_number(self) -> int:
+        result: int = 0
+
+        for index, char in enumerate(reversed(self.value)):
+            result += self.get_char_number(char) * (self.LENGTH ** index)
+        
+        return result
