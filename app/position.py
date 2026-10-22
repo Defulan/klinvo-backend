@@ -28,3 +28,18 @@ class Position:
             result += self.get_char_number(char) * (self.LENGTH ** index)
         
         return result
+    
+
+    @classmethod
+    def number_to_position(cls, number_value: int) -> str:
+        results: list[str] = []
+
+        while number_value > 0:
+            charnumber: int = number_value % cls.LENGTH
+            char = cls.get_char_by_charnumber(charnumber)
+
+            results.append(char)
+            number_value //= cls.LENGTH
+        
+        result: str = "".join(reversed(results))
+        return result
