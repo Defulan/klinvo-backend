@@ -44,6 +44,9 @@ class Position:
 
             results.append(char)
             number_value //= cls.LENGTH
+
+            if charnumber == 0:
+                number_value -= 1
         
         result: str = "".join(reversed(results))
         return result
