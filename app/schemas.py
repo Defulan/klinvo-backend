@@ -86,6 +86,10 @@ class WordPatch(ConfiguredBaseModel):
     value: str | None = Field(min_length=1, max_length=255, default=None)
     meaning: str | None = Field(min_length=1, max_length=255, default=None)
 
+class WordMove(ConfiguredBaseModel):
+    previous: str
+    next: str
+
 
 class CategoryCreate(ConfiguredBaseModel):
     name: str = Field(min_length=1, max_length=255)
