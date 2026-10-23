@@ -4,7 +4,7 @@ from app import position
 from app.enums import ErrorCode
 
 
-# GET /categories/<category_id>
+# GET /categories/<category_id> - success
 def test_get_category_private_success(client, create_random_user, create_random_language, create_random_category, create_session_id):
     user = create_random_user()
     language = create_random_language(author_id=user.id)
@@ -56,7 +56,7 @@ def test_get_category_after_multiple_public_success(client, create_random_user, 
     assert data["name"] == category.name
 
 
-# GET /categories/<category_id>
+# GET /categories/<category_id> - error
 def test_create_category_not_found_error(client):
     response = client.get("/categories/9281")
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -71,3 +71,12 @@ def test_get_category_private_error(client, create_random_user, create_random_la
     response = client.get(f"/categories/{category.id}")
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json()["detail"] == ErrorCode.CATEGORY_DOESNT_EXIST
+
+
+# TODO POST /categories/<language_id> - success
+
+# TODO POST /categories/<language_id> - error
+
+# TODO PATCH /categories/<category_id> - success
+
+# TODO PATCH /categories/<category_id> - error
