@@ -40,7 +40,7 @@ def create_word(language_id: int, data: WordCreate, db: DbSession, session_id: C
     if not language:
         raise NotFoundLanguageException()
     
-    if not session_id or (user.id != language.author_id):
+    if user.id != language.author_id:
         if language.is_private:
             raise NotFoundLanguageException()
         raise NoPermissionsException()
