@@ -107,10 +107,10 @@ class WordCategoryMove(ConfiguredBaseModel):
 
         if self.to_bottom:
             if is_previous_filled or is_next_filled:
-                raise ValueError(ErrorCode.WORD_MOVE_FILLED)
+                raise ValueError(ErrorCode.WORD_CATEGORY_MOVE_FILLED)
         else:
             if not (is_previous_filled and is_next_filled):
-                raise ValueError(ErrorCode.WORD_MOVE_UNFILLED)
+                raise ValueError(ErrorCode.WORD_CATEGORY_MOVE_UNFILLED)
 
 
 class CategoryCreate(ConfiguredBaseModel):
