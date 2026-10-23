@@ -2,7 +2,7 @@ CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 LENGTH = len(CHARACTERS)
 
 
-def to_number(position: str) -> int:
+def position_to_number(position: str) -> int:
     result: int = 0
 
     for index, char in enumerate(reversed(position)):
@@ -12,7 +12,7 @@ def to_number(position: str) -> int:
 
 
 def get_next_position(position: str) -> str:
-    next_number = to_number(position) + 1
+    next_number = position_to_number(position) + 1
     next_position: str = number_to_position(next_number)
     return next_position
 
@@ -58,8 +58,8 @@ def get_average_position(pos1: str, pos2: str) -> str:
     if pos1 == pos2:
         raise ValueError("Both positions are equal")
     
-    pos1_number = to_number(pos1)
-    pos2_number = to_number(pos2)
+    pos1_number = position_to_number(pos1)
+    pos2_number = position_to_number(pos2)
 
     average_number = (pos1_number + pos2_number) // 2
     average_position = number_to_position(average_number)
