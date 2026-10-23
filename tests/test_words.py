@@ -266,3 +266,13 @@ def test_change_word_partial_success(client, create_random_user, create_random_l
     assert data["value"] == old_value
     assert data["meaning"] == payload["meaning"]
     assert data["meaning"] != old_meaning
+
+# TODO PATCH /words/<word_id> - error
+
+# TODO PATCH /words/<word_id>/move - success
+
+# TODO PATCH /words/<word_id>/move - error
+
+# TODO PATCH /words/<word_id>/move/<category_id> - success
+
+# TODO PATCH /words/<word_id>/move/<category_id> - error
