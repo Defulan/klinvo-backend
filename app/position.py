@@ -1,81 +1,70 @@
-class Position:
-    CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-    LENGTH = len(CHARACTERS)
+CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+LENGTH = len(CHARACTERS)
 
-    value: str
-    def __init__(self, value: str):
-        self.value = value
+
+def to_number(position: str) -> int:
+    result: int = 0
+
+    for index, char in enumerate(reversed(position)):
+        result += get_char_number(char) * (LENGTH ** index)
     
+    return result
 
-    def to_number(self) -> int:
-        result: int = 0
 
-        for index, char in enumerate(reversed(self.value)):
-            result += self.get_char_number(char) * (self.LENGTH ** index)
-        
-        return result
+def get_next_position(position: str) -> str:
+    next_number = to_number(position) + 1
+    next_position: str = number_to_position(next_number)
+    return next_position
+
+
+def get_none_position() -> str:
+    return CHARACTERS[0]
+
+
+def get_char_number(char: str) -> int:
+    return CHARACTERS.index(char) + 1
+
+
+def get_char_by_charnumber(charnumber: int) -> str:
+    return CHARACTERS[charnumber - 1]
+
+
+def get_next_char(char: str) -> str:
+    if char[-1] == CHARACTERS[-1]:
+        raise ValueError("Argument is final character")
     
+    next_index = CHARACTERS.index(char) + 1
+    return CHARACTERS[next_index]
 
-    def get_next_position(self) -> str:
-        next_number = self.to_number() + 1
-        next_position: str = self.number_to_position(next_number)
-        return next_position
+
+def number_to_position(number_value: int) -> str:
+    results: list[str] = []
+
+    while number_value > 0:
+        charnumber: int = number_value % LENGTH
+        char = get_char_by_charnumber(charnumber)
+
+        results.append(char)
+        number_value //= LENGTH
+
+        if charnumber == 0:
+            number_value -= 1
     
+    result: str = "".join(reversed(results))
+    return result
 
-    @classmethod
-    def get_none_position(cls) -> str:
-        return cls.CHARACTERS[0]
+
+def get_average_position(pos1: str, pos2: str) -> str:
+    if pos1 == pos2:
+        raise ValueError("Left and right positions are equal")
     
+    pos1_number = to_number(pos1)
+    pos2_number = to_number(pos2)
+
+    average_number = (pos1_number + pos2_number) // 2
+    average_position = number_to_position(average_number)
     
-    @classmethod
-    def get_char_number(cls, char: str) -> int:
-        return cls.CHARACTERS.index(char) + 1
-    
+    if average_number == pos1_number or average_number == pos2_number:
+        average_position += CHARACTERS[LENGTH // 2]
 
-    @classmethod
-    def get_char_by_charnumber(cls, charnumber: int) -> str:
-        return cls.CHARACTERS[charnumber - 1]
-    
-
-    @classmethod
-    def get_next_char(cls, char: str) -> str:
-        if char[-1] == cls.CHARACTERS[-1]:
-            raise ValueError("Argument is final character")
-        
-        next_index = cls.CHARACTERS.index(char) + 1
-        return cls.CHARACTERS[next_index]
-    
-
-    @classmethod
-    def number_to_position(cls, number_value: int) -> str:
-        results: list[str] = []
-
-        while number_value > 0:
-            charnumber: int = number_value % cls.LENGTH
-            char = cls.get_char_by_charnumber(charnumber)
-
-            results.append(char)
-            number_value //= cls.LENGTH
-
-            if charnumber == 0:
-                number_value -= 1
-        
-        result: str = "".join(reversed(results))
-        return result
-    
-
-    @classmethod
-    def get_average_position(cls, pos1: str, pos2: str) -> str:
-        if pos1 == pos2:
-            raise ValueError("Left and right positions are equal")
-        
-        pos1_number = Position(pos1).to_number()
-        pos2_number = Position(pos2).to_number()
-
-        average_number = (pos1_number + pos2_number) // 2
-        average_position = cls.number_to_position(average_number)
-        
-        if average_number == pos1_number or average_number == pos2_number:
-            average_position += cls.CHARACTERS[cls.LENGTH // 2]
-
-        return average_position
+    return average_position
