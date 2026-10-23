@@ -11,6 +11,12 @@ def position_to_number(position: str) -> int:
     return result
 
 
+def get_previous_position(position: str) -> str:
+    prev_number = position_to_number(position) - 1
+    prev_position: str = number_to_position(prev_number)
+    return prev_position
+
+
 def get_next_position(position: str) -> str:
     next_number = position_to_number(position) + 1
     next_position: str = number_to_position(next_number)
