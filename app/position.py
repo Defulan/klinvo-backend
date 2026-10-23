@@ -56,7 +56,7 @@ def number_to_position(number_value: int) -> str:
 
 def get_average_position(pos1: str, pos2: str) -> str:
     if pos1 == pos2:
-        raise ValueError("Left and right positions are equal")
+        raise ValueError("Both positions are equal")
     
     pos1_number = to_number(pos1)
     pos2_number = to_number(pos2)
