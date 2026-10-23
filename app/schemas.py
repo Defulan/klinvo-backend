@@ -94,6 +94,7 @@ class WordMove(ConfiguredBaseModel):
     def field_check(self):
         if self.previous is None and self.next is None:
             raise ValueError(ErrorCode.WORD_MOVE_UNFILLED)
+        return self
 
 class WordCategoryMove(ConfiguredBaseModel):
     to_bottom: bool = Field(default=False)
@@ -111,6 +112,7 @@ class WordCategoryMove(ConfiguredBaseModel):
         else:
             if not (is_previous_filled and is_next_filled):
                 raise ValueError(ErrorCode.WORD_CATEGORY_MOVE_UNFILLED)
+        return self
 
 
 class CategoryCreate(ConfiguredBaseModel):
