@@ -88,7 +88,7 @@ class WordPatch(ConfiguredBaseModel):
 
 class WordMove(ConfiguredBaseModel):
     previous: str | None
-    next: str
+    next: str | None
 
 class WordCategoryMove(ConfiguredBaseModel):
     to_bottom: bool = Field(default=False)
