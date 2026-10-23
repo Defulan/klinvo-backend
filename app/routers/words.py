@@ -2,7 +2,7 @@ from fastapi import APIRouter, status
 from app import position
 from app.security import get_value_from_cookie
 from app.database import get_word_by_id, get_language_by_id, Word, get_user_by_id, get_last_word, get_category_by_id
-from app.schemas import WordOut, WordCreate, WordPatch, WordMove
+from app.schemas import WordOut, WordCreate, WordPatch, WordMove, WordCategoryMove
 from app.dependencies import DbSession, CookieValue
 from app.exceptions import (
     NotFoundWordException, NotFoundLanguageException, NotFoundUserException, NotFoundCategoryException,
@@ -119,7 +119,7 @@ def move_word(word_id: int, data: WordMove, db: DbSession, session_id: CookieVal
 
 
 @router.patch("/{word_id}/move/{category_id}")
-def change_word_category(word_id: int, category_id: int, data: WordMove, db: DbSession, session_id: CookieValue) -> WordOut:
+def change_word_category(word_id: int, category_id: int, data: WordCategoryMove, db: DbSession, session_id: CookieValue) -> WordOut:
     if not session_id:
         raise UnauthorizedException()
     
@@ -141,7 +141,12 @@ def change_word_category(word_id: int, category_id: int, data: WordMove, db: DbS
         raise NotFoundCategoryException()
     
     word.category_id = category_id
-    word.position = position.get_average_position(data.previous, data.next)
+
+    if data.to_bottom:
+        last_word = get_last_word(db, word.language.id, category_id)
+        word.position = position.get_next_position(last_word.position)
+    else:
+        word.position = position.get_average_position(data.previous, data.next)
 
     db.commit()
     db.refresh(word)
