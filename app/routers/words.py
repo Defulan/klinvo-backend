@@ -1,11 +1,11 @@
 from fastapi import APIRouter, status
 from app import position
 from app.security import get_value_from_cookie
-from app.database import get_word_by_id, get_language_by_id, Word, get_user_by_id, get_last_word
+from app.database import get_word_by_id, get_language_by_id, Word, get_user_by_id, get_last_word, get_category_by_id
 from app.schemas import WordOut, WordCreate, WordPatch, WordMove
 from app.dependencies import DbSession, CookieValue
 from app.exceptions import (
-    NotFoundWordException, NotFoundLanguageException, NotFoundUserException,
+    NotFoundWordException, NotFoundLanguageException, NotFoundUserException, NotFoundCategoryException,
     NoPermissionsException, UnauthorizedException
 )
 
@@ -112,6 +112,37 @@ def move_word(word_id: int, data: WordMove, db: DbSession, session_id: CookieVal
     average_position: str = position.get_average_position(data.previous, data.next)
     word.position = average_position
     
+    db.commit()
+    db.refresh(word)
+
+    return word
+
+
+@router.patch("/{word_id}/move/{category_id}")
+def change_word_category(word_id: int, category_id: int, data: WordMove, db: DbSession, session_id: CookieValue) -> WordOut:
+    if not session_id:
+        raise UnauthorizedException()
+    
+    user = get_user_by_id(db, get_value_from_cookie(session_id))
+    if not user:
+        raise NotFoundUserException()
+    
+    word = get_word_by_id(word_id)
+    if not word:
+        raise NotFoundWordException()
+    
+    if word.language.author_id != user.id:
+        if word.language.is_private:
+            raise NotFoundWordException()
+        raise NoPermissionsException()
+    
+    category = get_category_by_id(category_id)
+    if not category:
+        raise NotFoundCategoryException()
+    
+    word.category_id = category_id
+    word.position = position.get_average_position(data.previous, data.next)
+
     db.commit()
     db.refresh(word)
 
