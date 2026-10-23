@@ -68,13 +68,13 @@ def change_word(word_id: int, data: WordPatch, db: DbSession, session_id: Cookie
     if not session_id:
         raise UnauthorizedException()
     
-    word = get_word_by_id(db, word_id)
-    if not word:
-        raise NotFoundWordException()
-    
     user = get_user_by_id(db, get_value_from_cookie(session_id))
     if not user:
         raise NotFoundUserException()
+    
+    word = get_word_by_id(db, word_id)
+    if not word:
+        raise NotFoundWordException()
 
     if user.id != word.language.author_id:
         if word.language.is_private:
