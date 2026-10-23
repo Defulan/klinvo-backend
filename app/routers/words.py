@@ -100,7 +100,7 @@ def move_word(word_id: int, data: WordMove, db: DbSession, session_id: CookieVal
     if not user:
         raise NotFoundUserException()
     
-    word = get_word_by_id(word_id)
+    word = get_word_by_id(db, word_id)
     if not word:
         raise NotFoundWordException()
     
@@ -127,7 +127,7 @@ def change_word_category(word_id: int, category_id: int, data: WordMove, db: DbS
     if not user:
         raise NotFoundUserException()
     
-    word = get_word_by_id(word_id)
+    word = get_word_by_id(db, word_id)
     if not word:
         raise NotFoundWordException()
     
@@ -136,7 +136,7 @@ def change_word_category(word_id: int, category_id: int, data: WordMove, db: DbS
             raise NotFoundWordException()
         raise NoPermissionsException()
     
-    category = get_category_by_id(category_id)
+    category = get_category_by_id(db, category_id)
     if not category:
         raise NotFoundCategoryException()
     
