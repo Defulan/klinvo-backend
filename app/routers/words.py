@@ -1,8 +1,8 @@
 from fastapi import APIRouter, status
+from app import position
 from app.security import get_value_from_cookie
 from app.database import get_word_by_id, get_language_by_id, Word, get_user_by_id, get_last_word
 from app.schemas import WordOut, WordCreate, WordPatch
-from app.position import Position
 from app.dependencies import DbSession, CookieValue
 from app.exceptions import (
     NotFoundWordException, NotFoundLanguageException, NotFoundUserException,
@@ -48,9 +48,9 @@ def create_word(language_id: int, data: WordCreate, db: DbSession, session_id: C
     last_word: Word = get_last_word(db, language_id, data.category_id)
 
     if last_word is None:
-        new_position = Position.none_position_value()
+        new_position = position.get_none_position()
     else:
-        new_position = Position(last_word.position).get_next_position_value()
+        new_position = position.get_next_position(last_word.position)
 
     word = Word(
         language_id=language_id, category_id=data.category_id, position=new_position,

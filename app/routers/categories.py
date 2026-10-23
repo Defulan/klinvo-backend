@@ -1,8 +1,8 @@
 from fastapi import APIRouter, status
+from app import position
 from app.security import get_value_from_cookie
 from app.database import get_category_by_id, get_language_by_id, Category, get_user_by_id, get_last_category
 from app.schemas import CategoryOut, CategoryCreate, CategoryPatch
-from app.position import Position
 from app.dependencies import DbSession, CookieValue
 from app.exceptions import (
     NotFoundCategoryException, NotFoundLanguageException, NotFoundUserException,
@@ -45,9 +45,9 @@ def create_category(language_id: int, data: CategoryCreate, db: DbSession, sessi
     last_category: Category = get_last_category(db, language_id)
 
     if last_category is None:
-        new_position = Position.none_position_value()
+        new_position = position.get_none_position()
     else:
-        new_position = Position(last_category.position).get_next_position_value()
+        new_position = position.get_next_position(last_category.position)
 
     category = Category(
         language_id=language_id, position=new_position,

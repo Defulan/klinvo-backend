@@ -1,6 +1,6 @@
 from fastapi import status
 from enums import ModuleName
-from app.position import Position
+from app import position
 from app.enums import ErrorCode
 
 # GET /words/<word_id> - success
@@ -18,7 +18,7 @@ def test_get_word_private_success(client, create_random_user, create_random_lang
     assert data["id"] == word.id
     assert data["languageId"] == word.language_id
     assert data["categoryId"] is None
-    assert data["position"] == Position.none_position_value()
+    assert data["position"] == position.get_none_position()
     assert data["value"] == word.value
     assert data["meaning"] == word.meaning
 
@@ -36,7 +36,7 @@ def test_get_word_public_success(client, create_random_user, create_random_langu
     assert data["id"] == word.id
     assert data["languageId"] == word.language_id
     assert data["categoryId"] is None
-    assert data["position"] == Position.none_position_value()
+    assert data["position"] == position.get_none_position()
     assert data["value"] == word.value
     assert data["meaning"] == word.meaning
 
@@ -97,7 +97,7 @@ def test_create_word_no_category_success(client, create_random_user, create_rand
     assert data["id"] is not None
     assert data["languageId"] == language.id
     assert data["categoryId"] is None
-    assert data["position"] == Position.none_position_value()
+    assert data["position"] == position.get_none_position()
     assert data["value"] == payload["value"]
     assert data["meaning"] == payload["meaning"]
 
@@ -121,7 +121,7 @@ def test_create_word_with_category_success(client, create_random_user, create_ra
     assert data["id"] is not None
     assert data["languageId"] == language.id
     assert data["categoryId"] == category.id
-    assert data["position"] == Position.none_position_value()
+    assert data["position"] == position.get_none_position()
     assert data["value"] == payload["value"]
     assert data["meaning"] == payload["meaning"]
 
@@ -235,7 +235,7 @@ def test_change_word_full_success(client, create_random_user, create_random_lang
     assert data["id"] == word.id
     assert data["languageId"] == language.id
     assert data["categoryId"] == word.category_id
-    assert data["position"] == Position.none_position_value()
+    assert data["position"] == position.get_none_position()
     assert data["value"] == payload["value"]
     assert data["value"] != old_value
     assert data["meaning"] == payload["meaning"]
@@ -262,7 +262,7 @@ def test_change_word_partial_success(client, create_random_user, create_random_l
     assert data["id"] == word.id
     assert data["languageId"] == language.id
     assert data["categoryId"] == word.category_id
-    assert data["position"] == Position.none_position_value()
+    assert data["position"] == position.get_none_position()
     assert data["value"] == old_value
     assert data["meaning"] == payload["meaning"]
     assert data["meaning"] != old_meaning
