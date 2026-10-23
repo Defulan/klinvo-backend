@@ -87,8 +87,9 @@ class WordPatch(ConfiguredBaseModel):
     meaning: str | None = Field(min_length=1, max_length=255, default=None)
 
 class WordMove(ConfiguredBaseModel):
-    previous: str
-    next: str
+    to_bottom: bool = Field(default=False)
+    previous: str | None = Field(default=None)
+    next: str | None = Field(default=None)
 
 
 class CategoryCreate(ConfiguredBaseModel):
