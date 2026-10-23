@@ -90,6 +90,11 @@ class WordMove(ConfiguredBaseModel):
     previous: str | None
     next: str | None
 
+    @model_validator(mode="after")
+    def field_check(self):
+        if self.previous is None and self.next is None:
+            raise ValueError(ErrorCode.WORD_MOVE_UNFILLED)
+
 class WordCategoryMove(ConfiguredBaseModel):
     to_bottom: bool = Field(default=False)
     previous: str | None = Field(default=None)
