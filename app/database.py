@@ -126,6 +126,12 @@ def get_last_category(db, language_id: int) -> Category | None:
     return categories.order_by(Category.position.desc()).first()
 
 
+def get_first_category(db, language_id: int) -> Category | None:
+    categories = db.query(Category).filter(Category.language_id == language_id)
+
+    return categories.order_by(Category.position).first()
+
+
 def is_language_available_for_user(language: Language, user_id: int):
     if not language.is_private:
         return True
