@@ -109,8 +109,14 @@ def move_word(word_id: int, data: WordMove, db: DbSession, session_id: CookieVal
             raise NotFoundWordException()
         raise NoPermissionsException()
     
-    average_position: str = position.get_average_position(data.previous, data.next)
-    word.position = average_position
+    if data.previous and data.next:
+        new_position = position.get_average_position(data.previous, data.next)
+    elif data.previous and not data.next:
+        new_position = position.generate_new_top_position(data.previous)
+    else:
+        new_position = position.generate_new_bottom_position(data.next)
+    
+    word.position = new_position
     
     db.commit()
     db.refresh(word)
