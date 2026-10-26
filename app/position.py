@@ -11,7 +11,7 @@ def position_to_number(position: str) -> int:
     return result
 
 
-def get_previous_position(position: str) -> str:
+def generate_new_bottom_position(position: str) -> str:
     if position[-1] == CHARACTERS[1]:
         prev_position = position[:-1] + CHARACTERS[0] + CHARACTERS[-1]
         return prev_position
@@ -21,7 +21,7 @@ def get_previous_position(position: str) -> str:
     return prev_position
 
 
-def get_next_position(position: str) -> str:
+def generate_new_top_position(position: str) -> str:
     if position[-1] == CHARACTERS[-1]:
         next_position = position + CHARACTERS[0]
         return next_position
