@@ -61,7 +61,6 @@ def generate_new_top_position(position: str) -> str:
             slice_position = position[:-1]
             if index != 0:
                 slice_position = slice_position[:-index]
-            print(index, char, position, slice_position)
             next_position = slice_position + get_next_char(char)
             return next_position
     
