@@ -7,7 +7,7 @@ def get_none_position() -> str:
     
     Needs to generate a position for element that is the only element in it's list"""
 
-    return CHARACTERS[0]
+    return CHARACTERS[LENGTH // 2]
 
 
 def get_average_position(pos1: str, pos2: str) -> str:
