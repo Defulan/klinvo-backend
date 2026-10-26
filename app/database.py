@@ -111,6 +111,15 @@ def get_last_word(db, language_id: int, category_id: int | None) -> Word | None:
     return category_words.order_by(Word.position.desc()).first()
 
 
+def get_first_word(db, language_id: int, category_id: int | None) -> Word | None:
+    category_words = db.query(Word).filter(
+        Word.language_id == language_id,
+        Word.category_id == category_id
+    )
+
+    return category_words.order_by(Word.position).first()
+
+
 def get_last_category(db, language_id: int) -> Category | None:
     categories = db.query(Category).filter(Category.language_id == language_id)
 
