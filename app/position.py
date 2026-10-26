@@ -2,17 +2,30 @@ CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 LENGTH = len(CHARACTERS)
 
 
-def position_to_number(position: str) -> int:
-    """Convert position to number as if position was 52-based number
+def get_none_position() -> str:
+    """Get a default position value for empty list
     
-    Number (int) form of position needs only for easier calculations in other functions"""
+    Needs to generate a position for element that is the only element in it's list"""
 
-    result: int = 0
+    return CHARACTERS[0]
 
-    for index, char in enumerate(reversed(position)):
-        result += get_charnumber(char) * (LENGTH ** index)
+
+def get_average_position(pos1: str, pos2: str) -> str:
+    """Get average position between two entered positions"""
+
+    if pos1 == pos2:
+        raise ValueError("Both positions are equal")
     
-    return result
+    pos1_number = position_to_number(pos1)
+    pos2_number = position_to_number(pos2)
+
+    average_number = (pos1_number + pos2_number) // 2
+    average_position = number_to_position(average_number)
+    
+    if average_number == pos1_number or average_number == pos2_number:
+        average_position += CHARACTERS[LENGTH // 2]
+
+    return average_position
 
 
 def generate_new_bottom_position(position: str) -> str:
@@ -67,26 +80,14 @@ def generate_new_top_position(position: str) -> str:
     return position + CHARACTERS[0]
 
 
-def get_none_position() -> str:
-    """Get a default position value for empty list
+def get_previous_char(char: str) -> str:
+    """Get previous char in list of all possible characters for position string"""
+
+    if char == CHARACTERS[0]:
+        raise ValueError("Argument is first character")
     
-    Needs to generate a position for element that is the only element in it's list"""
-
-    return CHARACTERS[0]
-
-
-def get_charnumber(char: str) -> int:
-    """Get charnumber of char in CHARACTERS (from all possible characters in position string)
-    
-    Needs only for easier calculations in other functions"""
-
-    return CHARACTERS.index(char) + 1
-
-
-def get_char_by_charnumber(charnumber: int) -> str:
-    """Get char by it's charnumber (reverse function of get_charnumber)"""
-
-    return CHARACTERS[charnumber - 1]
+    next_index = CHARACTERS.index(char) - 1
+    return CHARACTERS[next_index]
 
 
 def get_next_char(char: str) -> str:
@@ -99,14 +100,17 @@ def get_next_char(char: str) -> str:
     return CHARACTERS[next_index]
 
 
-def get_previous_char(char: str) -> str:
-    """Get previous char in list of all possible characters for position string"""
-
-    if char == CHARACTERS[0]:
-        raise ValueError("Argument is first character")
+def position_to_number(position: str) -> int:
+    """Convert position to number as if position was 52-based number
     
-    next_index = CHARACTERS.index(char) - 1
-    return CHARACTERS[next_index]
+    Number (int) form of position needs only for easier calculations in other functions"""
+
+    result: int = 0
+
+    for index, char in enumerate(reversed(position)):
+        result += get_charnumber(char) * (LENGTH ** index)
+    
+    return result
 
 
 def number_to_position(number_value: int) -> str:
@@ -128,19 +132,15 @@ def number_to_position(number_value: int) -> str:
     return result
 
 
-def get_average_position(pos1: str, pos2: str) -> str:
-    """Get average position between two entered positions"""
-
-    if pos1 == pos2:
-        raise ValueError("Both positions are equal")
+def get_charnumber(char: str) -> int:
+    """Get charnumber of char in CHARACTERS (from all possible characters in position string)
     
-    pos1_number = position_to_number(pos1)
-    pos2_number = position_to_number(pos2)
+    Needs only for easier calculations in other functions"""
 
-    average_number = (pos1_number + pos2_number) // 2
-    average_position = number_to_position(average_number)
-    
-    if average_number == pos1_number or average_number == pos2_number:
-        average_position += CHARACTERS[LENGTH // 2]
+    return CHARACTERS.index(char) + 1
 
-    return average_position
+
+def get_char_by_charnumber(charnumber: int) -> str:
+    """Get char by it's charnumber (reverse function of get_charnumber)"""
+
+    return CHARACTERS[charnumber - 1]
