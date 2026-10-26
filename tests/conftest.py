@@ -105,7 +105,7 @@ def create_random_word(db_session):
         if last_word is None:
             new_position = position.get_none_position()
         else:
-            new_position = position.generate_new_bottom_position(last_word.position)
+            new_position = position.generate_new_top_position(last_word.position)
 
         word = Word(
             language_id=language_id, category_id=category_id,
