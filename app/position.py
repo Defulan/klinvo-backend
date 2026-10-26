@@ -51,6 +51,14 @@ def get_next_char(char: str) -> str:
     return CHARACTERS[next_index]
 
 
+def get_previous_char(char: str) -> str:
+    if char[-1] == CHARACTERS[0]:
+        raise ValueError("Argument is first character")
+    
+    next_index = CHARACTERS.index(char) - 1
+    return CHARACTERS[next_index]
+
+
 def number_to_position(number_value: int) -> str:
     results: list[str] = []
 
