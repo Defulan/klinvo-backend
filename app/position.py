@@ -6,7 +6,7 @@ def position_to_number(position: str) -> int:
     result: int = 0
 
     for index, char in enumerate(reversed(position)):
-        result += get_char_number(char) * (LENGTH ** index)
+        result += get_charnumber(char) * (LENGTH ** index)
     
     return result
 
