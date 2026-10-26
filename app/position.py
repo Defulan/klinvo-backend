@@ -44,7 +44,7 @@ def get_char_by_charnumber(charnumber: int) -> str:
 
 
 def get_next_char(char: str) -> str:
-    if char[-1] == CHARACTERS[-1]:
+    if char == CHARACTERS[-1]:
         raise ValueError("Argument is final character")
     
     next_index = CHARACTERS.index(char) + 1
@@ -52,7 +52,7 @@ def get_next_char(char: str) -> str:
 
 
 def get_previous_char(char: str) -> str:
-    if char[-1] == CHARACTERS[0]:
+    if char == CHARACTERS[0]:
         raise ValueError("Argument is first character")
     
     next_index = CHARACTERS.index(char) - 1
