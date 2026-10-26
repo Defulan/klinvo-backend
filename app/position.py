@@ -12,12 +12,20 @@ def position_to_number(position: str) -> int:
 
 
 def get_previous_position(position: str) -> str:
+    if position[-1] == CHARACTERS[1]:
+        prev_position = position[:-1] + CHARACTERS[0] + CHARACTERS[-1]
+        return prev_position
+    
     prev_number = position_to_number(position) - 1
     prev_position: str = number_to_position(prev_number)
     return prev_position
 
 
 def get_next_position(position: str) -> str:
+    if position[-1] == CHARACTERS[-1]:
+        next_position = position + CHARACTERS[0]
+        return next_position
+    
     next_number = position_to_number(position) + 1
     next_position: str = number_to_position(next_number)
     return next_position
