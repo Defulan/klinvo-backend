@@ -18,15 +18,31 @@ def position_to_number(position: str) -> int:
 def generate_new_bottom_position(position: str) -> str:
     """Generate new last position based on current last position
     
-    Needs to generate a position than should be at the end"""
+    Needs to generate a position than should be at the end
     
-    if position[-1] == CHARACTERS[1]:
-        prev_position = position[:-1] + CHARACTERS[0] + CHARACTERS[-1]
-        return prev_position
+    If last character between C and z, function will just move back by one character
     
-    prev_number = position_to_number(position) - 1
-    prev_position: str = number_to_position(prev_number)
-    return prev_position
+    If last character is B:
+    if all previous is A - function will move B to A and add z to the end of position string
+    if any of previous characters is not A:
+        if it is between C and z: function will move that not-A character by one further and throw away everything after it
+        if it is B - function will move B to A and add z to the end of position string"""
+    
+    if position[-1] not in (CHARACTERS[0], CHARACTERS[1]):
+        return position[:-1] + get_previous_char(position[-1])
+    
+    for index, char in enumerate(position):
+        if char == CHARACTERS[0]:
+            continue
+
+        if char == CHARACTERS[1]:
+            slice_position = position[:index]
+            return slice_position + CHARACTERS[0] + CHARACTERS[-1]
+        
+        slice_position = position[:index]
+        return slice_position + get_previous_char(char)
+    
+    raise ValueError("Position with only A characters is impossible")
 
 
 def generate_new_top_position(position: str) -> str:
