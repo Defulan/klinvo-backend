@@ -32,15 +32,24 @@ def generate_new_bottom_position(position: str) -> str:
 def generate_new_top_position(position: str) -> str:
     """Generate new first position based on current first position
     
-    Needs to generate a position than should be at the beginning"""
-
-    if position[-1] == CHARACTERS[-1]:
-        next_position = position + CHARACTERS[0]
-        return next_position
+    Needs to generate a position than should be at the beginning
     
-    next_number = position_to_number(position) + 1
-    next_position: str = number_to_position(next_number)
-    return next_position
+    If last character between A and y, function will just move next by one character.
+    
+    If last character is z:
+    if all previous characters is z, function will add A to the end of position string
+    if one of characters on the way is not z - function will move that not-z character by one and throw away everything after it"""
+
+    for index, char in enumerate(reversed(position)):
+        if char != CHARACTERS[-1]:
+            slice_position = position[:-1]
+            if index != 0:
+                slice_position = slice_position[:-index]
+            print(index, char, position, slice_position)
+            next_position = slice_position + get_next_char(char)
+            return next_position
+    
+    return position + CHARACTERS[0]
 
 
 def get_none_position() -> str:
