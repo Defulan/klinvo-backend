@@ -35,7 +35,7 @@ def get_none_position() -> str:
     return CHARACTERS[0]
 
 
-def get_char_number(char: str) -> int:
+def get_charnumber(char: str) -> int:
     return CHARACTERS.index(char) + 1
 
 
