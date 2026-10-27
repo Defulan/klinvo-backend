@@ -78,6 +78,8 @@ There is list of all possible commands and below it more specific info:
 - `task testauth` — run only `/auth` tests
 - `task testlang` — run only `/languages` tests
 - `task testnotes` — run only `/notes` tests
+- `task testwords` — run only `/words` tests
+- `task testcats` — run only `/categories` tests
 - `task format` — format entire project
 - `task format [path]` — format only the specified directory/file
 - `task lint` — run linter on the entire project
@@ -139,9 +141,11 @@ klinvo-backend
 │  ├─ routers/ - endpoints
 │  │  ├─ __init__.py
 │  │  ├─ auth.py - /auth
+│  │  ├─ categories.py - /categories
 │  │  ├─ languages.py - /languages
 │  │  ├─ notes.py - /notes
-│  │  └─ users.py - /users
+│  │  ├─ users.py - /users
+│  │  └─ words.py - /words
 │  │
 │  ├─ __init__.py
 │  ├─ config.py - variable settings with environment variables
@@ -150,6 +154,7 @@ klinvo-backend
 │  ├─ enums.py
 │  ├─ exceptions.py - custom exceptions
 │  ├─ main.py - entry point of application
+│  ├─ position.py - functions for ordering sortable objects in DB
 │  ├─ schemas.py - pydantic schemas
 │  └─ security.py - functions for password and cookies
 │
@@ -157,9 +162,11 @@ klinvo-backend
 │  ├─ conftest.py - fixtures
 │  ├─ enums.py
 │  ├─ test_auth.py
+│  ├─ test_categories.py
 │  ├─ test_languages.py
 │  ├─ test_notes.py
-│  └─ test_users.py
+│  ├─ test_users.py
+│  └─ test_words.py
 │
 ├─ .env.example
 ├─ .gitignore

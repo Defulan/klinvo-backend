@@ -78,6 +78,8 @@ task dev
 - `task testauth` — запустить только `/auth` тесты
 - `task testlang` — запустить только `/languages` тесты
 - `task testnotes` — запустить только `/notes` тесты
+- `task testwords` — запустить только `/words` тесты
+- `task testcats` — запустить только `/categories` тесты
 - `task format` — форматировать весь проект
 - `task format [path]` — форматировать только конкретную папку или файл
 - `task lint` — запустить линтер во всём проекте
@@ -139,9 +141,11 @@ klinvo-backend
 │  ├─ routers/ - эндпоинты
 │  │  ├─ __init__.py
 │  │  ├─ auth.py - /auth
+│  │  ├─ categories.py - /categories
 │  │  ├─ languages.py - /languages
 │  │  ├─ notes.py - /notes
-│  │  └─ users.py - /users
+│  │  ├─ users.py - /users
+│  │  └─ words.py - /words
 │  │
 │  ├─ __init__.py
 │  ├─ config.py - переменная settings с env-значениями
@@ -150,6 +154,7 @@ klinvo-backend
 │  ├─ enums.py
 │  ├─ exceptions.py - собственные исключения
 │  ├─ main.py - точка запуска; настройка REST API и подключение эндпоинтов
+│  ├─ position.py - функции для упорядочивания сортируемых объектов в базе данных
 │  ├─ schemas.py - pydantic схемы
 │  └─ security.py - функции для работы с паролями и cookie
 │
@@ -157,9 +162,11 @@ klinvo-backend
 │  ├─ conftest.py
 │  ├─ enums.py
 │  ├─ test_auth.py
+│  ├─ test_categories.py
 │  ├─ test_languages.py
 │  ├─ test_notes.py
-│  └─ test_users.py
+│  ├─ test_users.py
+│  └─ test_words.py
 │
 ├─ .env.example
 ├─ .gitignore
