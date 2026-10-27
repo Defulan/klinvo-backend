@@ -2,7 +2,7 @@ from fastapi import APIRouter, status
 from app import position
 from app.security import get_value_from_cookie
 from app.database import get_word_by_id, get_language_by_id, Word, get_user_by_id, get_last_word, get_category_by_id
-from app.schemas import WordOut, WordCreate, WordPatch, WordMove, WordCategoryMove
+from app.schemas import WordOut, WordCreate, WordPatch, WordMove
 from app.dependencies import DbSession, CookieValue
 from app.exceptions import (
     NotFoundWordException, NotFoundLanguageException, NotFoundUserException, NotFoundCategoryException,
@@ -50,7 +50,7 @@ def create_word(language_id: int, data: WordCreate, db: DbSession, session_id: C
     if last_word is None:
         new_position = position.get_none_position()
     else:
-        new_position = position.new_first_position(last_word.position)
+        new_position = position.new_last_position(last_word.position)
 
     word = Word(
         language_id=language_id, category_id=data.category_id, position=new_position,
@@ -125,7 +125,7 @@ def move_word(word_id: int, data: WordMove, db: DbSession, session_id: CookieVal
 
 
 @router.patch("/{word_id}/move/{category_id}")
-def change_word_category(word_id: int, category_id: int, data: WordCategoryMove, db: DbSession, session_id: CookieValue) -> WordOut:
+def change_word_category(word_id: int, category_id: int, data: WordMove, db: DbSession, session_id: CookieValue) -> WordOut:
     if not session_id:
         raise UnauthorizedException()
     
@@ -147,12 +147,15 @@ def change_word_category(word_id: int, category_id: int, data: WordCategoryMove,
         raise NotFoundCategoryException()
     
     word.category_id = category_id
-
-    if data.to_bottom:
-        last_word = get_last_word(db, word.language.id, category_id)
-        word.position = position.new_first_position(last_word.position)
+    
+    if data.previous and data.next:
+        new_position = position.get_average_position(data.previous, data.next)
+    elif data.previous and not data.next:
+        new_position = position.new_last_position(data.previous)
     else:
-        word.position = position.get_average_position(data.previous, data.next)
+        new_position = position.new_first_position(data.next)
+
+    word.position = new_position
 
     db.commit()
     db.refresh(word)
