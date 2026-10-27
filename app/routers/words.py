@@ -117,13 +117,11 @@ def move_word(word_id: int, data: WordMove, db: DbSession, session_id: CookieVal
         word.category_id = data.category_id
     
     if data.previous and data.next:
-        new_position = position.get_average_position(data.previous, data.next)
-    elif data.previous and not data.next:
-        new_position = position.new_last_position(data.previous)
+        word.position = position.get_average_position(data.previous, data.next)
+    elif not data.previous and data.next:
+        word.position = position.new_first_position(data.previous)
     else:
-        new_position = position.new_first_position(data.next)
-    
-    word.position = new_position
+        word.position = position.new_last_position(data.next)
     
     db.commit()
     db.refresh(word)
