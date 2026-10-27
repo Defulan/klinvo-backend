@@ -6,7 +6,7 @@ from app.schemas import WordOut, WordCreate, WordPatch, WordMove
 from app.dependencies import DbSession, CookieValue
 from app.exceptions import (
     NotFoundWordException, NotFoundLanguageException, NotFoundUserException, NotFoundCategoryException,
-    NoPermissionsException, UnauthorizedException
+    NoPermissionsException, UnauthorizedException, NotEmptyCategoryException
 )
 
 router = APIRouter(
@@ -119,9 +119,13 @@ def move_word(word_id: int, data: WordMove, db: DbSession, session_id: CookieVal
     if data.previous and data.next:
         word.position = position.get_average_position(data.previous, data.next)
     elif not data.previous and data.next:
-        word.position = position.new_first_position(data.previous)
+        word.position = position.new_first_position(data.next)
+    elif data.previous:
+        word.position = position.new_last_position(data.previous)
     else:
-        word.position = position.new_last_position(data.next)
+        if len(category.words) > 0:
+            raise NotEmptyCategoryException()
+        word.position = position.get_none_position()
     
     db.commit()
     db.refresh(word)
