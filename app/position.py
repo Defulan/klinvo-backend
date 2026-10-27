@@ -29,9 +29,9 @@ def get_average_position(pos1: str, pos2: str) -> str:
 
 
 def new_first_position(position: str) -> str:
-    """Generate new last position based on current last position
+    """Generate new first position based on current first position
     
-    Needs to generate a position than should be at the end
+    Needs to generate a position than should be at the beginning (before everything else, on top in table)
     
     If last character between C and z, function will just move back by one character
     
@@ -59,9 +59,9 @@ def new_first_position(position: str) -> str:
 
 
 def new_last_position(position: str) -> str:
-    """Generate new first position based on current first position
-    
-    Needs to generate a position than should be at the beginning
+    """Generate new last position based on current last position
+
+    Needs to generate a position than should be at the end (after everything else, on bottom in table)
     
     If last character between A and y, function will just move next by one character.
     
