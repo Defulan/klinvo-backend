@@ -12,7 +12,7 @@ Backend version implies compatible with the corresponding Frontend version
 * `position.py` file for functions with position values in corresponding DB columns
 
 #### Important for Frontend
-* Added new error codes: `WORD_DOESNT_EXIST`, `CATEGORY_DOESNT_EXIST`, `WORD_MOVE_UNFILLED`, `WORD_MOVE_CATEGORY_UNFILLED`, `WORD_MOVE_CATEGORY_FILLED`
+* Added new error codes: `WORD_DOESNT_EXIST`, `CATEGORY_DOESNT_EXIST`, `WORD_MOVE_UNFILLED`, `NOT_EMPTY_CATEGORY`
 
 
 ## v0.4.1
