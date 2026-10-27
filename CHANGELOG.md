@@ -5,10 +5,15 @@ Backend version implies compatible with the corresponding Frontend version
 ## unversioned
 
 #### Added
-* `words` table
-* `categories` table
-* GET, POST, PATCH for `/words`
-* GET, POST, PATCH for `/categories`
+* `words` table and `/words` endpoints
+  * GET /words/{word_id}
+  * POST /words/{language_id}
+  * PATCH /words/{word_id}
+  * PATCH /words/{word_id}/move
+* `categories` table and `/categories` endpoints
+  * GET /categories/{category_id}
+  * POST /categories/{language_id}
+  * PATCH /categories/{category_id}
 * `position.py` file for functions with position values in corresponding DB columns
 
 #### Important for Frontend
