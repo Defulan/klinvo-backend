@@ -89,6 +89,7 @@ class WordPatch(ConfiguredBaseModel):
 class WordMove(ConfiguredBaseModel):
     previous: str | None
     next: str | None
+    category_id: int | None = Field(default=None)
 
     @model_validator(mode="after")
     def field_check(self):
