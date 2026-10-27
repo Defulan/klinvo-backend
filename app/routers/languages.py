@@ -1,10 +1,12 @@
 from fastapi import APIRouter, status
 from sqlalchemy import select
 from app.database import Language, get_language_by_id, get_user_by_id
-from app.schemas import LanguageCreate, LanguageOut, LanguageEdit, NoteOut
+from app.schemas import LanguageCreate, LanguageOut, LanguageEdit, NoteOut, WordOut
 from app.security import get_value_from_cookie
 from app.dependencies import DbSession, CookieValue
-from app.exceptions import NotFoundUserException, UnauthorizedException, NotFoundLanguageException
+from app.exceptions import (
+    NotFoundUserException, UnauthorizedException, NotFoundLanguageException
+)
 
 router = APIRouter(
     prefix="/languages",
@@ -38,6 +40,18 @@ def get_language_notes(language_id: int, db: DbSession, session_id: CookieValue 
         raise NotFoundLanguageException()
 
     return language.notes
+
+
+@router.get("/{language_id}/words")
+def get_language_words(language_id: int, db: DbSession, session_id: CookieValue = None) -> list[WordOut]:
+    language = get_language_by_id(db, language_id)
+    if language is None:
+        raise NotFoundLanguageException()
+    
+    if language.is_private and (not session_id or int(get_value_from_cookie(session_id)) != language.author_id):
+        raise NotFoundLanguageException()
+
+    return language.words
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
