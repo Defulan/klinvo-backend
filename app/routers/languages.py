@@ -54,6 +54,18 @@ def get_language_words(language_id: int, db: DbSession, session_id: CookieValue 
     return language.words
 
 
+@router.get("/{language_id}/categories")
+def get_language_categories(language_id: int, db: DbSession, session_id: CookieValue = None) -> list[WordOut]:
+    language = get_language_by_id(db, language_id)
+    if language is None:
+        raise NotFoundLanguageException()
+    
+    if language.is_private and (not session_id or int(get_value_from_cookie(session_id)) != language.author_id):
+        raise NotFoundLanguageException()
+
+    return language.categories
+
+
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_language(data: LanguageCreate, db: DbSession, session_id: CookieValue = None) -> LanguageOut:
     if not session_id:
