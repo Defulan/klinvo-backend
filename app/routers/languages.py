@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status
 from sqlalchemy import select
 from app.database import Language, get_language_by_id, get_user_by_id
-from app.schemas import LanguageCreate, LanguageOut, LanguageEdit, NoteOut, WordOut
+from app.schemas import LanguageCreate, LanguageOut, LanguageEdit, NoteOut, WordOut, CategoryOut
 from app.security import get_value_from_cookie
 from app.dependencies import DbSession, CookieValue
 from app.exceptions import (
@@ -55,7 +55,7 @@ def get_language_words(language_id: int, db: DbSession, session_id: CookieValue 
 
 
 @router.get("/{language_id}/categories")
-def get_language_categories(language_id: int, db: DbSession, session_id: CookieValue = None) -> list[WordOut]:
+def get_language_categories(language_id: int, db: DbSession, session_id: CookieValue = None) -> list[CategoryOut]:
     language = get_language_by_id(db, language_id)
     if language is None:
         raise NotFoundLanguageException()
