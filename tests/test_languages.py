@@ -146,6 +146,28 @@ def test_get_language_words_many_categories_success(
         assert word["meaning"] is not None
 
 
+def test_get_language_categories_success(
+        client, create_random_user, create_random_language, create_random_category
+    ):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id, is_private=False)
+
+    categories_quantity = 6
+    for _ in range(categories_quantity):
+        create_random_category(language_id=language.id)
+
+    response = client.get(f"/languages/{language.id}/categories")
+    assert response.status_code == status.HTTP_200_OK
+    
+    data = response.json()
+    assert len(data) == categories_quantity
+
+    for category in data:
+        assert category["languageId"] == language.id
+        assert category["position"] is not None
+        assert len(category["name"]) > 0
+
+
 def test_create_language_success(client, create_random_user, create_session_id):
     user = create_random_user()
     create_session_id(module_name=ModuleName.LANGUAGES, user_id=user.id)
