@@ -155,7 +155,7 @@ klinvo-backend
 │  ├─ dependencies.py - типы для аргументов эндпоинтов
 │  ├─ enums.py
 │  ├─ exceptions.py - собственные исключения
-│  ├─ main.py - точка запуска; настройка REST API и подключение эндпоинтов
+│  ├─ main.py - точка запуска
 │  ├─ position.py - функции для упорядочивания сортируемых объектов в базе данных
 │  ├─ schemas.py - pydantic схемы
 │  └─ security.py - функции для работы с паролями и cookie
