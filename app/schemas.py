@@ -93,7 +93,7 @@ class WordMove(ConfiguredBaseModel):
 
     @model_validator(mode="after")
     def field_check(self):
-        if self.previous is None and self.next is None:
+        if self.category_id is None and self.previous is None and self.next is None:
             raise ValueError(ErrorCode.WORD_MOVE_UNFILLED)
         return self
 
