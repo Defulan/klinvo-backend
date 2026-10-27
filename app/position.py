@@ -28,7 +28,7 @@ def get_average_position(pos1: str, pos2: str) -> str:
     return average_position
 
 
-def generate_new_bottom_position(position: str) -> str:
+def new_first_position(position: str) -> str:
     """Generate new last position based on current last position
     
     Needs to generate a position than should be at the end
@@ -58,7 +58,7 @@ def generate_new_bottom_position(position: str) -> str:
     raise ValueError("Position with only A characters is impossible")
 
 
-def generate_new_top_position(position: str) -> str:
+def new_last_position(position: str) -> str:
     """Generate new first position based on current first position
     
     Needs to generate a position than should be at the beginning

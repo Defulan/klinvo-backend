@@ -50,7 +50,7 @@ def create_word(language_id: int, data: WordCreate, db: DbSession, session_id: C
     if last_word is None:
         new_position = position.get_none_position()
     else:
-        new_position = position.generate_new_bottom_position(last_word.position)
+        new_position = position.new_first_position(last_word.position)
 
     word = Word(
         language_id=language_id, category_id=data.category_id, position=new_position,
@@ -112,9 +112,9 @@ def move_word(word_id: int, data: WordMove, db: DbSession, session_id: CookieVal
     if data.previous and data.next:
         new_position = position.get_average_position(data.previous, data.next)
     elif data.previous and not data.next:
-        new_position = position.generate_new_top_position(data.previous)
+        new_position = position.new_last_position(data.previous)
     else:
-        new_position = position.generate_new_bottom_position(data.next)
+        new_position = position.new_first_position(data.next)
     
     word.position = new_position
     
@@ -150,7 +150,7 @@ def change_word_category(word_id: int, category_id: int, data: WordCategoryMove,
 
     if data.to_bottom:
         last_word = get_last_word(db, word.language.id, category_id)
-        word.position = position.generate_new_bottom_position(last_word.position)
+        word.position = position.new_first_position(last_word.position)
     else:
         word.position = position.get_average_position(data.previous, data.next)
 

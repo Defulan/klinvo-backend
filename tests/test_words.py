@@ -344,7 +344,7 @@ def test_move_word_only_previous_success(client, db_session, create_random_user,
         "next": None
     }
 
-    new_position = position.generate_new_top_position(payload["previous"])
+    new_position = position.new_last_position(payload["previous"])
 
     response = client.patch(f"/words/{target_word.id}/move", json=payload)
     assert response.status_code == status.HTTP_200_OK
@@ -372,7 +372,7 @@ def test_move_word_only_next_success(client, db_session, create_random_user, cre
         "next": last_word.position
     }
 
-    new_position = position.generate_new_bottom_position(payload["next"])
+    new_position = position.new_first_position(payload["next"])
 
     response = client.patch(f"/words/{target_word.id}/move", json=payload)
     assert response.status_code == status.HTTP_200_OK
