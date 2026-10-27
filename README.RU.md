@@ -98,6 +98,8 @@ task testusers
 task testauth
 task testlang
 task testnotes
+task testwords
+task testcats
 ```
 
 ### Форматирование
