@@ -514,7 +514,3 @@ def test_move_word_by_category_without_position_params_success(
 
 
 # TODO PATCH /words/<word_id>/move - error
-
-# TODO PATCH /words/<word_id>/move/<category_id> - success
-
-# TODO PATCH /words/<word_id>/move/<category_id> - error
