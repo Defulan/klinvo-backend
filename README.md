@@ -188,7 +188,9 @@ Currently, the main goal is to bring the project to the MVP stage.
 - [x] Accounts system (DB table, creating, log in/log out, changing, getting data)
 - [x] Language (DB table, creation, getting, changing)
 - [x] Notes (DB table, CRUD)
+- [x] Sorting in DB
 - [ ] Words (DB table, CRUD)
+- [ ] Categories (DB table, CRUD)
 
 ### Future Enhancements
 - [ ] Auth with email
