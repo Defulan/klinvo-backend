@@ -96,24 +96,6 @@ class WordMove(ConfiguredBaseModel):
             raise ValueError(ErrorCode.WORD_MOVE_UNFILLED)
         return self
 
-class WordCategoryMove(ConfiguredBaseModel):
-    to_bottom: bool = Field(default=False)
-    previous: str | None = Field(default=None)
-    next: str | None = Field(default=None)
-
-    @model_validator(mode="after")
-    def to_bottom_check(self):
-        is_previous_filled = self.previous is not None
-        is_next_filled = self.next is not None
-
-        if self.to_bottom:
-            if is_previous_filled or is_next_filled:
-                raise ValueError(ErrorCode.WORD_CATEGORY_MOVE_FILLED)
-        else:
-            if not (is_previous_filled and is_next_filled):
-                raise ValueError(ErrorCode.WORD_CATEGORY_MOVE_UNFILLED)
-        return self
-
 
 class CategoryCreate(ConfiguredBaseModel):
     name: str = Field(min_length=1, max_length=255)
