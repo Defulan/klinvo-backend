@@ -67,3 +67,8 @@ class WrongRegisterException(AppException):
     def __init__(self):
         super().__init__(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=ErrorCode.WRONG_REGISTER_DATA)
 
+
+class NotEmptyCategoryException(AppException):
+    """Category is not empty"""
+    def __init__(self):
+        super().__init__(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=ErrorCode.NOT_EMPTY_CATEGORY)
