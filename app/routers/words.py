@@ -108,6 +108,13 @@ def move_word(word_id: int, data: WordMove, db: DbSession, session_id: CookieVal
         if word.language.is_private:
             raise NotFoundWordException()
         raise NoPermissionsException()
+
+    if data.category_id:
+        category = get_category_by_id(db, data.category_id)
+        if not category:
+            raise NotFoundCategoryException()
+        
+        word.category_id = data.category_id
     
     if data.previous and data.next:
         new_position = position.get_average_position(data.previous, data.next)
