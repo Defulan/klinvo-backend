@@ -94,6 +94,58 @@ def test_get_language_notes_private_error(client, create_random_user, create_ran
     assert response.json()["detail"] == ErrorCode.LANGUAGE_DOESNT_EXIST
 
 
+def test_get_language_words_uncategorized_success(
+        client, create_random_user, create_random_language, create_random_word
+    ):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id, is_private=False)
+
+    for _ in range(3):
+        create_random_word(language_id=language.id)
+
+    response = client.get(f"/languages/{language.id}/words")
+    assert response.status_code == status.HTTP_200_OK
+    
+    data = response.json()
+    assert len(data) == 3
+
+    for word in data:
+        assert word["languageId"] == language.id
+        assert word["categoryId"] is None
+        assert word["position"] is not None
+        assert word["value"] is not None
+        assert word["meaning"] is not None
+
+
+def test_get_language_words_many_categories_success(
+        client, create_random_user, create_random_language, create_random_word, create_random_category
+    ):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id, is_private=False)
+
+    category_1 = create_random_category(language_id=language.id)
+    category_2 = create_random_category(language_id=language.id)
+
+    words_quantity = 20
+    possible_categories = (None, category_1.id, category_2.id)
+    for i in range(words_quantity):
+        category_id = possible_categories[i % 3]
+        create_random_word(language_id=language.id, category_id=category_id)
+
+    response = client.get(f"/languages/{language.id}/words")
+    assert response.status_code == status.HTTP_200_OK
+    
+    data = response.json()
+    assert len(data) == words_quantity
+
+    for word in data:
+        assert word["languageId"] == language.id
+        assert word["categoryId"] in possible_categories
+        assert word["position"] is not None
+        assert word["value"] is not None
+        assert word["meaning"] is not None
+
+
 def test_create_language_success(client, create_random_user, create_session_id):
     user = create_random_user()
     create_session_id(module_name=ModuleName.LANGUAGES, user_id=user.id)
