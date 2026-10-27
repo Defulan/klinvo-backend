@@ -43,6 +43,7 @@ class Language(Base):
     author: Mapped["User"] = relationship(back_populates="languages")
     notes: Mapped[list["Note"]] = relationship(back_populates="language")
     words: Mapped[list["Word"]] = relationship(back_populates="language")
+    categories: Mapped[list["Category"]] = relationship(back_populates="language")
 
 
 class Note(Base):
@@ -79,6 +80,7 @@ class Category(Base):
     position: Mapped[str] = mapped_column(String(collation="C"), nullable=False)
     name: Mapped[str] = mapped_column(String(255))
 
+    language: Mapped["Language"] = relationship(back_populates="categories")
     words: Mapped[list["Word"]] = relationship(back_populates="category")
 
 
