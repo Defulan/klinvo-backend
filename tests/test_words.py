@@ -428,7 +428,8 @@ def test_move_word_by_category_only_previous_success(
     create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
     
     target_word = create_random_word(language_id=language.id)
-    words = [create_random_word(language_id=language.id, category_id=category.id) for _ in range(10)]
+    for _ in range(10):
+        create_random_word(language_id=language.id, category_id=category.id)
 
     payload = {
         "previous": get_last_word(db_session, language.id, category.id).position,
@@ -459,7 +460,8 @@ def test_move_word_by_category_only_next_success(
     category = create_random_category(language_id=language.id)
     create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
 
-    words = [create_random_word(language_id=language.id, category_id=category.id) for _ in range(10)]
+    for _ in range(10):
+        create_random_word(language_id=language.id, category_id=category.id)
     target_word = create_random_word(language_id=language.id)
 
     payload = {
