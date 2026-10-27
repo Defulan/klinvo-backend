@@ -386,6 +386,133 @@ def test_move_word_only_next_success(client, db_session, create_random_user, cre
     assert data["meaning"] == target_word.meaning
 
 
+def test_move_word_by_category_between_success(
+        client, create_random_user, create_random_language, create_random_word, create_random_category, create_session_id
+    ):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    category = create_random_category(language_id=language.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
+    
+    target_word = create_random_word(language_id=language.id)
+
+    words = [create_random_word(language_id=language.id, category_id=category.id) for _ in range(10)]
+
+    payload = {
+        "previous": words[-4].position,
+        "next": words[-3].position,
+        "categoryId": category.id
+    }
+
+    average_position = position.get_average_position(payload["previous"], payload["next"])
+
+    response = client.patch(f"/words/{target_word.id}/move", json=payload)
+    assert response.status_code == status.HTTP_200_OK
+
+    data = response.json()
+    assert data["id"] == target_word.id
+    assert data["languageId"] == language.id
+    assert data["categoryId"] == category.id
+    assert data["position"] == average_position
+    assert data["value"] == target_word.value
+    assert data["meaning"] == target_word.meaning
+
+
+def test_move_word_by_category_only_previous_success(
+        client, db_session,
+        create_random_user, create_random_language, create_random_word, create_random_category, create_session_id
+    ):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    category = create_random_category(language_id=language.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
+    
+    target_word = create_random_word(language_id=language.id)
+    words = [create_random_word(language_id=language.id, category_id=category.id) for _ in range(10)]
+
+    payload = {
+        "previous": get_last_word(db_session, language.id, category.id).position,
+        "next": None,
+        "categoryId": category.id
+    }
+
+    new_position = position.new_last_position(payload["previous"])
+
+    response = client.patch(f"/words/{target_word.id}/move", json=payload)
+    assert response.status_code == status.HTTP_200_OK
+
+    data = response.json()
+    assert data["id"] == target_word.id
+    assert data["languageId"] == language.id
+    assert data["categoryId"] == category.id
+    assert data["position"] == new_position
+    assert data["value"] == target_word.value
+    assert data["meaning"] == target_word.meaning
+
+
+def test_move_word_by_category_only_next_success(
+        client, db_session,
+        create_random_user, create_random_language, create_random_word, create_random_category, create_session_id
+    ):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    category = create_random_category(language_id=language.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
+
+    words = [create_random_word(language_id=language.id, category_id=category.id) for _ in range(10)]
+    target_word = create_random_word(language_id=language.id)
+
+    payload = {
+        "previous": None,
+        "next": get_first_word(db_session, language.id, category.id).position,
+        "categoryId": category.id
+    }
+
+    new_position = position.new_first_position(payload["next"])
+
+    response = client.patch(f"/words/{target_word.id}/move", json=payload)
+    assert response.status_code == status.HTTP_200_OK
+
+    data = response.json()
+    assert data["id"] == target_word.id
+    assert data["languageId"] == language.id
+    assert data["categoryId"] == category.id
+    assert data["position"] == new_position
+    assert data["value"] == target_word.value
+    assert data["meaning"] == target_word.meaning
+
+
+def test_move_word_by_category_without_position_params_success(
+        client,
+        create_random_user, create_random_language, create_random_word, create_random_category, create_session_id
+    ):
+    user = create_random_user()
+    language = create_random_language(author_id=user.id)
+    category = create_random_category(language_id=language.id)
+    create_session_id(module_name=ModuleName.WORDS, user_id=user.id)
+
+    target_word = create_random_word(language_id=language.id)
+
+    payload = {
+        "previous": None,
+        "next": None,
+        "categoryId": category.id
+    }
+
+    new_position = position.get_none_position()
+
+    response = client.patch(f"/words/{target_word.id}/move", json=payload)
+    assert response.status_code == status.HTTP_200_OK
+
+    data = response.json()
+    assert data["id"] == target_word.id
+    assert data["languageId"] == language.id
+    assert data["categoryId"] == category.id
+    assert data["position"] == new_position
+    assert data["value"] == target_word.value
+    assert data["meaning"] == target_word.meaning
+
+
 # TODO PATCH /words/<word_id>/move - error
 
 # TODO PATCH /words/<word_id>/move/<category_id> - success
