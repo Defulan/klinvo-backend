@@ -1,3 +1,7 @@
+> [!NOTE]
+>
+> This project is currently on hold due to the author's personal reasons. It's not abandoned. Its active development will continue after the v0.4.2 release.
+
 # klinvo-backend
 
 README: [English](README.md) | [Русский](README.RU.md)
